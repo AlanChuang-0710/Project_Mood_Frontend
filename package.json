@@ -3,13 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@mantine/core": "^6.0.18",
+    "@mantine/dates": "^6.0.18",
+    "@mantine/hooks": "^6.0.18",
+    "@mantine/notifications": "^6.0.18",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@tabler/icons-react": "^2.38.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.2.0",
+    "react-bootstrap-icons": "^1.10.3",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.64.2"
   },
   "scripts": {
     "start": "react-scripts start",

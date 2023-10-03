@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Button, SimpleGrid, Grid, } from '@mantine/core';
+import { Button, SimpleGrid, Group, } from '@mantine/core';
 import classes from "./layout.module.scss";
-import { HouseDoor, Gear, Bell } from "react-bootstrap-icons";
+import { HouseDoor, Gear, Bell, Search, XLg } from "react-bootstrap-icons";
 import LightDarkButton from "../components/LightDarkButton";
+import { useViewportSize } from '@mantine/hooks';
 
 import {
     AppShell,
@@ -18,6 +19,14 @@ const Layout = (props) => {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
 
+    // 視口達到某些寬度，navbar出現可
+    const { height, width } = useViewportSize();
+
+    const appShellStyle = {
+        body: {
+            background: "#dbdbeb"
+        }
+    };
 
     return (
         <AppShell
@@ -28,10 +37,16 @@ const Layout = (props) => {
             }}
             navbarOffsetBreakpoint="sm"
             navbar={
-                <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200 }} height='100vh'>
+                <Navbar
+                    className={classes.nav}
+                    style={{ background: theme.colorScheme === 'dark' ? "#2b2c40" : theme.colors.gray[0] }}
+                    p="md" hidden={!opened} hiddenBreakpoint="sm" width={{ base: 200, xl: 300 }} height='100vh'>
                     <SimpleGrid cols={1}>
                         <Navbar.Section>
-                            <a href="javascript;" className={classes["nav-logo"]}>Mood</a>
+                            <div style={{ position: "relative" }}>
+                                {width < 768 && <XLg onClick={() => setOpened(false)} className={classes["nav-close"]}></XLg>}
+                                <a href="javascript;" className={classes["nav-logo"]}>Mood</a>
+                            </div>
                         </Navbar.Section>
                         <Navbar.Section>
                             <Button variant='subtle' fullWidth leftIcon={<HouseDoor className={classes["nav-icon"]} />}>
@@ -44,7 +59,6 @@ const Layout = (props) => {
                             </Button>
                         </Navbar.Section>
                     </SimpleGrid>
-
                 </Navbar>
             }
 
@@ -54,12 +68,24 @@ const Layout = (props) => {
                 </Footer>
             }
         >
-            <Grid>
-                <Grid.Col span={12}>
+            <div className={classes.header}>
+                <Group>
+                    <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+                        <Burger
+                            opened={opened}
+                            onClick={() => setOpened((o) => !o)}
+                            size="sm"
+                            color={theme.colors.gray[6]}
+                            mr="sm"
+                        />
+                    </MediaQuery>
+                    <Search size={25} color={theme.colorScheme === 'dark' ? "white" : ""} />
+                </Group>
+                <Group>
                     <LightDarkButton />
                     <Bell size={25} color={theme.colorScheme === 'dark' ? "white" : ""} />
-                </Grid.Col>
-            </Grid>
+                </Group>
+            </div>
             <div >
                 {props.children}
             </div>

@@ -13,7 +13,16 @@ function App() {
   return (
     <div className="App">
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-        <MantineProvider theme={{ colorScheme }}>
+        <MantineProvider
+          // 使theme顏色置入css變量
+          withCSSVariables withGlobalStyles withNormalizeCSS
+          theme={{
+            colorScheme, // light or dark
+            colors: { // 設定主題色
+              brand: ["#6a6cff", "#09c0e8", "#6a6cff", " #73db3d"],
+            },
+            primaryColor: 'brand', //只接受colors中的鍵
+          }}>
           <Notifications />
           <Layout>
             <Routes>

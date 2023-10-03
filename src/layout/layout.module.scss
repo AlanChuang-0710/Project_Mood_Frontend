@@ -1,8 +1,23 @@
-.nav-logo {
-    font-size: 50px;
-    text-align: center;
-    text-decoration: none;
-    display: block;
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav {
+    .nav-logo {
+        font-size: 50px;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+        color: var(--mantine-color-brand-0)
+    }
+
+    .nav-close {
+        position: absolute;
+        cursor: pointer;
+        right: 0;
+        top: 0
+    }
 }
 
 .nav-icon {

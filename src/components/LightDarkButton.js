@@ -1,14 +1,16 @@
-import { ActionIcon, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, useMantineColorScheme, useMantineTheme } from '@mantine/core';
 import { IconSun, IconMoonStars } from '@tabler/icons-react';
 
 function LightDarkButton() {
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
     const dark = colorScheme === 'dark';
 
+    const theme = useMantineTheme();
+
     return (
         <ActionIcon
             variant="outline"
-            color={dark ? 'yellow' : 'blue'}
+            color={dark ? "brand.3" : "brand.0"}
             onClick={() => toggleColorScheme()}
             title="Toggle color scheme"
         >

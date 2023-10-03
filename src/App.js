@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import { useState } from "react";
+import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
+import { Notifications } from '@mantine/notifications';
 import Layout from './layout/Layout';
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
-import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
-import { Notifications } from '@mantine/notifications';
 
 function App() {
   const [colorScheme, setColorScheme] = useState('light');
@@ -19,9 +19,11 @@ function App() {
           theme={{
             colorScheme, // light or dark
             colors: { // 設定主題色
-              brand: ["#6a6cff", "#09c0e8", "#6a6cff", " #73db3d"],
+              brand: ["#6a6cff", "#09c0e8", "#73db3d", "#f7e048"], // 藍  青藍 青綠 淡橘黃
+              light: ["#fff"], // 0是白色背景 
+              night: ["#2b2c40"], // 0是深藍背景 
             },
-            primaryColor: 'brand', //只接受colors中的鍵
+            // primaryColor: 'brand', //只接受colors中的鍵
           }}>
           <Notifications />
           <Layout>

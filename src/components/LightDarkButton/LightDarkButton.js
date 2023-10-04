@@ -13,8 +13,9 @@ function LightDarkButton() {
             color={dark ? "brand.3" : "brand.0"}
             onClick={() => toggleColorScheme()}
             title="Toggle color scheme"
+            style={{ border: "none" }}
         >
-            {dark ? <IconSun size="1.1rem" /> : <IconMoonStars size="1.1rem" />}
+            {dark ? <IconSun size="25" /> : <IconMoonStars size="25" />}
         </ActionIcon>
     );
 };

@@ -1,0 +1,40 @@
+.user-wrapper {
+    height: 100%;
+    padding: 10px 0 20px 10px;
+
+    .user-title {
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .user-subtitle {
+        overflow: hidden;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+
+    }
+}
+
+.calendar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button[data-selected] {
+        background-color: rgb(212, 216, 216);
+        border-radius: 20px;
+    }
+
+    button[data-selected]:hover,
+    button:hover {
+        border-radius: 20px;
+        background-color: rgb(212, 216, 216);
+    }
+
+    button[data-selected]:active {
+        background-color: rgb(212, 216, 216);
+    }
+}

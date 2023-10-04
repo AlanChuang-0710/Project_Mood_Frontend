@@ -1,30 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
-import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar } from '@mantine/core';
+import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '@mantine/core';
 import classes from "./layout.module.scss";
-import { HouseDoor, Gear, Bell, Search } from "react-bootstrap-icons";
-import LightDarkButton from "../components/LightDarkButton";
-// import { useViewportSize } from '@mantine/hooks';
-
-import {
-    AppShell,
-    Navbar,
-    // Footer,
-    Burger,
-    useMantineTheme,
-} from '@mantine/core';
+import { HouseDoor, Gear, Bell, Search, GraphUp, Compass } from "react-bootstrap-icons";
+import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
+import { useNavigate } from 'react-router-dom';
+import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
+import { AppShell, Navbar, useMantineTheme, Burger } from '@mantine/core';
 
 const Layout = (props) => {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(true);
-    const layoutComponentStyle = {
-        background: theme.colorScheme === 'light' ? theme.colors.light[0] : theme.colors.night[0],
-        borderRadius: "5px",
-        transition: "all 0.2s",
-    };
 
-    // 視口達到某些寬度，navbar出現可
-    // const { height, width } = useViewportSize();
+    // navbar 選項
+    const [active, setActive] = useState(0);
+    const navButtons = [
+        {
+            label: 'Dashboard',
+            icon: <HouseDoor className={classes["nav-icon"]} />,
+            route: "/dashboard"
+        },
+        {
+            label: 'Analysis',
+            icon: <GraphUp className={classes["nav-icon"]} />,
+            route: "/analysis"
+        },
+        {
+            label: 'Compass',
+            icon: <Compass className={classes["nav-icon"]} />,
+            route: "/compass"
+        },
+        {
+            label: 'Account Settings',
+            icon: <Gear className={classes["nav-icon"]} />,
+            route: "/account"
+        },
+    ];
+
+    /* 獲得nav */
+    const nav = useNavigate();
+    const navClickHandler = useCallback((index, route) => {
+        setActive(index);
+        nav(route);
+    }, [nav]);
 
     return (
         <AppShell
@@ -35,9 +53,10 @@ const Layout = (props) => {
             }}
             navbarOffsetBreakpoint="sm"
             header={
-                <Header height={{ base: 60 }} p="md" pb="sm"
-                    style={layoutComponentStyle}>
-                    <div className={classes.header}>
+                <Header height={{ base: 68 }} p="md" pb="sm"
+                    style={useGetLayoutComponentStyle()}>
+                    <div className={classes.header}
+                        style={useGetComponentStyle()}>
                         <Group>
                             <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
                                 <Burger
@@ -45,18 +64,23 @@ const Layout = (props) => {
                                     onClick={() => { setOpened((o) => !o); console.log(opened); }}
                                     size="sm"
                                     color={theme.colors.gray[6]}
-                                    mr="sm"
                                 />
                             </MediaQuery>
-                            <Search size={25} color={theme.colorScheme === 'dark' ? "white" : ""} />
+                            <Button size="25" variant="default" style={{ border: "none" }}>
+                                <Search size={23} style={{ cursor: "pointer" }} color={theme.colorScheme === 'light' ? theme.colors.tool[0] : "white"} />
+                            </Button>
                         </Group>
                         <Group>
                             <LightDarkButton style={{ cursor: "pointer" }} />
-                            <Bell style={{ cursor: "pointer" }} size={25} color={theme.colorScheme === 'dark' ? "white" : ""} />
-                            <Avatar
-                                size={28}
-                                style={{ cursor: "pointer", }}
-                                src="https://t4.ftcdn.net/jpg/01/80/45/59/360_F_180455965_hTcjQ6257nkPtH2CTiLnUtUyjR820NsY.jpg" alt="it's me" />
+                            <Button size="25" variant="default" style={{ border: "none" }}>
+                                <Bell className={classes.bell} style={{ cursor: "pointer" }} size={25} color={theme.colorScheme === 'light' ? theme.colors.tool[0] : "white"} />
+                            </Button>
+                            <Button size="25" variant="default" style={{ border: "none" }}>
+                                <Avatar
+                                    size={30}
+                                    style={{ cursor: "pointer", borderRadius: "50%" }}
+                                    src="https://t4.ftcdn.net/jpg/01/80/45/59/360_F_180455965_hTcjQ6257nkPtH2CTiLnUtUyjR820NsY.jpg" alt="it's me" />
+                            </Button>
                         </Group>
                     </div>
                 </Header>
@@ -64,30 +88,31 @@ const Layout = (props) => {
             navbar={
                 <Navbar
                     className={classes.nav}
-                    style={layoutComponentStyle}
-                    p="md" hiddenBreakpoint="sm" hidden={opened} width={{ base: 200, xl: 300 }} height='100vh'>
-                    <SimpleGrid cols={1}>
-                        <Navbar.Section>
-                            <div style={{ position: "relative" }}>
-                                <a href="javascript;" className={classes["nav-logo"]}>Mood</a>
-                            </div>
-                        </Navbar.Section>
-                        <Navbar.Section>
-                            <Button variant='subtle' fullWidth leftIcon={<HouseDoor className={classes["nav-icon"]} />}>
-                                Assets/Hosts
-                            </Button>
-                        </Navbar.Section>
-                        <Navbar.Section>
-                            <Button variant='subtle' fullWidth leftIcon={<Gear className={classes["nav-icon"]} />} >
-                                Assets/Hosts
-                            </Button>
-                        </Navbar.Section>
-                    </SimpleGrid>
+                    style={useGetLayoutComponentStyle()}
+                    p="md" hiddenBreakpoint="sm" hidden={opened} width={{ base: 230, xl: 300 }} height='100vh'>
+                    <div className={classes.nav} style={useGetComponentStyle()}>
+                        <SimpleGrid cols={1}>
+                            <Navbar.Section>
+                                <div style={{ position: "relative" }}>
+                                    <a href="javascript;" className={classes["nav-logo"]}>Mood</a>
+                                </div>
+                            </Navbar.Section>
+
+                            {navButtons.map((option, index) => <NavLink
+                                styles={{ root: { '&:hover': { backgroundColor: theme.colorScheme === 'light' ? "" : "#33486B", borderRadius: "8px" }, '&[data-active]': { backgroundColor: theme.colorScheme === 'light' ? "" : "#33486B", borderRadius: "8px" } }, inner: { justifyContent: "flex-start", marginLeft: "5px", color: theme.colors.tool[0], fontSize: "16px" } }}
+                                key={index}
+                                active={index === active}
+                                label={option.label}
+                                icon={option.icon}
+                                onClick={() => navClickHandler(index, option.route)}
+                            />)}
+                        </SimpleGrid>
+                    </div>
                 </Navbar>
             }
 
         // footer={
-        //     <Footer height={50} p="md" style={layoutComponentStyle}>
+        //     <Footer height={50} p="md" style={useGetLayoutComponentStyle()}>
         //         Application footer
         //     </Footer>
         // }

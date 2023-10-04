@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# sample
+/sample_mood_bean
+
 # dependencies
 /node_modules
 /.pnp

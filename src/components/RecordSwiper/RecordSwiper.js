@@ -17,6 +17,7 @@ SwiperCore.use([Scrollbar, Mousewheel]);
 
 const RecordSwiper = () => {
     const theme = useMantineTheme();
+
     const fakeData = [
         {
             id: "4691",
@@ -68,8 +69,8 @@ const RecordSwiper = () => {
             direction="vertical"
             mousewheel={true}
             scrollbar={{ draggable: true }}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
+            // onSlideChange={() => console.log('slide change')}
+            // onSwiper={(swiper) => console.log(swiper)}
             className={classes["swiper-day"]}
         >
             {fakeData.map((item) => < SwiperSlide key={item.id} tag="div" className={classes["swiper-slide-day"]}>
@@ -78,7 +79,7 @@ const RecordSwiper = () => {
                         <SVG src={tool} width={"100%"} height={"100%"}></SVG>
                     </div>)}
                 </div>
-                <div className={classes["day-wrapper"]} style={{ backgroundColor: theme.colorScheme === "light" ? "rgba(213, 240, 206, .5)":"" }}>
+                <div className={classes["day-wrapper"]} style={{ backgroundColor: theme.colorScheme === "light" ? "rgba(213, 240, 206, .5)" : "" }}>
                     <Grid>
                         <Grid.Col span="content">
                             {/* <div className={classes["month-date"]} style={{ background: `url(${swiperBackground}) no-repeat`, backgroundSize: "contain" }}> */}

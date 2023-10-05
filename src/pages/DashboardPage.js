@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Image, Grid, MediaQuery, Button, useMantineTheme, Group } from "@mantine/core";
+import React, { useState, useEffect, useMemo } from 'react';
+import { Image, Grid, MediaQuery, Button, useMantineTheme, Modal, LoadingOverlay, Tabs } from "@mantine/core";
+import { useDisclosure } from '@mantine/hooks';
 import { DatePicker } from '@mantine/dates';
 import classes from "./DashboardPage.module.scss";
 import { useGetComponentStyle } from "../styles/dayNightStyle";
 import userImage from "../assets/user.png";
 import RecordSwiper from "../components/RecordSwiper/RecordSwiper";
+import moment from "moment";
 
 const DashboardPage = () => {
   const theme = useMantineTheme();
 
   /* date relative */
-  const [dateValue, setDateValue] = useState(new Date().setHours(0, 0, 0, 0));
+  const [selectedDateValue, setSelectedDateValue] = useState(new Date().setHours(0, 0, 0, 0));
+  const formatSelectedDate = useMemo(() => {
+    const date = moment(selectedDateValue);
+    return date.format('YYYY-MM-DD');
+  }, [selectedDateValue]);
+
   const calendarStyle = {
     calendarHeaderLevel: {
       fontWeight: "700",
@@ -41,9 +48,16 @@ const DashboardPage = () => {
     },
   };
 
+  /* 心情 Modal */
+  const [opened, { open, close }] = useDisclosure(false);
+  const [activeTab, setActiveTab] = useState("night");
+
   useEffect(() => {
-    console.log(dateValue);
-  }, [dateValue]);
+    if (selectedDateValue) {
+      console.log(selectedDateValue);
+      open();
+    }
+  }, [selectedDateValue]);
 
   return (
     <Grid>
@@ -94,7 +108,7 @@ const DashboardPage = () => {
       < Grid.Col md={5} lg={4} >
         <div style={useGetComponentStyle()} >
           <div className={classes.calendar}>
-            <DatePicker allowDeselect value={dateValue} onChange={setDateValue} hideOutsideDates styles={calendarStyle}
+            <DatePicker allowDeselect value={selectedDateValue} onChange={setSelectedDateValue} hideOutsideDates styles={calendarStyle}
               size="md" locale="zh-tw"
             // monthLabelFormat="YYYY年 M月"
             />
@@ -108,11 +122,28 @@ const DashboardPage = () => {
           <RecordSwiper></RecordSwiper>
         </div>
       </Grid.Col>
+
+      {/* Lesson recommend */}
       <Grid.Col xs={12} lg={5}>
         <div className={classes["lesson-wrapper"]} style={useGetComponentStyle()} >
           123456
         </div>
       </Grid.Col>
+
+      {/* 新增心情 Modal */}
+      <Modal styles={{ content: useGetComponentStyle(), header: useGetComponentStyle(), title: { fontSize: "30px" } }} opened={opened} onClose={close} title={formatSelectedDate} yOffset={200}>
+        {/* <LoadingOverlay visible={opened} overlayBlur={2} /> */}
+        <Tabs value={activeTab} onTabChange={setActiveTab}>
+          <Tabs.List>
+            <Tabs.Tab value="night">Night</Tabs.Tab>
+            <Tabs.Tab value="day">Day</Tabs.Tab>
+          </Tabs.List>
+
+          <Tabs.Panel value="night">First panel</Tabs.Panel>
+          <Tabs.Panel value="day">Second panel</Tabs.Panel>
+        </Tabs>
+      </Modal>
+
     </Grid >
   );
 };

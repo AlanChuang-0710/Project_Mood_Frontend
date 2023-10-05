@@ -6,7 +6,8 @@ export function useGetLayoutComponentStyle() {
     return {
         background: theme.colorScheme === 'light' ? "#ebebeb" : "#0b0c29",
         transition: "all 0.2s",
-        border: "none"
+        border: "none",
+        borderRadius: "20px"
     };
 };
 

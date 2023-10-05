@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Image, Grid, MediaQuery, Button, useMantineTheme, Group } from "@mantine/core";
 import { DatePicker } from '@mantine/dates';
-import userImage from "../assets/user.png";
 import classes from "./DashboardPage.module.scss";
 import { useGetComponentStyle } from "../styles/dayNightStyle";
+import userImage from "../assets/user.png";
+import RecordSwiper from "../components/RecordSwiper/RecordSwiper";
 
 const DashboardPage = () => {
   const theme = useMantineTheme();
@@ -48,14 +49,16 @@ const DashboardPage = () => {
     <Grid>
       {/* Positive Phrase Section */}
       <Grid.Col xs={12} lg={8}>
+
+        {/* milestone */}
         <div style={useGetComponentStyle()}>
           <Grid>
             <Grid.Col xs={6} md={8} >
               <MediaQuery smallerThan="md" styles={{ display: "none" }}>
                 <div style={{ height: "100%" }}>
-                  <div className={classes["user-wrapper"]}>
-                    <div className={classes["user-title"]}>Congratulations John! 🎉</div>
-                    <div className={classes["user-subtitle"]}> Stay away from those people who try to disparage your ambitions. Small minds will always do that, but great minds will give you a feeling that you can become great too.</div>
+                  <div className={classes["phrase-wrapper"]}>
+                    <div className={classes["phrase-title"]}>Congratulations John! 🎉</div>
+                    <div className={classes["phrase-subtitle"]}> Stay away from those people who try to disparage your ambitions. Small minds will always do that, but great minds will give you a feeling that you can become great too.</div>
                     <div style={{ marginTop: "20px" }} >
                       {/* <Button color="brand.0" styles={{ root: { "&:active": { background: theme.colors.brand[0] } } }} >View more...</Button> */}
                       <Button variant="light" radius="md" >View more...</Button>
@@ -64,15 +67,31 @@ const DashboardPage = () => {
                 </div>
               </MediaQuery>
             </Grid.Col>
-            <Grid.Col xs={12} md={4} style={{ display: "flex", justifyContent: "center" }} >
-              <Image maw={300} fit="contain" radius="md" src={userImage} alt="Uesr" />
+            <Grid.Col xs={12} md={4} style={{ display: "flex", justifyContent: "center", alignContent: "center" }} >
+              <Image maw={350} fit="contain" radius="md" src={userImage} alt="Uesr" styles={{ root: { display: "flex", alignItems: "center" } }}
+              />
             </Grid.Col>
           </Grid>
         </div>
-      </Grid.Col>
+
+        {/* tiny psycological test */}
+        <div style={{ ...useGetComponentStyle(), marginTop: "15px" }}>
+          <Grid>
+            <Grid.Col span={4}>
+              1
+            </Grid.Col>
+            <Grid.Col span={4}>
+              1
+            </Grid.Col>
+            <Grid.Col span={4} >
+              1
+            </Grid.Col>
+          </Grid >
+        </div >
+      </Grid.Col >
 
       {/* Date  */}
-      <Grid.Col md={6} lg={4} >
+      < Grid.Col md={5} lg={4} >
         <div style={useGetComponentStyle()} >
           <div className={classes.calendar}>
             <DatePicker allowDeselect value={dateValue} onChange={setDateValue} hideOutsideDates styles={calendarStyle}
@@ -80,6 +99,18 @@ const DashboardPage = () => {
             // monthLabelFormat="YYYY年 M月"
             />
           </div>
+        </div>
+      </Grid.Col>
+
+      {/* Month record */}
+      <Grid.Col md={7} lg={7}>
+        <div className={classes["month-wrapper"]} style={useGetComponentStyle()} >
+          <RecordSwiper></RecordSwiper>
+        </div>
+      </Grid.Col>
+      <Grid.Col xs={12} lg={5}>
+        <div className={classes["lesson-wrapper"]} style={useGetComponentStyle()} >
+          123456
         </div>
       </Grid.Col>
     </Grid >

@@ -1,0 +1,83 @@
+.swiper-day {
+    height: 404px;
+
+    .swiper-slide-day {
+        height: 125px !important;
+
+        .day-tool-list {
+            margin-right: 5px;
+            display: flex;
+            justify-content: flex-end;
+
+            .day-tool {
+                width: 17px;
+                height: 17px;
+                margin: 2px 2px;
+                cursor: pointer;
+            }
+        }
+
+        .day-wrapper {
+            margin-right: 5px;
+            padding: 5px 0 3px;
+            border-radius: 10px;
+
+            .month-date {
+                width: 70px;
+                height: 100%;
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: center;
+                padding: 5px;
+                padding-right: 0;
+                text-align: center;
+
+                .month {
+                    font-size: 18px;
+                }
+
+                .date {
+                    font-size: 25px;
+                }
+            }
+
+            .mood {
+                width: 80px;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .tag-list {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: flex-start;
+                height: 29px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                align-content: space-between;
+                margin-bottom: 4px;
+
+                .tag {
+                    background-color: var(--mantine-color-tool-1);
+                    color: #fff;
+                    border-radius: 5px;
+                    padding: 0px 3px;
+                    margin-right: 3px;
+                    margin-bottom: 2px;
+                }
+            }
+
+            .memo {
+                // text-align: justify;
+                font-size: 15px;
+                overflow: hidden;
+                display: -webkit-box;
+                text-overflow: ellipsis;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+            }
+        }
+    }
+}

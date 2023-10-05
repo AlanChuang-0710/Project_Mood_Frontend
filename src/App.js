@@ -11,7 +11,7 @@ import AnalysisPage from "./pages/AnalysisPage";
 import CompassPage from "./pages/CompassPage";
 
 function App() {
-  const [colorScheme, setColorScheme] = useState('light');
+  const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
 
   return (
@@ -27,6 +27,8 @@ function App() {
               light: ["#fff"], // 0是白色背景 
               night: ["#2b2c40"], // 0是深藍背景 
               tool: ["#717b8a", "#9BA2AD"], // 0是灰色 用於工具 1是淺灰 用於日曆
+              mood: [],
+              button: ["#e7f5ff", "#33486B"] //0是light下btn的顏色，1是dark下btn的顏色
             },
             // primaryColor: 'brand', //只接受colors中的鍵
           }}>

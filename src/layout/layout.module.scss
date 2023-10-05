@@ -30,9 +30,17 @@
         color: var(--mantine-color-brand-0);
     }
 
-    .nav-icon {
-        font-size: 20px;
-        color: var(--mantine-color-tool-0);
+    button {
+
+        .nav-icon {
+            font-size: 20px;
+            color: var(--mantine-color-tool-0);
+        }
+
+        span {
+            font-size: 16px;
+        }
+
     }
 
     .nav-close {

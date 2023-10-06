@@ -102,7 +102,6 @@ const DashboardPage = () => {
     // 回傳FileList對象，包含各個file
     window.URL = window.URL || window.webkitURL;
 
-
     // 較驗相片的規格
     if (FileList.length > 3) {
       return alert("每日快照最多上傳三張相片!");
@@ -133,7 +132,7 @@ const DashboardPage = () => {
     setMemo("");
     setPreviewPhotos([]);
     setSendServerPhotos([]);
-  });
+  }, []);
 
 
   useEffect(() => {
@@ -218,7 +217,7 @@ const DashboardPage = () => {
       <Modal styles={{ header: { justifyContent: "center" }, title: { fontSize: "30px" } }} opened={opened} onClose={closeModalHandler} title={formatSelectedDate} withCloseButton={false} yOffset={200}>
         {/* <LoadingOverlay visible={opened} overlayBlur={2} /> */}
         <Tabs value={activeTab} onTabChange={setActiveTab} styles={{ tabLabel: { fontSize: "22px" }, tab: { "&:hover": { backgroundColor: theme.colorScheme === "light" ? theme.colors.button[0] : theme.colors.button[1] } } }}>
-          
+
           <Tabs.List>
             <Tabs.Tab value="night">Night</Tabs.Tab>
             <Tabs.Tab value="day">Day</Tabs.Tab>

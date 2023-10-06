@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Image, Grid, MediaQuery, Button, useMantineTheme, Modal, LoadingOverlay, Tabs, Slider, Textarea } from "@mantine/core";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { Image, Grid, MediaQuery, Button, useMantineTheme, Modal, LoadingOverlay, Tabs, Slider, Textarea, MultiSelect, Group, FileButton, CloseButton } from "@mantine/core";
+import { IconCloudUpload } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { DatePicker } from '@mantine/dates';
 import classes from "./DashboardPage.module.scss";
@@ -58,18 +59,82 @@ const DashboardPage = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [activeTab, setActiveTab] = useState("night");
 
-  /* 今日睡眠品質 */
+  // 今日睡眠品質
   const [sleep, setSleep] = useState(8);
   const sleepMarks = [
     { value: 8, label: '8hr' },
     { value: 16, label: '16hr' },
   ];
 
-  /* 今日夢境相關 */
+  // 今日夢境相關
   const [dream, setDream] = useState('');
 
-  /* 選擇當日心情 */
-  const [score, setScore] = useState(null);
+  // 今日心情
+  const [score, setScore] = useState(0);
+
+  // 今日memo
+  const [memo, setMemo] = useState('');
+
+  // 今日snapshot
+  const [previewPhotos, setPreviewPhotos] = useState([]);
+  const [sendServerPhotos, setSendServerPhotos] = useState([]);
+  const resetRef = useRef(null);
+  const clearPhotos = useCallback((index) => {
+    if (index !== undefined) {
+      setPreviewPhotos((preVal) => {
+        let result = [...preVal];
+        result.splice(index, 1);
+        return result;
+      });
+      setSendServerPhotos((preVal) => {
+        let result = [...preVal];
+        result.splice(index, 1);
+        return result;
+      });
+      resetRef.current?.();
+    } else {
+      setPreviewPhotos([]);
+      setSendServerPhotos([]);
+      resetRef.current?.();
+    }
+  }, []);
+  const uploadImageHandler = useCallback((FileList) => {
+    // 回傳FileList對象，包含各個file
+    window.URL = window.URL || window.webkitURL;
+
+
+    // 較驗相片的規格
+    if (FileList.length > 3) {
+      return alert("每日快照最多上傳三張相片!");
+
+      /* 使用mantine notification 組件 */
+      // return notifications.show({
+      //     title: 'Notification',
+      //     message: '每日快照最多上傳三張相片! ',
+      //     position: "top-center"
+      // });
+    };
+
+    if (FileList.some((file) => file.size / 1024 > 1024)) {
+      return alert("每張快照不能超過1MB");
+    };
+
+    let urlArray = FileList.map((file) => URL.createObjectURL(file));
+    setPreviewPhotos(urlArray);
+    setSendServerPhotos(FileList);
+  }, []);
+
+  const closeModalHandler = useCallback(() => {
+    close();
+    setActiveTab("night");
+    setSleep(8);
+    setDream("");
+    setScore(0);
+    setMemo("");
+    setPreviewPhotos([]);
+    setSendServerPhotos([]);
+  });
+
 
   useEffect(() => {
     if (selectedDateValue) {
@@ -150,9 +215,10 @@ const DashboardPage = () => {
       </Grid.Col>
 
       {/* 新增心情 Modal */}
-      <Modal styles={{ header: { justifyContent: "center" }, title: { fontSize: "30px" } }} opened={opened} onClose={close} title={formatSelectedDate} withCloseButton={false} yOffset={200}>
+      <Modal styles={{ header: { justifyContent: "center" }, title: { fontSize: "30px" } }} opened={opened} onClose={closeModalHandler} title={formatSelectedDate} withCloseButton={false} yOffset={200}>
         {/* <LoadingOverlay visible={opened} overlayBlur={2} /> */}
         <Tabs value={activeTab} onTabChange={setActiveTab} styles={{ tabLabel: { fontSize: "22px" }, tab: { "&:hover": { backgroundColor: theme.colorScheme === "light" ? theme.colors.button[0] : theme.colors.button[1] } } }}>
+          
           <Tabs.List>
             <Tabs.Tab value="night">Night</Tabs.Tab>
             <Tabs.Tab value="day">Day</Tabs.Tab>
@@ -200,6 +266,53 @@ const DashboardPage = () => {
                   <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(2)}>
                     <SVG src={faceHappy} width={"100%"} height={"100%"}></SVG>
                   </Button>
+                </div>
+              </div>
+              <div style={{ marginTop: "20px" }}>
+                <div className={classes["title"]}>Influential People</div>
+                <div>
+                  <MultiSelect
+                    placeholder="Pick people who mainly affect your mood today"
+                    data={['Parent', 'Sibling', 'Alan', 'Myself']}
+                    searchable
+                  />
+                </div>
+              </div>
+              <div style={{ marginTop: "20px" }}>
+                <div className={classes["title"]}>Hashtags for today</div>
+                <div>
+                  <MultiSelect
+                    placeholder="Pick hashtags for today"
+                    data={['Happy', 'Angry', 'Tired', 'Exhausted']}
+                    searchable
+                  />
+                </div>
+              </div>
+              <div style={{ marginTop: "20px" }}>
+                <div className={classes["title"]}>Memo for Today</div>
+                <Textarea value={memo} onChange={(event) => setMemo(event.currentTarget.value)} styles={{ input: { height: "200px" } }} />
+              </div>
+              <div style={{ marginTop: "20px" }}>
+                <div className={classes["title"]}>Snapshot for Today</div>
+                <div className={classes["upload-container"]}>
+                  <Group position="center">
+                    <FileButton resetRef={resetRef} onChange={uploadImageHandler} accept="image/png,image/jpeg" multiple>
+                      {(props) => <Button  {...props} leftIcon={<IconCloudUpload size="1rem" />} loaderPosition="center">
+                        上傳照片
+                      </Button>}
+                    </FileButton>
+                    <Button disabled={previewPhotos.length === 0} color="red" onClick={() => clearPhotos()}>
+                      清除照片
+                    </Button>
+                  </Group>
+                </div>
+                <div className={classes["photo-container"]}>
+                  {previewPhotos && previewPhotos.map((file, index) =>
+                    <div key={index} className={classes["upload-photo"]}>
+                      <CloseButton aria-label="Close modal" className={classes.delete} radius="xl" onClick={() => clearPhotos(index)} />
+                      <img src={file} alt="upload" />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

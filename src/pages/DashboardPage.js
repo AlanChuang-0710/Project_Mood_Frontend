@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Image, Grid, MediaQuery, Button, useMantineTheme, Modal, LoadingOverlay, Tabs } from "@mantine/core";
+import { Image, Grid, MediaQuery, Button, useMantineTheme, Modal, LoadingOverlay, Tabs, Slider, Textarea } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { DatePicker } from '@mantine/dates';
 import classes from "./DashboardPage.module.scss";
@@ -7,6 +7,12 @@ import { useGetComponentStyle } from "../styles/dayNightStyle";
 import userImage from "../assets/user.png";
 import RecordSwiper from "../components/RecordSwiper/RecordSwiper";
 import moment from "moment";
+import SVG from "react-inlinesvg";
+import faceHappy from "../assets/emotion_set/face_happy.svg";
+import faceSmile from "../assets/emotion_set/face_smile.svg";
+import faceNormal from "../assets/emotion_set/face_normal.svg";
+import faceSad from "../assets/emotion_set/face_sad.svg";
+import faceDepressed from "../assets/emotion_set/face_depressed.svg";
 
 const DashboardPage = () => {
   const theme = useMantineTheme();
@@ -51,6 +57,19 @@ const DashboardPage = () => {
   /* 心情 Modal */
   const [opened, { open, close }] = useDisclosure(false);
   const [activeTab, setActiveTab] = useState("night");
+
+  /* 今日睡眠品質 */
+  const [sleep, setSleep] = useState(8);
+  const sleepMarks = [
+    { value: 8, label: '8hr' },
+    { value: 16, label: '16hr' },
+  ];
+
+  /* 今日夢境相關 */
+  const [dream, setDream] = useState('');
+
+  /* 選擇當日心情 */
+  const [score, setScore] = useState(null);
 
   useEffect(() => {
     if (selectedDateValue) {
@@ -131,16 +150,60 @@ const DashboardPage = () => {
       </Grid.Col>
 
       {/* 新增心情 Modal */}
-      <Modal styles={{ content: useGetComponentStyle(), header: useGetComponentStyle(), title: { fontSize: "30px" } }} opened={opened} onClose={close} title={formatSelectedDate} yOffset={200}>
+      <Modal styles={{ header: { justifyContent: "center" }, title: { fontSize: "30px" } }} opened={opened} onClose={close} title={formatSelectedDate} withCloseButton={false} yOffset={200}>
         {/* <LoadingOverlay visible={opened} overlayBlur={2} /> */}
-        <Tabs value={activeTab} onTabChange={setActiveTab}>
+        <Tabs value={activeTab} onTabChange={setActiveTab} styles={{ tabLabel: { fontSize: "22px" }, tab: { "&:hover": { backgroundColor: theme.colorScheme === "light" ? theme.colors.button[0] : theme.colors.button[1] } } }}>
           <Tabs.List>
             <Tabs.Tab value="night">Night</Tabs.Tab>
             <Tabs.Tab value="day">Day</Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="night">First panel</Tabs.Panel>
-          <Tabs.Panel value="day">Second panel</Tabs.Panel>
+          <Tabs.Panel value="night">
+            <div className={classes["panel"]}>
+              <div >
+                <div className={classes["title"]}>Sleep Quality</div>
+                <Slider
+                  mt={"md"}
+                  value={sleep} onChange={setSleep}
+                  marks={sleepMarks}
+                  min={0}
+                  max={24}
+                  label={(value) => value.toFixed(1) + "hr"}
+                  step={0.5}
+                  precision={1}
+                />
+              </div>
+              <div style={{ marginTop: "30px" }}>
+                <div className={classes["title"]}>Dream Content</div>
+                <Textarea value={dream} onChange={(event) => setDream(event.currentTarget.value)} styles={{ input: { height: "200px" } }} />
+              </div>
+            </div>
+          </Tabs.Panel>
+
+          <Tabs.Panel value="day">
+            <div className={classes["panel"]}>
+              <div>
+                <div className={classes["title"]}>Mood Score</div>
+                <div className={classes["mood-list"]}>
+                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(-2)}>
+                    <SVG src={faceDepressed} width={"100%"} height={"100%"}></SVG>
+                  </Button>
+                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(-1)}>
+                    <SVG src={faceSad} width={"100%"} height={"100%"}></SVG>
+                  </Button>
+                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(0)}>
+                    <SVG src={faceNormal} width={"100%"} height={"100%"}></SVG>
+                  </Button>
+                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(1)}>
+                    <SVG src={faceSmile} width={"100%"} height={"100%"}></SVG>
+                  </Button>
+                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(2)}>
+                    <SVG src={faceHappy} width={"100%"} height={"100%"}></SVG>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Tabs.Panel>
         </Tabs>
       </Modal>
 

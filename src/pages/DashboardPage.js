@@ -8,12 +8,11 @@ import { useGetComponentStyle } from "../styles/dayNightStyle";
 import userImage from "../assets/user.png";
 import RecordSwiper from "../components/RecordSwiper/RecordSwiper";
 import moment from "moment";
-import SVG from "react-inlinesvg";
-import faceHappy from "../assets/emotion_set/face_happy.svg";
-import faceSmile from "../assets/emotion_set/face_smile.svg";
-import faceNormal from "../assets/emotion_set/face_normal.svg";
-import faceSad from "../assets/emotion_set/face_sad.svg";
-import faceDepressed from "../assets/emotion_set/face_depressed.svg";
+import happy from "../assets/emotion_set/happy.svg";
+import smile from "../assets/emotion_set/smile.svg";
+import normal from "../assets/emotion_set/normal.svg";
+import sad from "../assets/emotion_set/sad.svg";
+import depressed from "../assets/emotion_set/depressed.svg";
 
 const DashboardPage = () => {
   const theme = useMantineTheme();
@@ -58,6 +57,30 @@ const DashboardPage = () => {
   /* 心情 Modal */
   const [opened, { open, close }] = useDisclosure(false);
   const [activeTab, setActiveTab] = useState("night");
+
+  // 今日score
+  const moodList = [
+    {
+      icon: happy,
+      score: 2
+    },
+    {
+      icon: smile,
+      score: 1
+    },
+    {
+      icon: normal,
+      score: 0
+    },
+    {
+      icon: sad,
+      score: -1
+    },
+    {
+      icon: depressed,
+      score: -2
+    }
+  ];
 
   // 今日睡眠品質
   const [sleep, setSleep] = useState(8);
@@ -250,21 +273,9 @@ const DashboardPage = () => {
               <div>
                 <div className={classes["title"]}>Mood Score</div>
                 <div className={classes["mood-list"]}>
-                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(-2)}>
-                    <SVG src={faceDepressed} width={"100%"} height={"100%"}></SVG>
-                  </Button>
-                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(-1)}>
-                    <SVG src={faceSad} width={"100%"} height={"100%"}></SVG>
-                  </Button>
-                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(0)}>
-                    <SVG src={faceNormal} width={"100%"} height={"100%"}></SVG>
-                  </Button>
-                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(1)}>
-                    <SVG src={faceSmile} width={"100%"} height={"100%"}></SVG>
-                  </Button>
-                  <Button variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(2)}>
-                    <SVG src={faceHappy} width={"100%"} height={"100%"}></SVG>
-                  </Button>
+                  {moodList.map((item) => <Button key={item.score} variant="light" styles={{ root: { padding: 0 } }} onClick={() => setScore(item.score)}>
+                    <img style={{ width: "40px", height: "40px" }} src={item.icon} alt="圖片" />
+                  </Button>)}
                 </div>
               </div>
               <div style={{ marginTop: "20px" }}>

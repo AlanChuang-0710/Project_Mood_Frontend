@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, useMantineTheme } from "@mantine/core";
 import classes from "./RecordSwiper.module.scss";
 // import swiperBackground from "../../assets/swiper_background.svg";
-import faceHappy from "../../assets/emotion_set/face_happy.svg";
+import faceHappy from "../../assets/emotion_set/happy.svg";
 import uploadIcon from "../../assets/tool/upload.svg";
 import deleteIcon from "../../assets/tool/delete.svg";
 import editIcon from "../../assets/tool/edit.svg";

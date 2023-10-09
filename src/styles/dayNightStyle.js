@@ -17,6 +17,7 @@ export function useGetComponentStyle() {
     return {
         background: theme.colorScheme === 'light' ? theme.colors.light[0] : theme.colors.night[0],
         borderRadius: "15px",
-        padding: "10px"
+        padding: "10px",
+        boxShadow: "2px 2px 2px 1px rgba(0, 0, 0, 0.2)"
     };
 }

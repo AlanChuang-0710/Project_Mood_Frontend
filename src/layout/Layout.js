@@ -4,7 +4,7 @@ import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '
 import classes from "./layout.module.scss";
 import { HouseDoor, Gear, Bell, Search, GraphUp, Compass } from "react-bootstrap-icons";
 import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
 import { AppShell, Navbar, useMantineTheme, Burger, Menu, Text } from '@mantine/core';
 import { IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
@@ -13,8 +13,11 @@ const Layout = (props) => {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(true);
 
+    /* 獲得當前路由 */
+    const location = useLocation();
+
     // navbar 選項
-    const [active, setActive] = useState(0);
+    const [active, setActive] = useState(("/" + location.pathname.split("/")[1]) === "/" ? "/dashboard" : "/" + location.pathname.split("/")[1]);
     const navButtons = [
         {
             label: 'Dashboard',
@@ -40,10 +43,10 @@ const Layout = (props) => {
 
     /* 獲得nav */
     const nav = useNavigate();
-    const navClickHandler = useCallback((index, route) => {
-        setActive(index);
+    const navClickHandler = useCallback((route) => {
+        setActive(route);
         nav(route);
-    }, [nav]);
+    });
 
     return (
         <AppShell
@@ -117,17 +120,17 @@ const Layout = (props) => {
                         <SimpleGrid cols={1}>
                             <Navbar.Section>
                                 <div style={{ position: "relative" }}>
-                                    <a href="javascript;" className={classes["nav-logo"]}>Mood</a>
+                                    <a href="#" className={classes["nav-logo"]}>Mood</a>
                                 </div>
                             </Navbar.Section>
 
                             {navButtons.map((option, index) => <NavLink
                                 styles={{ root: { '&:hover': { backgroundColor: theme.colorScheme === 'light' ? theme.colors.button[0] : theme.colors.button[1], borderRadius: "8px" }, '&[data-active]': { backgroundColor: theme.colorScheme === 'light' ? theme.colors.button[0] : theme.colors.button[1], borderRadius: "8px" } }, inner: { justifyContent: "flex-start", marginLeft: "5px", color: theme.colors.tool[0], fontSize: "16px" } }}
                                 key={index}
-                                active={index === active}
+                                active={option.route === active}
                                 label={option.label}
                                 icon={option.icon}
-                                onClick={() => navClickHandler(index, option.route)}
+                                onClick={() => navClickHandler(option.route)}
                             />)}
                         </SimpleGrid>
                     </div>

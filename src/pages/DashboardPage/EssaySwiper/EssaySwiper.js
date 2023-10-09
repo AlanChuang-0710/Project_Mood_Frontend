@@ -1,0 +1,133 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import { useMantineTheme, Chip, Group, Grid, Image } from "@mantine/core";
+import { useViewportSize } from '@mantine/hooks';
+import classes from "./Essay.module.scss";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/scrollbar';
+import test from "../../../assets/test.jpg";
+import test2 from "../../../assets/test2.png";
+
+
+SwiperCore.use([Scrollbar, Mousewheel]);
+
+const LessonSwiper = () => {
+  const theme = useMantineTheme();
+  const [value, setValue] = useState('All');
+
+  // 獲得視口寬度
+  const { height, width } = useViewportSize();
+  const [direction, setDirection] = useState("vertical");
+
+  const fakeData = [
+    {
+      id: 1293,
+      url: "https://www.google.com/",
+      photo: test,
+      title: "How to get away with Depression, top 10 sales!",
+      author: "Alan Chuang",
+      intro: "Meditation is a form of yoga and, like yoga, starts to shift you from identifying with your mind to identifying with your awareness"
+    },
+    {
+      id: 1292,
+      url: "https://www.google.com/",
+      photo: test2,
+      title: "Mountain therapy ",
+      author: "Eric Bennett",
+      intro: "A short stroll through the woods, a hike in the mountains, looking out at the ocean, or sitting  quietly in the desert can quickly begin to heal."
+    },
+    {
+      id: 1290,
+      url: "https://www.google.com/",
+      photo: test,
+      title: "SUP discovery course ",
+      author: "Atoll Board Corp.",
+      intro: "Stand up paddle boarding is an activity that completely alters your state of mind and physical body, where we could have great satisfaction"
+    },
+    {
+      id: 13,
+      url: "https://www.google.com/",
+      photo: test,
+      title: "How to get away with Depression, top 10 sales!",
+      author: "Alan Chuang",
+      intro: "Meditation is a form of yoga and, like yoga, starts to shift you from identifying with your mind to identifying with your awareness"
+    },
+    {
+      id: 12,
+      url: "https://www.google.com/",
+      photo: test2,
+      title: "Mountain therapy ",
+      author: "Eric Bennett",
+      intro: "A short stroll through the woods, a hike in the mountains, looking out at the ocean, or sitting  quietly in the desert can quickly begin to heal."
+    },
+    {
+      id: 120,
+      url: "https://www.google.com/",
+      photo: test,
+      title: "SUP discovery course ",
+      author: "Atoll Board Corp.",
+      intro: "Stand up paddle boarding is an activity that completely alters your state of mind and physical body, where we could have great satisfaction"
+    }
+  ];
+
+  const essayClickHandler = useCallback((url) => {
+    window.open(url);
+  });
+
+  // useEffect(() => {
+  // if (width < 700) {
+  //   setDirection("horizontal");
+  // } else {
+  //   setDirection("vertical");
+  // }
+  // }, [width]);
+
+  return (
+    <div>
+      <Chip.Group multiple value={value} onChange={setValue} >
+        <Group position="left" mb="xs">
+          <Chip variant="light" value="All">All</Chip>
+          <Chip variant="light" value="Happiness">Happiness</Chip>
+          <Chip variant="light" value="Depression">Depression</Chip>
+          <Chip variant="light" value="Sad">Sad</Chip>
+        </Group>
+      </Chip.Group>
+
+      <Swiper spaceBetween={5}
+        slidesPerView={4}
+        direction={direction}
+        mousewheel={true}
+        scrollbar={{ draggable: true }}
+        className={classes["essay-swiper"]}
+      >
+
+        {[...fakeData].map((essay) =>
+          < SwiperSlide tag="div" className={classes["essay-slide"]} key={essay.id} onClick={() => essayClickHandler(essay.url)}>
+            <Grid>
+              <Grid.Col span={4} >
+                <div>
+                  <Image height={130} radius="md" fit='cover' src={essay.photo} alt="Random image" />
+                </div>
+              </Grid.Col>
+              <Grid.Col span={8} >
+                <div>
+                  <div className={classes.title}>
+                    {essay.title}
+                  </div>
+                  <div className={classes.author}>
+                    by {essay.author}
+                  </div>
+                </div>
+                <div className={classes.intro}>
+                  {essay.intro}
+                </div>
+              </Grid.Col>
+            </Grid>
+          </SwiperSlide>)}
+      </Swiper>
+    </div >
+  );
+};
+
+export default LessonSwiper;

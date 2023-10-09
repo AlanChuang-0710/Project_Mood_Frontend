@@ -1,8 +1,14 @@
+.title {
+    font-weight: 700;
+    font-size: 22px;
+    text-align: center
+}
+
 .swiper-day {
-    height: 404px;
 
     .swiper-slide-day {
-        height: 125px !important;
+        // height: 125px !important;
+        cursor: grab;
 
         .day-tool-list {
             margin-right: 5px;

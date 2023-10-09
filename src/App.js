@@ -3,12 +3,12 @@ import { useState } from "react";
 import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import Layout from './layout/Layout';
-import SignUpPage from "./pages/SignUpPage";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import AccountPage from "./pages/AccountPage";
-import AnalysisPage from "./pages/AnalysisPage";
-import CompassPage from "./pages/CompassPage";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import AnalysisPage from "./pages/AnalysisPage/AnalysisPage";
+import AccountPage from "./pages/AccountPage/AccountPage";
+import CompassPage from "./pages/CompassPage/CompassPage";
 
 function App() {
   const [colorScheme, setColorScheme] = useState('dark');

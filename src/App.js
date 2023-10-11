@@ -33,17 +33,17 @@ function App() {
             // primaryColor: 'brand', //只接受colors中的鍵
           }}>
           <Notifications />
-          <Layout>
-            <Routes>
+          <Routes>
+            <Route path="/signup/:tabValue" element={<SignUpPage />}></Route>
+            <Route path="/login" element={<LoginPage />}></Route>
+            <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" />}></Route>
               <Route path="/dashboard" element={<DashboardPage />}></Route>
               <Route path="/account" element={<AccountPage />}></Route>
               <Route path="/analysis" element={<AnalysisPage />}></Route>
               <Route path="/compass" element={<CompassPage />}></Route>
-              <Route path="/signup" element={<SignUpPage />}></Route>
-              <Route path="/login" element={<LoginPage />}></Route>
-            </Routes>
-          </Layout>
+            </Route>
+          </Routes>
         </MantineProvider>
       </ColorSchemeProvider>
     </div>

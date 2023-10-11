@@ -4,7 +4,7 @@ import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '
 import classes from "./layout.module.scss";
 import { HouseDoor, Gear, Bell, Search, GraphUp, Compass } from "react-bootstrap-icons";
 import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
 import { AppShell, Navbar, useMantineTheme, Burger, Menu, Text } from '@mantine/core';
 import { IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
@@ -144,7 +144,7 @@ const Layout = (props) => {
         // }
         >
             <div >
-                {props.children}
+                <Outlet />
             </div>
         </AppShell>
     );

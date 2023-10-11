@@ -1,10 +1,16 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
 import { TextInput, Button } from "@mantine/core";
 import loginByPhone from "../../../assets/loginSignup/login_by_phone.svg";
 import classes from "./Verification.module.scss";
 
 const Verification = () => {
+
+    // 獲得跳轉
+    const nav = useNavigate();
+
+    // 統一數據管理
     const form = useForm({
         initialValues: {
             phone: "0975684593"
@@ -18,7 +24,7 @@ const Verification = () => {
         () => {
             form.validate();
             if (form.isValid()) {
-                alert("Verified");
+                nav("/signup/otp");
             }
         },
         [form],

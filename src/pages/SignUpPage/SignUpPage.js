@@ -41,7 +41,6 @@ const SignUpPage = () => {
         () => {
             form.validate();
             if (form.isValid()) {
-                alert("signup !");
                 nav("/signup/verification");
             }
         },

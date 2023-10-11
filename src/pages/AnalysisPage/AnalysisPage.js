@@ -4,6 +4,7 @@ import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import { Grid, useMantineTheme, } from "@mantine/core";
 import ScoreRatioPieChart from "./ScoreRatioPieChart/ScoreRatioPieChart";
 import ScoreFlowChart from './ScoreFlowChart/ScoreFlowChart';
+import ScoreDayChart from './ScoreDayChart/ScoreDayChart';
 
 const AnalysisPage = () => {
 
@@ -20,12 +21,12 @@ const AnalysisPage = () => {
             <ScoreFlowChart />
           </div>
         </Grid.Col>
-        <Grid.Col xs={12} md={4}>
+        <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
-            1
+            <ScoreDayChart />
           </div>
         </Grid.Col>
-        <Grid.Col xs={12} md={8}>
+        <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
             1
           </div>

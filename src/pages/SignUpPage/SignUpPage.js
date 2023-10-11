@@ -8,6 +8,7 @@ import dayBg from "../../assets/loginSignup/day_bg.svg";
 import nightBg from "../../assets/loginSignup/night_bg.svg";
 import Verification from "./Verification/Verification";
 import OTPcheck from './OTPcheck/OTPcheck';
+import SignupResult from "./SignupResult/SignupResult";
 
 const SignUpPage = () => {
     const theme = useMantineTheme();
@@ -89,6 +90,9 @@ const SignUpPage = () => {
                         </Tabs.Panel>
                         <Tabs.Panel value="otp">
                             <OTPcheck />
+                        </Tabs.Panel>
+                        <Tabs.Panel value="result">
+                            <SignupResult />
                         </Tabs.Panel>
                     </Tabs>
                 </div>

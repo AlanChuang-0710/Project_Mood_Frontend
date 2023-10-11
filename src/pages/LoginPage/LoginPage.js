@@ -35,7 +35,7 @@ const LoginPage = () => {
         () => {
             form.validate();
             if (form.isValid()) {
-                alert("login !");
+                nav("/");
             }
         },
         [form],

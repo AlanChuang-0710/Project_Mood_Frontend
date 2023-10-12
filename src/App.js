@@ -9,6 +9,7 @@ import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import AnalysisPage from "./pages/AnalysisPage/AnalysisPage";
 import AccountPage from "./pages/AccountPage/AccountPage";
 import CompassPage from "./pages/CompassPage/CompassPage";
+import WordAnalysisPage from "./pages/WordAnalysisPage/WordAnalysisPage";
 
 function App() {
   const [colorScheme, setColorScheme] = useState('dark');
@@ -34,13 +35,15 @@ function App() {
           }}>
           <Notifications />
           <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" />}></Route>
+            <Route path="/signup" element={<Navigate to="/signup/create" />}></Route>
             <Route path="/signup/:tabValue" element={<SignUpPage />}></Route>
             <Route path="/login" element={<LoginPage />}></Route>
             <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/dashboard" />}></Route>
               <Route path="/dashboard" element={<DashboardPage />}></Route>
               <Route path="/account" element={<AccountPage />}></Route>
               <Route path="/analysis" element={<AnalysisPage />}></Route>
+              <Route path="/word-analysis" element={<WordAnalysisPage />}></Route>
               <Route path="/compass" element={<CompassPage />}></Route>
             </Route>
           </Routes>

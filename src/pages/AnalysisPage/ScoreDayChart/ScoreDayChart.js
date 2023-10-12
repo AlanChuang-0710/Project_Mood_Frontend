@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as echarts from 'echarts';
 import { useMantineTheme, } from "@mantine/core";
 
-const ScoreDayChart = () => {
+const ScoreDayChart = ({ height }) => {
     const theme = useMantineTheme();
     const scoreDayDOM = useRef(null);
     const [scoreDayChart, setScoreDayChart] = useState(null);
@@ -109,7 +109,7 @@ const ScoreDayChart = () => {
     }, [option, handleResize]);
 
     return (
-        <div ref={scoreDayDOM} style={{ height: "300px" }}></div>
+        <div ref={scoreDayDOM} style={{ height: height + "px" }}></div>
     );
 };
 

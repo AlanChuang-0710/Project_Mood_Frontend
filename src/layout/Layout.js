@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '@mantine/core';
 import classes from "./layout.module.scss";
-import { HouseDoor, Gear, Bell, Search, GraphUp, Compass } from "react-bootstrap-icons";
+import { HouseDoor, Gear, Bell, Search, GraphUp, Compass, BodyText } from "react-bootstrap-icons";
 import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
@@ -28,6 +28,11 @@ const Layout = (props) => {
             label: 'Analysis',
             icon: <GraphUp className={classes["nav-icon"]} />,
             route: "/analysis"
+        },
+        {
+            label: 'Word Analysis',
+            icon: <BodyText className={classes["nav-icon"]} />,
+            route: "/word-analysis"
         },
         {
             label: 'Compass',

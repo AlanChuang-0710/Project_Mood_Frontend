@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as echarts from 'echarts';
 
-const ScoreRatioPieChart = () => {
+const ScoreRatioPieChart = ({ height }) => {
     const scoreRatioPieDOM = useRef(null);
     const [scoreRatioPieChart, setScoreRaioPieChart] = useState(null);
     const handleResize = () => scoreRatioPieChart?.resize();
@@ -61,7 +61,7 @@ const ScoreRatioPieChart = () => {
     }, [option]);
 
     return (
-        <div ref={scoreRatioPieDOM} style={{ height: "200px", widt: "200px" }}></div>
+        <div ref={scoreRatioPieDOM} style={{ height: height + "px" }}></div>
     );
 };
 

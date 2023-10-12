@@ -4,7 +4,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { DatePicker } from '@mantine/dates';
 import classes from "./DashboardPage.module.scss";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
-import userImage from "../../assets/user.png";
+import userImage from "../../assets/dashboard/user.png";
 import RecordSwiper from "./RecordSwiper/RecordSwiper";
 import EssaySwiper from './EssaySwiper/EssaySwiper';
 import DailyRecordModal from './DailyRecordModal/DailyRecordModal';

@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as echarts from 'echarts';
 import { useMantineTheme, } from "@mantine/core";
 
-const ScoreFlowChart = ({ height }) => {
+const SleepFlowChart = ({ height }) => {
     const theme = useMantineTheme();
-    const scoreFlowDOM = useRef(null);
-    const [scoreFlowChart, setScoreFlowChart] = useState(null);
-    const handleResize = () => scoreFlowChart?.resize();
+    const sleepFlowDOM = useRef(null);
+    const [sleepFlowChart, setScoreFlowChart] = useState(null);
+    const handleResize = () => sleepFlowChart?.resize();
     const option = {
         title: {
             text: "Mood Flow",
@@ -56,14 +56,14 @@ const ScoreFlowChart = ({ height }) => {
     };
 
     useEffect(() => {
-        if (!scoreFlowChart) {
+        if (!sleepFlowChart) {
             // 此處極為重要，目的是避免DOM尚未被渲染就執行init，會出現頁面不顯示圖表，且控制台報錯的問題:
             // Can't get DOM width or height. Please check dom.clientWidth and dom.clientHeight.
             setTimeout(() => {
-                setScoreFlowChart(echarts.init(scoreFlowDOM.current));
+                setScoreFlowChart(echarts.init(sleepFlowDOM.current));
             }, 100);
         }
-        scoreFlowChart?.setOption(option);
+        sleepFlowChart?.setOption(option);
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -71,8 +71,8 @@ const ScoreFlowChart = ({ height }) => {
     }, [option, handleResize]);
 
     return (
-        <div ref={scoreFlowDOM} style={{ height: height + "px" }}></div>
+        <div ref={sleepFlowDOM} style={{ height: height + "px" }}></div>
     );
 };
 
-export default ScoreFlowChart;
+export default SleepFlowChart;

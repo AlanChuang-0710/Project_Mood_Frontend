@@ -1,4 +1,15 @@
+.title {
+    font-size: 20px;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 12px;
+}
+
 .table-wrapper {
+    margin-top: 5px;
+
     table {
 
         tr,
@@ -6,20 +17,16 @@
             background-color: transparent;
         }
 
-        thead {
-            th:nth-child(1) {
-                text-align: center;
-            }
-        }
-
         tbody {
-            td:nth-child(1) {
-                text-align: center;
-            }
-
             tr:hover {
                 background-color: rgb(112, 112, 112) !important;
             }
         }
+
     }
+
+    table~div {
+        background: none !important;
+    }
+
 }

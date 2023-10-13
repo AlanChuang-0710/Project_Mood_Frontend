@@ -3,7 +3,7 @@ import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import { Grid, useMantineTheme, SegmentedControl, } from "@mantine/core";
 import classes from "./WordAnalysisPage.module.scss";
 import ScoreKOLTable from './ScoreKOLTable/ScoreKOLTable';
-import ScoreReality from './ScoreReality/ScoreReality';
+import RepeatedWordTable from './RepeatedWordTable/RepeatedWordTable';
 
 const WordAnalysisPage = () => {
     const theme = useMantineTheme();
@@ -25,17 +25,21 @@ const WordAnalysisPage = () => {
             </Grid>
 
             <Grid>
-                <Grid.Col xs={12} md={6}>
+                <Grid.Col xs={12} md={7}>
                     <div style={useGetComponentStyle()}>
-                        <ScoreKOLTable />
+                        <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />
                     </div>
                 </Grid.Col>
-                <Grid.Col xs={12} md={6}>
+                <Grid.Col xs={12} md={5}>
                     <div style={useGetComponentStyle()}>
-                        <ScoreReality />
+                        <RepeatedWordTable
+                            title={"Repeated words in Dream"}
+                            subtitle={"The following table compiles the words that frequently appear in daily dreams."}
+                        />
                     </div>
                 </Grid.Col>
             </Grid>
+
         </div>
     );
 };

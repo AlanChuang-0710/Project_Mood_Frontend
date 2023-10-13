@@ -1,12 +1,14 @@
 import React from 'react';
-import { Table, Badge } from "@mantine/core";
+import { Table, Badge, HoverCard, Text } from "@mantine/core";
+import { IconInfoCircleFilled } from '@tabler/icons-react';
+import classes from "./ScoreKOLTable.module.scss";
 import happy from "../../../assets/emotion_set/happy.svg";
 import smile from "../../../assets/emotion_set/smile.svg";
 import normal from "../../../assets/emotion_set/normal.svg";
 import sad from "../../../assets/emotion_set/sad.svg";
 import depressed from "../../../assets/emotion_set/depressed.svg";
 
-const ScoreKOLTable = () => {
+const ScoreKOLTable = ({ title, subtitle }) => {
     const elements = [
         { icon: happy, KOL: ['Alan', "Alex"] },
         { icon: smile, KOL: ['Nitrogen'] },
@@ -26,7 +28,22 @@ const ScoreKOLTable = () => {
 
     return (
         <div>
-            <Table>
+            <div style={{ position: "relative" }}>
+                <div className={classes.title}>{title}</div>
+                <div style={{ position: "absolute", right: "0", top: "3px" }}>
+                    <HoverCard width={280} shadow="md">
+                        <HoverCard.Target>
+                            <IconInfoCircleFilled />
+                        </HoverCard.Target>
+                        <HoverCard.Dropdown>
+                            <Text size="sm">
+                                {subtitle}
+                            </Text>
+                        </HoverCard.Dropdown>
+                    </HoverCard>
+                </div>
+            </div>
+            <Table >
                 <thead>
                     <tr>
                         <th>Mood</th>

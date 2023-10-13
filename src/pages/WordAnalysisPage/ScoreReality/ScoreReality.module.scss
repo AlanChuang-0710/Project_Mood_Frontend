@@ -1,0 +1,25 @@
+.table-wrapper {
+    table {
+
+        tr,
+        th {
+            background-color: transparent;
+        }
+
+        thead {
+            th:nth-child(1) {
+                text-align: center;
+            }
+        }
+
+        tbody {
+            td:nth-child(1) {
+                text-align: center;
+            }
+
+            tr:hover {
+                background-color: rgb(112, 112, 112) !important;
+            }
+        }
+    }
+}

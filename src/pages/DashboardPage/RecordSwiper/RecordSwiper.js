@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, useMantineTheme } from "@mantine/core";
+import { Grid, useMantineTheme, Group, Chip } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
 import classes from "./RecordSwiper.module.scss";
 import happy from "../../../assets/emotion_set/happy.svg";
@@ -22,6 +22,7 @@ SwiperCore.use([Scrollbar, Mousewheel]);
 const RecordSwiper = ({ openDailyRecord }) => {
     // 獲得視口寬度
     const { height, width } = useViewportSize();
+    // const [value, setValue] = useState('All');
 
     const theme = useMantineTheme();
 
@@ -89,6 +90,15 @@ const RecordSwiper = ({ openDailyRecord }) => {
 
     return (
         <>
+            {/* <Chip.Group multiple value={value} onChange={setValue} >
+                <Group position="left" mb="xs">
+                    <Chip variant="light" value="All">All</Chip>
+                    <Chip variant="light" value="Happiness">Happiness</Chip>
+                    <Chip variant="light" value="Depression">Depression</Chip>
+                    <Chip variant="light" value="Sad">Sad</Chip>
+                </Group>
+            </Chip.Group> */}
+
             {/* <div className={classes.title} style={{ color: theme.colorScheme === "light" ? "#4f5250" : theme.colors.tool[1] }}>October 2023</div> */}
             <Swiper spaceBetween={10}
                 slidesPerView={slidesPerView}

@@ -4,6 +4,7 @@ import { Grid, useMantineTheme, SegmentedControl, } from "@mantine/core";
 import classes from "./WordAnalysisPage.module.scss";
 import ScoreKOLTable from './ScoreKOLTable/ScoreKOLTable';
 import RepeatedWordTable from './RepeatedWordTable/RepeatedWordTable';
+import WorldCloudChart from './WordCloudChart/WorldCloudChart';
 
 const WordAnalysisPage = () => {
     const theme = useMantineTheme();
@@ -25,6 +26,27 @@ const WordAnalysisPage = () => {
             </Grid>
 
             <Grid>
+
+                {/* world cloud */}
+                <Grid.Col xs={12}>
+                    <div style={useGetComponentStyle()}>
+                        <WorldCloudChart height={300} />
+                    </div>
+                </Grid.Col>
+
+                <Grid.Col xs={12} md={7}>
+                    <div style={useGetComponentStyle()}>
+                        <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />
+                    </div>
+                </Grid.Col>
+                <Grid.Col xs={12} md={5}>
+                    <div style={useGetComponentStyle()}>
+                        <RepeatedWordTable
+                            title={"Repeated words in Dream"}
+                            subtitle={"The following table compiles the words that frequently appear in daily dreams."}
+                        />
+                    </div>
+                </Grid.Col>
                 <Grid.Col xs={12} md={7}>
                     <div style={useGetComponentStyle()}>
                         <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />

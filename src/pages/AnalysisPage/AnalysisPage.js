@@ -45,7 +45,7 @@ const AnalysisPage = () => {
         </Grid.Col>
         <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
-            <div className={classes["score-report"]}>
+            <div className={classes["score-report1"]}>
               數據分析
             </div>
           </div>
@@ -57,7 +57,7 @@ const AnalysisPage = () => {
         </Grid.Col>
         <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
-            <div className={classes["score-report"]}>
+            <div className={classes["score-report2"]}>
               數據分析
             </div>
           </div>

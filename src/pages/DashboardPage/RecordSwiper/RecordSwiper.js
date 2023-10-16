@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, useMantineTheme, Group, Chip } from "@mantine/core";
+import { Grid, useMantineTheme, } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
 import classes from "./RecordSwiper.module.scss";
 import happy from "../../../assets/emotion_set/happy.svg";

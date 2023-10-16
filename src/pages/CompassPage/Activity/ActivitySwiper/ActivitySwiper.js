@@ -1,24 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useMantineTheme, Chip, Group, Grid, Image } from "@mantine/core";
-import { useViewportSize } from '@mantine/hooks';
-import classes from "./Essay.module.scss";
+import React, { useCallback, useState } from 'react';
+import { Chip, Group, Grid, Image } from "@mantine/core";
+import classes from "./Activity.module.scss";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
-import test from "../../../assets/test.jpg";
-import test2 from "../../../assets/test2.png";
+import test from "../../../../assets/test.jpg";
+import test2 from "../../../../assets/test2.png";
 
 
 SwiperCore.use([Scrollbar, Mousewheel]);
 
-const EssaySwiper = () => {
-  const theme = useMantineTheme();
+const ActivitySwiper = ({ height }) => {
   const [value, setValue] = useState('All');
-
-  // 獲得視口寬度
-  const { height, width } = useViewportSize();
-  const [direction, setDirection] = useState("vertical");
 
   const fakeData = [
     {
@@ -75,14 +69,6 @@ const EssaySwiper = () => {
     window.open(url);
   });
 
-  // useEffect(() => {
-  // if (width < 700) {
-  //   setDirection("horizontal");
-  // } else {
-  //   setDirection("vertical");
-  // }
-  // }, [width]);
-
   return (
     <div>
       <Chip.Group multiple value={value} onChange={setValue} >
@@ -96,14 +82,15 @@ const EssaySwiper = () => {
 
       <Swiper spaceBetween={5}
         slidesPerView={4}
-        direction={direction}
+        direction={"vertical"}
         mousewheel={true}
         scrollbar={{ draggable: true }}
-        className={classes["essay-swiper"]}
+        className={classes["activity-swiper"]}
+        style={{ height: `${height}px` }}
       >
 
         {[...fakeData].map((essay) =>
-          < SwiperSlide tag="div" className={classes["essay-slide"]} key={essay.id} onClick={() => essayClickHandler(essay.url)}>
+          < SwiperSlide tag="div" className={classes["activity-slide"]} key={essay.id} onClick={() => essayClickHandler(essay.url)}>
             <Grid>
               <Grid.Col span={4} >
                 <div>
@@ -130,4 +117,4 @@ const EssaySwiper = () => {
   );
 };
 
-export default EssaySwiper;
+export default ActivitySwiper;

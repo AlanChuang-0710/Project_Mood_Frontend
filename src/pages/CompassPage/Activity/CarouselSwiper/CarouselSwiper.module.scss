@@ -1,0 +1,21 @@
+.title {
+    font-size: 25px;
+    text-align: center;
+}
+
+.swiper-container {
+    padding: 4px;
+
+    .activity-swiper {
+
+        .activity-slide {
+            cursor: pointer;
+            text-align: center;
+            overflow: hidden;
+
+            img {
+                height: 100%;
+            }
+        }
+    }
+}

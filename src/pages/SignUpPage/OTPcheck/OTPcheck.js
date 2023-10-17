@@ -24,7 +24,7 @@ const OTPcheck = () => {
     if (form.isValid()) {
       nav("/signup/result");
     }
-  });
+  }, [nav]);
 
 
   return (

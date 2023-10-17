@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useMantineTheme, Chip, Group, Grid, Image } from "@mantine/core";
-import { useViewportSize } from '@mantine/hooks';
+// import { useViewportSize } from '@mantine/hooks';
 import classes from "./Essay.module.scss";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
@@ -13,12 +13,12 @@ import test2 from "../../../assets/test2.png";
 SwiperCore.use([Scrollbar, Mousewheel]);
 
 const EssaySwiper = () => {
-  const theme = useMantineTheme();
+  // const theme = useMantineTheme();
   const [value, setValue] = useState('All');
 
   // 獲得視口寬度
-  const { height, width } = useViewportSize();
-  const [direction, setDirection] = useState("vertical");
+  // const { height, width } = useViewportSize();
+  // const [direction, setDirection] = useState("vertical");
 
   const fakeData = [
     {
@@ -96,7 +96,7 @@ const EssaySwiper = () => {
 
       <Swiper spaceBetween={5}
         slidesPerView={4}
-        direction={direction}
+        direction={"vertical"}
         mousewheel={true}
         scrollbar={{ draggable: true }}
         className={classes["essay-swiper"]}

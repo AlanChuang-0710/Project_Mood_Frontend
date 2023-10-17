@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from "./SignupResult.module.scss";
 import { Button } from "@mantine/core";

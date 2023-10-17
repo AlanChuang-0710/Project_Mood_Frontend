@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as echarts from 'echarts';
 import 'echarts-wordcloud';
 import { useMantineTheme, } from "@mantine/core";
-import classes from "./WorldCloudChart.module.scss";
+// import classes from "./WorldCloudChart.module.scss";
 
 const WorldCloudChart = ({ height }) => {
     const theme = useMantineTheme();

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import classes from "./LoginPage.module.scss";
 import dayBg from "../../assets/loginSignup/day_bg.svg";
 import nightBg from "../../assets/loginSignup/night_bg.svg";

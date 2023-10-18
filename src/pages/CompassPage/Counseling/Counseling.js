@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, } from "@mantine/core";
 import { useGetComponentStyle } from "../../../styles/dayNightStyle";
 import Map from './Map/Map';

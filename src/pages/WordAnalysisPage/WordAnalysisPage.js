@@ -55,8 +55,8 @@ const WordAnalysisPage = () => {
                 <Grid.Col xs={12} md={5}>
                     <div style={useGetComponentStyle()}>
                         <RepeatedWordTable
-                            title={"Repeated words in Dream"}
-                            subtitle={"The following table compiles the words that frequently appear in daily dreams."}
+                            title={"Repeated words in Reality"}
+                            subtitle={"The following table compiles the words that frequently appear in reality."}
                         />
                     </div>
                 </Grid.Col>

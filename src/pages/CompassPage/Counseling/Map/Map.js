@@ -6,12 +6,10 @@ const Map = () => {
     const mapContainer = useRef(null);
 
     useEffect(() => {
-        const container = L.DomUtil.get(mapContainer.current);
-        if (container != null) {
-            container._leaflet_id = null;
-        };
-        if (container) {
-            const mymap = L.map(mapContainer.current).setView([25.03418, 121.564517], 17);
+        let mymap = "";
+
+        function drawMap(latitude = 24.77624184, longitude = 120.97160238) {
+            mymap = L.map(mapContainer.current, { maxZoom: 18, minZoom: 7 }).setView([latitude, longitude], 17);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(mymap);
             const greenIcon = new L.Icon({
                 iconUrl:
@@ -24,11 +22,7 @@ const Map = () => {
                 shadowSize: [41, 41]
             });
 
-            const marker = L.marker([25.03418, 121.564517], { icon: greenIcon }).addTo(
-                mymap
-            );
-
-            marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+            L.marker([latitude, longitude], { icon: greenIcon }).bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup().addTo(mymap);
 
             L.circle([25.03418, 121.564517], {
                 color: "red",
@@ -37,12 +31,28 @@ const Map = () => {
                 radius: 10
             }).addTo(mymap);
         }
+
+        if ("geolocation" in navigator) {
+            window.navigator.geolocation.getCurrentPosition((position) => {
+                const { latitude, longitude } = position.coords;
+                // const container = L.DomUtil.get(mapContainer.current);
+                drawMap(latitude, longitude);
+            });
+        } else {
+            alert("Your Geolocation is not available");
+            drawMap();
+        }
+
+
+        return () => {
+            mymap.remove();
+        };
     });
 
 
     return (
         <div>
-            <div ref={mapContainer} style={{ height: "500px", width: "100%" }}></div>
+            <div ref={mapContainer} style={{ height: "500px", width: "100%", borderRadius: "10px" }}></div>
         </div>
     );
 };

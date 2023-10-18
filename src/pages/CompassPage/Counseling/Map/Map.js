@@ -32,14 +32,16 @@ const Map = () => {
             }).addTo(mymap);
         }
 
+        // 有些瀏覽器navigator不支持html5 geolocation對象
         if ("geolocation" in navigator) {
+            // 有些瀏覽器geolocation不支持getCurrentPosition屬性
+            // 傳入兩個參數 success 函數 & reject 函數
             window.navigator.geolocation.getCurrentPosition((position) => {
                 const { latitude, longitude } = position.coords;
-                // const container = L.DomUtil.get(mapContainer.current);
                 drawMap(latitude, longitude);
-            });
+            }, () => drawMap());
         } else {
-            alert("Your Geolocation is not available");
+            alert("Your Browser does not support HTML5 Geolocation");
             drawMap();
         }
 

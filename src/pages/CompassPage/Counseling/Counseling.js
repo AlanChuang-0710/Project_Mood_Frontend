@@ -1,9 +1,10 @@
 import React from 'react';
-import { Grid, useMantineTheme, Tabs } from "@mantine/core";
+import { Grid, } from "@mantine/core";
 import { useGetComponentStyle } from "../../../styles/dayNightStyle";
 import Map from './Map/Map';
 
 const Counseling = () => {
+    // const theme = useMantineTheme();
     return (
         <Grid>
             <Grid.Col xs={12} md={6}>

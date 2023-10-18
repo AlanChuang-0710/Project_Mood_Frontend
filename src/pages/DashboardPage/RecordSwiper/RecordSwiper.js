@@ -21,7 +21,7 @@ SwiperCore.use([Scrollbar, Mousewheel]);
 
 const RecordSwiper = ({ openDailyRecord }) => {
     // 獲得視口寬度
-    const { height, width } = useViewportSize();
+    const { width } = useViewportSize();
     // const [value, setValue] = useState('All');
 
     const theme = useMantineTheme();
@@ -47,7 +47,7 @@ const RecordSwiper = ({ openDailyRecord }) => {
             id: "329",
             month: "Nov.",
             date: 20,
-            mood: happy,
+            mood: smile,
             tagList: ["生氣", "憤怒"],
             memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
         },
@@ -55,7 +55,7 @@ const RecordSwiper = ({ openDailyRecord }) => {
             id: "59",
             month: "Nov.",
             date: 20,
-            mood: happy,
+            mood: sad,
             tagList: ["生氣", "憤怒"],
             memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
         },
@@ -63,7 +63,15 @@ const RecordSwiper = ({ openDailyRecord }) => {
             id: "32",
             month: "Nov.",
             date: 20,
-            mood: happy,
+            mood: normal,
+            tagList: ["生氣", "憤怒"],
+            memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
+        },
+        {
+            id: "35",
+            month: "Nov.",
+            date: 20,
+            mood: depressed,
             tagList: ["生氣", "憤怒"],
             memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
         }

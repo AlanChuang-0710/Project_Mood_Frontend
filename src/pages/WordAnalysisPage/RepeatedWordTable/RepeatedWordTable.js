@@ -8,14 +8,13 @@ import { IconInfoCircleFilled } from '@tabler/icons-react';
 // https://icflorescu.github.io/mantine-datatable/examples/basic-usage
 
 const PAGE_SIZE = 10;
+const employees = [];
+for (let index = 1; index < 20; index++) {
+    employees.push({ rank: index, repeatedWord: "Chuang", count: 5 });
+}
 
 const RepeatedWordTable = ({ title, subtitle }) => {
     const theme = useMantineTheme();
-    const employees = [];
-
-    for (let index = 1; index < 20; index++) {
-        employees.push({ rank: index, repeatedWord: "Chuang", count: 5 });
-    }
 
     const [page, setPage] = useState(1);
     const [records, setRecords] = useState(employees.slice(0, PAGE_SIZE));

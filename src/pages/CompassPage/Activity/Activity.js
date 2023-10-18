@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, useMantineTheme } from "@mantine/core";
+import { Grid } from "@mantine/core";
 import { useGetComponentStyle } from "../../../styles/dayNightStyle";
 import ActivitySwiper from './ActivitySwiper/ActivitySwiper';
 import CarouselSwiper from './CarouselSwiper/CarouselSwiper';

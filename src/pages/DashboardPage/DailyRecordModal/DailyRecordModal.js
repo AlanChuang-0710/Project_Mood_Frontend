@@ -119,11 +119,11 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
         setMemo("");
         setPreviewPhotos([]);
         setSendServerPhotos([]);
-    }, []);
+    }, [close]);
 
     const updateDailyRecord = useCallback(() => {
-        console.log("Loading!");
-    });
+        console.log(sendServerPhotos);
+    }, [sendServerPhotos]);
 
     return (
         <Modal styles={{

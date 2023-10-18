@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useMantineTheme, Chip, Group, Grid, Image } from "@mantine/core";
+import { Chip, Group, Grid, Image } from "@mantine/core";
 // import { useViewportSize } from '@mantine/hooks';
 import classes from "./Essay.module.scss";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -73,7 +73,7 @@ const EssaySwiper = () => {
 
   const essayClickHandler = useCallback((url) => {
     window.open(url);
-  });
+  }, []);
 
   // useEffect(() => {
   // if (width < 700) {

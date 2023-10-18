@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
-import { Grid, useMantineTheme, Tabs } from "@mantine/core";
+import { Grid, Tabs } from "@mantine/core";
 import classes from "./CompassPage.module.scss";
 import Activity from './Activity/Activity';
 import Counseling from './Counseling/Counseling';
 
 const CompassPage = () => {
-    const theme = useMantineTheme();
+    // const theme = useMantineTheme();
     const [activeTab, setActiveTab] = useState('activity');
 
     return (

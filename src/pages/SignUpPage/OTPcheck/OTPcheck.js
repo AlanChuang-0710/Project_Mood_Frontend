@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from "./OTP.module.scss";
 import { PinInput, Button } from "@mantine/core";
@@ -24,7 +24,7 @@ const OTPcheck = () => {
     if (form.isValid()) {
       nav("/signup/result");
     }
-  }, [nav]);
+  }, [nav, form]);
 
 
   return (

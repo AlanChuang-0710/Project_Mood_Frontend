@@ -4,7 +4,7 @@ import dayBg from "../../assets/loginSignup/day_bg.svg";
 import nightBg from "../../assets/loginSignup/night_bg.svg";
 import facebookIcon from "../../assets/loginSignup/facebook.svg";
 import googleIcon from "../../assets/loginSignup/google.svg";
-import { PasswordInput, TextInput, Button, useMantineTheme } from "@mantine/core";
+import { PasswordInput, TextInput, Button } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
@@ -13,7 +13,7 @@ const LoginPage = () => {
 
     // 獲得當地時間判斷是否 day or night background
     const time = new Date().getHours();
-    const theme = useMantineTheme();
+    // const theme = useMantineTheme();
     const [visible, { toggle }] = useDisclosure(false);
 
 
@@ -30,6 +30,10 @@ const LoginPage = () => {
         },
     });
 
+
+    // 獲得跳轉
+    const nav = useNavigate();
+
     // login
     const loginHandler = useCallback(
         () => {
@@ -38,12 +42,8 @@ const LoginPage = () => {
                 nav("/");
             }
         },
-        [form],
+        [form, nav],
     );
-
-
-    // 獲得跳轉
-    const nav = useNavigate();
 
     return (
         <div className={classes.bg} style={{ backgroundImage: `url(${time > 17 ? nightBg : dayBg}) ` }}>

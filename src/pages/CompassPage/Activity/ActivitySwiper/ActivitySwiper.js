@@ -67,7 +67,7 @@ const ActivitySwiper = ({ height }) => {
 
   const essayClickHandler = useCallback((url) => {
     window.open(url);
-  });
+  }, []);
 
   return (
     <div>

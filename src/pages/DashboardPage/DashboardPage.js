@@ -49,7 +49,7 @@ const DashboardPage = () => {
   const dateChangeHandler = useCallback((selectedDate) => {
     setSelectedDateValue(selectedDate);
     open();
-  });
+  }, [open]);
 
   return (
     <Grid>

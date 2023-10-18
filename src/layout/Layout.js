@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useState } from 'react';
 import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '@mantine/core';
 import classes from "./layout.module.scss";
@@ -51,7 +51,7 @@ const Layout = (props) => {
     const navClickHandler = useCallback((route) => {
         setActive(route);
         nav(route);
-    });
+    }, [nav, setActive]);
 
     return (
         <AppShell
@@ -125,7 +125,7 @@ const Layout = (props) => {
                         <SimpleGrid cols={1}>
                             <Navbar.Section>
                                 <div style={{ position: "relative" }}>
-                                    <a href="#" className={classes["nav-logo"]}>Mood</a>
+                                    <a href="google.com" className={classes["nav-logo"]} onClick={(e) => e.preventDefault()}>Mood</a>
                                 </div>
                             </Navbar.Section>
 

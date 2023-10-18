@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
-import { PasswordInput, TextInput, Button, useMantineTheme, Checkbox, Tabs } from "@mantine/core";
+import { PasswordInput, TextInput, Button, Checkbox, Tabs } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import classes from "./SignUpPage.module.scss";
 import dayBg from "../../assets/loginSignup/day_bg.svg";
@@ -11,7 +11,6 @@ import OTPcheck from './OTPcheck/OTPcheck';
 import SignupResult from "./SignupResult/SignupResult";
 
 const SignUpPage = () => {
-    const theme = useMantineTheme();
     const { tabValue } = useParams();
     // 獲得跳轉
     const nav = useNavigate();
@@ -45,7 +44,7 @@ const SignUpPage = () => {
                 nav("/signup/verification");
             }
         },
-        [form],
+        [form, nav],
     );
 
     return (

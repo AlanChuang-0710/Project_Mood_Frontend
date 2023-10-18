@@ -34,7 +34,7 @@ const CarouselSwiper = ({ height }) => {
 
     const posterClickHandler = useCallback((url) => {
         window.open(url);
-    });
+    }, []);
 
     return (
         <div>

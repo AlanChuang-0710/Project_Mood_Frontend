@@ -27,7 +27,7 @@ const Verification = () => {
                 nav("/signup/otp");
             }
         },
-        [form],
+        [form, nav],
     );
 
 

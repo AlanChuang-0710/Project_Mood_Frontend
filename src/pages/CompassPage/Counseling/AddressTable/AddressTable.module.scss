@@ -1,0 +1,32 @@
+.title {
+    font-size: 20px;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 12px;
+}
+
+.table-wrapper {
+    margin-top: 5px;
+
+    table {
+
+        tr,
+        th {
+            background-color: transparent;
+        }
+
+        tbody {
+            tr:hover {
+                background-color: rgb(112, 112, 112) !important;
+            }
+        }
+
+    }
+
+    table~div {
+        background: none !important;
+    }
+
+}

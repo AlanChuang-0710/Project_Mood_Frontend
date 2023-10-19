@@ -7,7 +7,7 @@ import Counseling from './Counseling/Counseling';
 
 const CompassPage = () => {
     // const theme = useMantineTheme();
-    const [activeTab, setActiveTab] = useState('activity');
+    const [activeTab, setActiveTab] = useState('counseling');
 
     return (
         <div>

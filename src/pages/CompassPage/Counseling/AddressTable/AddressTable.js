@@ -11,7 +11,7 @@ import { IconInfoCircleFilled } from '@tabler/icons-react';
 const PAGE_SIZE = 10;
 const employees = [];
 for (let index = 1; index < 20; index++) {
-    employees.push({ name: "心安診所", address: `台中市大里區中興里新安路${index}號45689789789` });
+    employees.push({ id: index, name: "心安診所", address: `台中市大里區中興里新安路${index}號45689789789` });
 }
 
 const AddressTable = ({ title, subtitle }) => {

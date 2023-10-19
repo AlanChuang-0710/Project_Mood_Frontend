@@ -3,6 +3,7 @@ import { Grid, } from "@mantine/core";
 import { useGetComponentStyle } from "../../../styles/dayNightStyle";
 import Map from './Map/Map';
 import AddressTable from './AddressTable/AddressTable';
+import classes from "./Counseling.module.scss";
 
 const Counseling = () => {
     // const theme = useMantineTheme();
@@ -12,22 +13,37 @@ const Counseling = () => {
             <Grid>
                 <Grid.Col xs={4} md={2}>
                     <div style={useGetComponentStyle()}>
-                        <div style={{ height: "120px", justifyContent: "center", alignItems: "center", display: "flex" }}>
-                            尋求心理諮詢
+                        <div className={classes.card}>
+                            <div className={classes["psychological-option"]}>
+                            </div>
+                            <div style={{ textAlign: "center" }}>心理諮詢</div>
                         </div>
                     </div>
                 </Grid.Col>
                 <Grid.Col xs={4} md={2}>
                     <div style={useGetComponentStyle()}>
-                        <div style={{ height: "120px", justifyContent: "center", alignItems: "center", display: "flex" }}>
-                            抽一張心理牌
+                        <div className={classes.card}>
+                            <div className={classes["chat-option"]}>
+                            </div>
+                            <div style={{ textAlign: "center" }}>找人聊聊</div>
                         </div>
                     </div>
                 </Grid.Col>
                 <Grid.Col xs={4} md={2}>
                     <div style={useGetComponentStyle()}>
-                        <div style={{ height: "120px", justifyContent: "center", alignItems: "center", display: "flex" }}>
-                            線上陪聊/哄睡
+                        <div className={classes.card}>
+                            <div className={classes["rainbow-card-option"]}>
+                            </div>
+                            <div style={{ textAlign: "center" }}>彩虹牌</div>
+                        </div>
+                    </div>
+                </Grid.Col>
+                <Grid.Col xs={4} md={2}>
+                    <div style={useGetComponentStyle()}>
+                        <div className={classes.card}>
+                            <div className={classes["meditation-option"]}>
+                            </div>
+                            <div style={{ textAlign: "center" }}>冥想練習</div>
                         </div>
                     </div>
                 </Grid.Col>

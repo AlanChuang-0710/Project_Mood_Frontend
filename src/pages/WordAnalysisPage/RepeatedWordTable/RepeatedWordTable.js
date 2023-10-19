@@ -10,7 +10,7 @@ import { IconInfoCircleFilled } from '@tabler/icons-react';
 const PAGE_SIZE = 10;
 const employees = [];
 for (let index = 1; index < 20; index++) {
-    employees.push({ rank: index, repeatedWord: "Chuang", count: 5 });
+    employees.push({ id: index, rank: index, repeatedWord: "Chuang", count: 5 });
 }
 
 const RepeatedWordTable = ({ title, subtitle }) => {

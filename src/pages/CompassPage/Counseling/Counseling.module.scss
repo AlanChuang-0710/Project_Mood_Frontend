@@ -8,11 +8,20 @@
     background-position: center
 }
 
+.card-wrapper {
+    transition: all 0.5s;
+
+    &:active {
+        transform: translateY(5px)
+    }
+}
+
 .card {
     cursor: pointer;
     transition: all 0.3s;
 
     &:hover {
+        // transform: translateY(-10px)
         transform: scale(1.1)
     }
 

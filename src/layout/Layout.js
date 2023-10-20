@@ -7,7 +7,7 @@ import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
 import { AppShell, Navbar, useMantineTheme, Burger, Menu, Text } from '@mantine/core';
-import { IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
+import { IconSettings, IconLogout, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
 
 const Layout = (props) => {
     const theme = useMantineTheme();
@@ -99,10 +99,10 @@ const Layout = (props) => {
                                     <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
                                     <Menu.Item icon={<IconPhoto size={14} />}>Gallery</Menu.Item>
                                     <Menu.Item
-                                        icon={<IconSearch size={14} />}
+                                        icon={<IconLogout size={14} />}
                                         rightSection={<Text size="xs" color="dimmed">⌘K</Text>}
                                     >
-                                        Search
+                                        Logout
                                     </Menu.Item>
 
                                     <Menu.Divider />

@@ -12,38 +12,46 @@ const Counseling = () => {
         <>
             <Grid>
                 <Grid.Col xs={4} md={2}>
-                    <div style={useGetComponentStyle()}>
-                        <div className={classes.card}>
-                            <div className={classes["psychological-option"]}>
+                    <div className={classes["card-wrapper"]}>
+                        <div style={useGetComponentStyle()}>
+                            <div className={classes.card}>
+                                <div className={classes["psychological-option"]}>
+                                </div>
+                                <div style={{ textAlign: "center" }}>心理諮詢</div>
                             </div>
-                            <div style={{ textAlign: "center" }}>心理諮詢</div>
                         </div>
                     </div>
                 </Grid.Col>
                 <Grid.Col xs={4} md={2}>
-                    <div style={useGetComponentStyle()}>
-                        <div className={classes.card}>
-                            <div className={classes["chat-option"]}>
+                    <div className={classes["card-wrapper"]}>
+                        <div style={useGetComponentStyle()}>
+                            <div className={classes.card}>
+                                <div className={classes["chat-option"]}>
+                                </div>
+                                <div style={{ textAlign: "center" }}>找人聊聊</div>
                             </div>
-                            <div style={{ textAlign: "center" }}>找人聊聊</div>
                         </div>
                     </div>
                 </Grid.Col>
                 <Grid.Col xs={4} md={2}>
-                    <div style={useGetComponentStyle()}>
-                        <div className={classes.card}>
-                            <div className={classes["rainbow-card-option"]}>
+                    <div className={classes["card-wrapper"]}>
+                        <div style={useGetComponentStyle()}>
+                            <div className={classes.card}>
+                                <div className={classes["rainbow-card-option"]}>
+                                </div>
+                                <div style={{ textAlign: "center" }}>彩虹牌</div>
                             </div>
-                            <div style={{ textAlign: "center" }}>彩虹牌</div>
                         </div>
                     </div>
                 </Grid.Col>
                 <Grid.Col xs={4} md={2}>
-                    <div style={useGetComponentStyle()}>
-                        <div className={classes.card}>
-                            <div className={classes["meditation-option"]}>
+                    <div className={classes["card-wrapper"]}>
+                        <div style={useGetComponentStyle()}>
+                            <div className={classes.card}>
+                                <div className={classes["meditation-option"]}>
+                                </div>
+                                <div style={{ textAlign: "center" }}>冥想練習</div>
                             </div>
-                            <div style={{ textAlign: "center" }}>冥想練習</div>
                         </div>
                     </div>
                 </Grid.Col>

@@ -86,7 +86,7 @@ const AccountPage = () => {
 
       <div style={{ marginTop: "10px", ...useGetComponentStyle() }}>
         <Spoiler maxHeight={120} showLabel="Show more" hideLabel="Hide" >
-          <div style={{ padding: "0 40px" }}>
+          <div style={{ padding: width > 992 ? "0 40px" : "0 10px" }}>
             <div style={{ fontWeight: "bold", fontSize: "25px" }}>Privacy Policy</div>
             <div>Welcome to our website. We value your privacy and are committed to protecting your personal information. Before using this website, please take a moment to read the following privacy policy. Your use of this website indicates your agreement to the terms and conditions outlined below.</div>
             <Space h="md" />

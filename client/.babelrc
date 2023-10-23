@@ -1,0 +1,9 @@
+{
+  "env": {
+    "development": {
+      // The code generator has deoptimised the styling of …… as it exceeds the max of "500KB"
+      // 配置以忽略上述警告
+      "compact": false
+    }
+  }
+}

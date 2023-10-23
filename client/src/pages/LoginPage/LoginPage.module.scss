@@ -1,0 +1,100 @@
+.bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 60%;
+
+    .mask {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: rgba($color: #000000, $alpha: 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .wrapper {
+            width: 100%;
+            max-width: 330px;
+            height: 440px;
+            border-radius: 10px;
+            background-color: rgba($color: #000000, $alpha: 1);
+            padding: 25px 20px;
+
+            .email {
+                height: 80px;
+            }
+
+            .password {
+                height: 80px;
+                margin-bottom: 20px;
+            }
+
+            .btn {
+                button {
+                    background-color: #da8938;
+                }
+            }
+
+            .signup {
+                text-align: center;
+                font-size: 14px;
+
+                span {
+                    color: #D4A373;
+                    cursor: pointer
+                }
+            }
+
+
+
+            .login-option {
+                margin-top: 20px;
+                text-align: center;
+                color: #858597;
+                font-size: 12px;
+                line-height: normal;
+                font-weight: 400;
+                position: relative;
+                margin-bottom: 12px;
+            }
+
+            .login-option::before {
+                content: " ";
+                display: block;
+                width: 100%;
+                border: 1px solid #B8B8D2;
+                border-bottom: 0;
+                position: absolute;
+                top: 48%;
+                z-index: 5;
+            }
+
+            .login-option span {
+                position: relative;
+                display: inline-block;
+                text-align: center;
+                width: 30%;
+                z-index: 10;
+                background-color: rgba($color: #000000, $alpha: 1);
+            }
+
+            .social-media-logos {
+                display: flex;
+                justify-content: center;
+            }
+
+            .social-media-logos .logos-container {
+                width: 130px;
+                display: flex;
+                justify-content: space-around;
+            }
+        }
+    }
+}

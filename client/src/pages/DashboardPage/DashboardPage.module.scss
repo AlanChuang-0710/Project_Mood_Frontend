@@ -1,0 +1,87 @@
+@mixin date {
+    border-radius: 20px;
+    background-color: var(--mantine-color-brand-3);
+    color: black !important;
+    opacity: .6;
+}
+
+%shortcut-option {
+    height: 145px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.phrase-wrapper {
+    height: 100%;
+    padding: 10px 0 20px 10px;
+
+    .phrase-title {
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .phrase-subtitle {
+        overflow: hidden;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+    }
+}
+
+
+.shortcut {
+    .shortcut-wrapper {
+        transition: all 0.2s;
+        cursor: pointer;
+        overflow: hidden;
+
+        &:active {
+            transform: translateY(5px);
+        }
+    }
+
+    .shortcut-title {
+        text-align: center;
+    }
+
+    .happy-shortcut {
+        @extend %shortcut-option;
+        background-image: url(../../assets/dashboard/happy_action.svg);
+    }
+
+    .sad-shortcut {
+        @extend %shortcut-option;
+        background-image: url(../../assets/dashboard/negative_action.svg);
+        transform: translateY(15px);
+    }
+
+    .support-shortcut {
+        @extend %shortcut-option;
+        background-image: url(../../assets/dashboard/support-action.svg);
+        transform: translateY(6px);
+    }
+}
+
+.calendar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // padding-bottom: 35px;
+
+    button[data-selected] {
+        @include date
+    }
+
+    button[data-selected]:hover,
+    button:hover {
+        @include date
+    }
+
+}
+
+.month-wrapper {
+    padding: 2px 15px 20px;
+}

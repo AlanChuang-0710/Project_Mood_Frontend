@@ -5,20 +5,12 @@ const authApi = createApi({
     //Api的標示，不能跟其他Api或是reducer重複
     reducerPath: "authApi",
 
-    //指定查詢的基礎信息，發信請求的工具
     baseQuery: fetchBaseQuery({
         baseUrl: "http://127.0.0.1:3000/users",
-        // 統一修改請求頭 + 獲取redux store倉庫
-        // prepareHeaders: (headers, { getState }) => {
-        //     const token = getState().XXX;
-        //     if (token) {
-        //         headers.set("Authorization", `Bearer token`);
-        //     }
-        //     return headers;
-        // }
+        // credentials: "include" // 即便跨域也會攜帶上cookie
     }),
 
-    tagTypes: ["login", "register"], //用來指定Api中的標籤類型
+    // tagTypes: ["login", "register"], //用來指定Api中的標籤類型
 
     endpoints(build) {
         //build是請求的構建器，通過build來設置請求的相關信息
@@ -44,6 +36,16 @@ const authApi = createApi({
                 },
                 providesTags: ["register"]
             }),
+
+            refresh: build.query({
+                query() {
+                    return {
+                        url: "/refresh",
+                        method: "get",
+                    };
+                },
+                providesTags: ["refresh"]
+            })
 
 
             // getStudentById: build.query({

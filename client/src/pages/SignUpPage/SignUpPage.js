@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useRegisterMutation } from "../../store/api/authApi";
 import { useDisclosure } from '@mantine/hooks';
-import { PasswordInput, TextInput, Button, Checkbox, Tabs } from "@mantine/core";
+import { PasswordInput, TextInput, Button, Checkbox, Tabs, LoadingOverlay } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import classes from "./SignUpPage.module.scss";
 import dayBg from "../../assets/loginSignup/day_bg.svg";
@@ -9,12 +10,11 @@ import nightBg from "../../assets/loginSignup/night_bg.svg";
 import Verification from "./Verification/Verification";
 import OTPcheck from './OTPcheck/OTPcheck';
 import SignupResult from "./SignupResult/SignupResult";
-import { useRegisterMutation } from "../../store/api/authApi";
 
 const SignUpPage = () => {
-    const { tabValue } = useParams();
-    // 獲得跳轉
     const nav = useNavigate();
+
+    const { tabValue } = useParams();
 
     // 獲得當地時間判斷是否 day or night background
     const time = new Date().getHours();
@@ -38,32 +38,30 @@ const SignUpPage = () => {
     });
 
     // signup 
-    const [register, { data: registerData }] = useRegisterMutation();
-    const signupHandler = useCallback(
-        () => {
+    const [register, { isLoading }] = useRegisterMutation();
+    const signupHandler =
+        async () => {
             form.validate();
             if (form.isValid()) {
-                register(form.values);
+                try {
+                    const result = await register(form.values).unwrap(); //獲得原始的error，以利try catch攔截
+                    if (result.code !== 4001) {
+                        nav("/signup/verification");
+                    } else {
+                        // 展示後端回傳的msg
+                        alert(result.msg);
+                    }
+                } catch (err) {
+                    alert("No server response");
+                }
             }
-        },
-        [form, register],
-    );
-
-    useEffect(() => {
-        if (registerData) {
-            if (registerData.code === "2000") {
-                nav("/signup/verification");
-            } else {
-                alert(registerData.msg);
-            }
-        }
-    }, [registerData, nav]);
-
+        };
 
     return (
         <div className={classes.bg} style={{ backgroundImage: `url(${time > 17 ? nightBg : dayBg}) ` }}>
             <div className={classes.mask}>
                 <div className={classes.wrapper}>
+                    {isLoading && <LoadingOverlay visible={true} zIndex={1000} styles={{ overlay: { radius: "sm", blur: 2 } }} />}
                     <Tabs value={tabValue} onChange={(value) => nav(`/signup/${tabValue}`)}>
                         <Tabs.Panel value="create">
                             <div className={classes.signup}>

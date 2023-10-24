@@ -1,5 +1,4 @@
-import React, { useCallback } from 'react';
-import { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '@mantine/core';
 import classes from "./layout.module.scss";
 import { HouseDoor, Gear, Bell, Search, GraphUp, Compass, BodyText } from "react-bootstrap-icons";
@@ -8,13 +7,25 @@ import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
 import { AppShell, Navbar, useMantineTheme, Burger, Menu, Text } from '@mantine/core';
 import { IconSettings, IconLogout, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
+import { useSelector } from 'react-redux';
+import { selectCurrentAccessToken } from "../store/reducer/authSlice";
 
 const Layout = (props) => {
+    /* 路由權限 */
+    // 透過selector抓取accessToken
+    const accessToken = useSelector(selectCurrentAccessToken);
+    const location = useLocation();
+    const nav = useNavigate();
+
+    /* 路由守衛 避免沒有token直接進入保護的頁面 */
+    useEffect(() => {
+        if (!accessToken) {
+            nav("/login", { replace: true, state: { from: location } });
+        };
+    });
+
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(true);
-
-    /* 獲得當前路由 */
-    const location = useLocation();
 
     // navbar 選項
     const [active, setActive] = useState(("/" + location.pathname.split("/")[1]) === "/" ? "/dashboard" : "/" + location.pathname.split("/")[1]);
@@ -46,8 +57,7 @@ const Layout = (props) => {
         },
     ];
 
-    /* 獲得nav */
-    const nav = useNavigate();
+
     const navClickHandler = useCallback((route) => {
         setActive(route);
         nav(route);

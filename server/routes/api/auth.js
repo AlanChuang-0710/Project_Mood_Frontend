@@ -72,12 +72,12 @@ router.post("/login", async (req, res) => {
 
             // 創建accessToken
             const accessToken = jwt.sign({ email, id }, ACCESS_TOKEN_SECRET,
-                { expiresIn: 60 * 60 * 24 * 7 } // 7天過期
+                { expiresIn: 60 } // 7天過期
             );
 
             // 創建refreshToken
             const refreshToken = jwt.sign({ email, id }, REFRESH_TOKEN_SECRET,
-                { expiresIn: 60 * 60 * 24 * 365 } // 1年過期
+                { expiresIn: 60 * 2 } // 1年過期
             );
 
             // Assigning refresh token in http-only cookie  

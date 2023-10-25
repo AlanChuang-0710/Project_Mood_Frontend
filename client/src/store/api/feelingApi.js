@@ -3,13 +3,13 @@ import { setCredentials, logout } from "../reducer/authSlice";
 
 //指定查詢的基礎信息，發信請求的工具
 const baseQuery = fetchBaseQuery({
-    baseUrl: "http://127.0.0.1:3000/users",
+    baseUrl: "http://127.0.0.1:3000/feeling",
     // credentials: "include", // 即便跨域也會攜帶上cookie
     // 統一修改請求頭 參數包括(headers && redux store倉庫)
     prepareHeaders: (headers, { getState }) => {
-        const token = getState().auth.token;
-        if (token) {
-            headers.set("Authorization", `Bearer token`);
+        const accessToken = getState().auth.accessToken;
+        if (accessToken) {
+            headers.set("accessToken", accessToken);
         }
         return headers;
     }
@@ -47,11 +47,11 @@ const feelingApi = createApi({
         //build是請求的構建器，通過build來設置請求的相關信息
         return {
             getUserFeeling: build.query({
-                query(time) {
+                query({ id, startTime, endTIme }) {
                     return {
-                        url: `/${"getUserId()"}`,
+                        url: `/${id}`,
                         method: "get",
-                        params: time
+                        params: { startTime, endTIme }
                     };
                 },
                 providesTags: [{
@@ -59,10 +59,10 @@ const feelingApi = createApi({
                 }]
             }),
 
-            addUserFeeling: build.mutation({
-                query(data) {
+            updateUserFeeling: build.mutation({
+                query({ id, data }) {
                     return {
-                        url: `/${"getUserId()"}`,
+                        url: `/${id}`,
                         method: "post",
                         body: data,
                     };
@@ -72,11 +72,27 @@ const feelingApi = createApi({
                     id: ""
                 }]
             })
+
+
+            // getStudentById: build.query({
+            //     query(id) { //調用鉤子函數時會傳入參數
+            //         return `students/id`;
+            //     },
+            //     // 用來轉換響應數據的格式，可以設定返回的data數據格式
+            //     transformResponse(baseQueryReturnValue) {
+            //         return baseQueryReturnValue.data;
+            //     },
+            //     // keepUnusedDataFor: 2, // 設置數據緩存的時間，單位為秒，默認60s
+            //     providesTags: [{
+            //         type: "ATags",
+            //         id: "XXX"
+            //     }]
+            // }),
         };
     }
 });
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetUserFeelingQuery, useAddUserFeelingMutation } = feelingApi;
+export const { useGetUserFeelingQuery, useUpdateUserFeelingMutation } = feelingApi;
 export default feelingApi;

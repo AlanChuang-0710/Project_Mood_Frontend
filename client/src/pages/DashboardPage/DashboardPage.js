@@ -8,8 +8,14 @@ import userImage from "../../assets/dashboard/user.png";
 import RecordSwiper from "./RecordSwiper/RecordSwiper";
 import EssaySwiper from './EssaySwiper/EssaySwiper';
 import DailyRecordModal from './DailyRecordModal/DailyRecordModal';
+import { useGetUserFeelingQuery } from "../../store/api/feelingApi";
+import { useSelector } from 'react-redux';
+import { selectCurrentUserId } from "../../store/reducer/authSlice";
 
 const DashboardPage = () => {
+  const { data, } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId) });
+  console.log(data);
+
   const theme = useMantineTheme();
 
   /* date relative */

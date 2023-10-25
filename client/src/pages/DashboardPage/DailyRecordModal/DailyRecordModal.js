@@ -8,9 +8,11 @@ import sad from "../../../assets/emotion_set/sad.svg";
 import depressed from "../../../assets/emotion_set/depressed.svg";
 import { IconCloudUpload } from '@tabler/icons-react';
 import moment from "moment";
+import { useUpdateUserFeelingMutation } from "../../../store/api/feelingApi";
 
 const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     const theme = useMantineTheme();
+    const [updateUserFeeling, { data }] = useUpdateUserFeelingMutation();
 
     const formatSelectedDate = useMemo(() => {
         const date = moment(selectedDateValue);
@@ -121,9 +123,10 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
         setSendServerPhotos([]);
     }, [close]);
 
-    const updateDailyRecord = useCallback(() => {
-        console.log(sendServerPhotos);
-    }, [sendServerPhotos]);
+    const updateDailyRecord = useCallback(async () => {
+        const result = await updateUserFeeling({sendServerPhotos});
+        console.log(result);
+    }, []);
 
     return (
         <Modal styles={{

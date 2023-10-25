@@ -80,7 +80,7 @@ const Layout = (props) => {
                             <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
                                 <Burger
                                     opened={!opened}
-                                    onClick={() => { setOpened((o) => !o); console.log(opened); }}
+                                    onClick={() => { setOpened((o) => !o); }}
                                     size="sm"
                                     color={theme.colors.gray[6]}
                                 />

@@ -47,37 +47,6 @@ const authApi = createApi({
                 providesTags: ["refresh"]
             })
 
-
-            // getStudentById: build.query({
-            //     query(id) { //調用鉤子函數時會傳入參數
-            //         return `students/id`;
-            //     },
-            //     // 用來轉換響應數據的格式，可以設定返回的data數據格式
-            //     transformResponse(baseQueryReturnValue) {
-            //         return baseQueryReturnValue.data;
-            //     },
-            //     // keepUnusedDataFor: 2, // 設置數據緩存的時間，單位為秒，默認60s
-            //     providesTags: [{
-            //         type: "ATags",
-            //         id: "XXX"
-            //     }]
-            // }),
-
-            // updateStudent: build.mutation({
-            //     query(stu) {
-            //         return {
-            //             url: `students/${stu.id}`,
-            //             method: "put",
-            //             body: {
-            //                 data: stu.attributes
-            //             }
-            //         };
-            //     },
-            //     invalidatesTags: [{
-            //         type: "ATags",
-            //         id: "XXX"
-            //     }]
-            // })
         };
     }
 });

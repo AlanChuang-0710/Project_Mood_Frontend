@@ -124,7 +124,16 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     }, [close]);
 
     const updateDailyRecord = useCallback(async () => {
-        const result = await updateUserFeeling({sendServerPhotos});
+        const result = await updateUserFeeling({
+            timestamp: "2023-08-27T00:00:00.000Z",
+            score: 8,
+            imgURL: sendServerPhotos,
+            tags: ["happy"],
+            KOL: ["Wang", "Jessy^^", "$Liu Wang", "18"],
+            dream: "我想要吃酸菜魚、土豆絲",
+            memo: "今天心情很差，有點抑鬱，可能是跟朋友出去的關係吧?",
+            sleep: 12,
+        }, [sendServerPhotos,]);
         console.log(result);
     }, []);
 

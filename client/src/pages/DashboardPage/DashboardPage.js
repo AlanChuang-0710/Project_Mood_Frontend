@@ -13,9 +13,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 
 const DashboardPage = () => {
-  const { data, } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId) });
-  console.log(data);
-
+  const { data } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId) });
   const theme = useMantineTheme();
 
   /* date relative */

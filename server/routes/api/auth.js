@@ -55,9 +55,9 @@ router.delete("/:id", checkTokenMiddleware, async (req, res) => {
 // 用戶登入
 router.post("/login", async (req, res) => {
     let { email, password } = req.body;
-    const errRes = () => res.json({
+    const errRes = (msg) => res.json({
         code: 4001,
-        msg: "Please fill in correct email or password",
+        msg: msg,
         data: null
     });
 
@@ -72,16 +72,17 @@ router.post("/login", async (req, res) => {
 
             // 創建accessToken
             const accessToken = jwt.sign({ email, id }, ACCESS_TOKEN_SECRET,
-                { expiresIn: 60 } // 7天過期
+                { expiresIn: 10 } // 10秒過期
             );
 
             // 創建refreshToken
             const refreshToken = jwt.sign({ email, id }, REFRESH_TOKEN_SECRET,
-                { expiresIn: 60 * 2 } // 1年過期
+                { expiresIn: 60 * 60 * 12 } // 12小時過期
             );
 
-            // Assigning refresh token in http-only cookie  
-            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, maxAge: 60 * 60 * 24 * 365 });
+            // Assigning refresh token in http-only cookie
+            // samesite 限制跨域請求、secure 限制只能https或不限http/https傳送
+            res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 12, sameSite: "None", secure: true });
 
             // 以json格式 提供 token, 給用戶 
             res.json({
@@ -90,10 +91,11 @@ router.post("/login", async (req, res) => {
                 data: { accessToken, id, username }
             });
         } else {
-            errRes();
+            errRes("Please fill in correct email or password");
         }
     } catch (err) {
-        errRes();
+        console.log(err);
+        errRes(err.msg);
     };
 });
 
@@ -105,15 +107,15 @@ router.get("/refresh", (req, res) => {
             jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, data) => {
                 if (err) {
                     if (err instanceof jwt.JsonWebTokenError) {
-                        return res.json({ code: 4001, msg: "token verification fails", data: err });
+                        return res.json({ code: 4001, msg: "accesstoken verification fails", data: err });
                     } else if (err instanceof jwt.TokenExpiredError) {
                         return res.json({ code: 4001, msg: "refreshToken expires", data: err });
                     }
                 } else {
                     const accessToken = jwt.sign({ email: data.email, id: data.id }, ACCESS_TOKEN_SECRET,
-                        { expiresIn: 60 * 60 * 24 * 7 } // 7天過期
+                        { expiresIn: 10 } // 10秒過期
                     );
-                    return res.json({ code: 2000, msg: "Token updated", data: accessToken });
+                    return res.json({ code: 2000, msg: "Token updated", data: { accessToken } });
                 }
             });
         } else {

@@ -18,9 +18,6 @@ const MongoStore = require("connect-mongo");
 // 導入配置項
 const { DBHOST, DBPORT, DBNAME } = require("./config/config");
 
-// 導入cors
-const cors = require('cors');
-
 const app = express();
 
 // 設置session中間件
@@ -38,8 +35,18 @@ app.use(session({
   }
 }));
 
+// 導入cors
+const cors = require('cors');
+const corsOptions = {
+  origin: [
+    'http://localhost:8550',
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  credentials: true
+};
+
 // 設置cors中間件
-app.use(cors());
+app.use(cors(corsOptions));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

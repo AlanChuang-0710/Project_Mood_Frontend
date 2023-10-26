@@ -140,7 +140,6 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                 sleep: 12,
             }
         });
-        console.log(result);
     }, [sendServerPhotos, updateUserFeeling]);
 
     return (

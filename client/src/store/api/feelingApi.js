@@ -4,7 +4,8 @@ import { setCredentials, logout } from "../reducer/authSlice";
 //指定查詢的基礎信息，發信請求的工具
 const baseQuery = fetchBaseQuery({
     baseUrl: "http://127.0.0.1:3000/feeling",
-    // credentials: "include", // 即便跨域也會攜帶上cookie
+    credentials: "include", // 即便跨域也會攜帶上cookie
+    mode: 'cors',
     // 統一修改請求頭 參數包括(headers && redux store倉庫)
     prepareHeaders: (headers, { getState }) => {
         const accessToken = getState().auth.accessToken;
@@ -17,15 +18,12 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
-    if (result?.msg === "token expires") {
-        // Send refresh token to get new access token
-        const refreshResult = await baseQuery('/refresh', api, extraOptions);
-        if (refreshResult?.data) {
-            const username = api.getState().auth.username;
-            // store new token
-            api.dispatch(setCredentials({ ...refreshResult.data, username }));
-            // retry original query with new access token
-            result = await baseQuery(args, api, extraOptions);
+    if (result?.data?.data?.message === "jwt expired") {
+        const refreshResult = await fetchBaseQuery({ baseUrl: "http://127.0.0.1:3000", credentials: "include", mode: 'cors' })('/users/refresh', api, extraOptions);
+        if (refreshResult?.data?.data?.accessToken) {
+            const authData = api.getState().auth;
+            api.dispatch(setCredentials({ ...authData, accessToken: refreshResult.data.data.accessToken })); // store new token
+            result = await baseQuery(args, api, extraOptions); // retry original query with new access token
         } else {
             api.dispatch(logout());
         }

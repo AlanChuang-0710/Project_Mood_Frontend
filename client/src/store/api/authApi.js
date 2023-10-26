@@ -7,7 +7,8 @@ const authApi = createApi({
 
     baseQuery: fetchBaseQuery({
         baseUrl: "http://127.0.0.1:3000/users",
-        // credentials: "include" // 即便跨域也會攜帶上cookie
+        credentials: "include", // 即便跨域也會攜帶上cookie
+        mode: 'cors',
     }),
 
     // tagTypes: ["login", "register"], //用來指定Api中的標籤類型

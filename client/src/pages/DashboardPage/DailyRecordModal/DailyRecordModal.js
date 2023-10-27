@@ -8,14 +8,15 @@ import sad from "../../../assets/emotion_set/sad.svg";
 import depressed from "../../../assets/emotion_set/depressed.svg";
 import { IconCloudUpload } from '@tabler/icons-react';
 import moment from "moment";
-import { useUpdateUserFeelingMutation } from "../../../store/api/feelingApi";
+import { useUpdateUserFeelingMutation, useGetUserFeelingQuery } from "../../../store/api/feelingApi";
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from "../../../store/reducer/authSlice";
 
 const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     const id = useSelector(selectCurrentUserId);
     const theme = useMantineTheme();
-    const [updateUserFeeling, { data }] = useUpdateUserFeelingMutation();
+    const [updateUserFeeling] = useUpdateUserFeelingMutation();
+    const { data: dayFeeling } = useGetUserFeelingQuery({ id, });
 
     const formatSelectedDate = useMemo(() => {
         const date = moment(selectedDateValue);

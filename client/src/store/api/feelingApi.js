@@ -45,11 +45,11 @@ const feelingApi = createApi({
         //build是請求的構建器，通過build來設置請求的相關信息
         return {
             getUserFeeling: build.query({
-                query({ id, startTime, endTIme }) {
+                query({ id, startTime, endTime }) {
                     return {
                         url: `/${id}`,
                         method: "get",
-                        params: { startTime, endTIme }
+                        params: { startTime, endTime }
                     };
                 },
                 providesTags: [{

@@ -16,15 +16,13 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     const id = useSelector(selectCurrentUserId);
     const theme = useMantineTheme();
     const [updateUserFeeling] = useUpdateUserFeelingMutation();
-    const { data: dayFeeling } = useGetUserFeelingQuery({ id, });
-
+    const { data: dayFeeling, isSuccess } = useGetUserFeelingQuery({ id, startTime: selectedDateValue - 5, endTime: selectedDateValue + 5 });
     const formatSelectedDate = useMemo(() => {
         const date = moment(selectedDateValue);
         return date.format('YYYY-MM-DD');
     }, [selectedDateValue]);
 
     /* 心情 Modal */
-
     const [activeTab, setActiveTab] = useState("night");
 
     // 今日score
@@ -51,25 +49,24 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
         }
     ];
 
-    // 今日睡眠品質
-    const [sleep, setSleep] = useState(8);
+    const [dayRecord, setDayRecord] = useState({
+        timestamp: selectedDateValue,
+        sleep: 8,
+        dream: "",
+        score: 0,
+        KOL: [],
+        tags: [],
+        memo: "",
+        imgURL: [],
+    });
+
     const sleepMarks = [
         { value: 8, label: '8hr' },
         { value: 16, label: '16hr' },
     ];
 
-    // 今日夢境相關
-    const [dream, setDream] = useState('');
-
-    // 今日心情
-    const [score, setScore] = useState(0);
-
-    // 今日memo
-    const [memo, setMemo] = useState('');
-
     // 今日snapshot
     const [previewPhotos, setPreviewPhotos] = useState([]);
-    const [sendServerPhotos, setSendServerPhotos] = useState([]);
     const resetRef = useRef(null);
     const clearPhotos = useCallback((index) => {
         if (index !== undefined) {
@@ -78,15 +75,15 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                 result.splice(index, 1);
                 return result;
             });
-            setSendServerPhotos((preVal) => {
-                let result = [...preVal];
+            setDayRecord((preVal) => {
+                let result = [...preVal.imgURL];
                 result.splice(index, 1);
-                return result;
+                return { ...preVal, imgURL: result };
             });
             resetRef.current?.();
         } else {
             setPreviewPhotos([]);
-            setSendServerPhotos([]);
+            setDayRecord((preVal) => { return { ...preVal, imgURL: [] }; });
             resetRef.current?.();
         }
     }, []);
@@ -113,35 +110,30 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
 
         let urlArray = FileList.map((file) => URL.createObjectURL(file));
         setPreviewPhotos(urlArray);
-        setSendServerPhotos(FileList);
+        setDayRecord((preVal) => { return { ...preVal, imgURL: FileList }; });
     }, []);
 
     const closeModalHandler = useCallback(() => {
         close();
         setActiveTab("night");
-        setSleep(8);
-        setDream("");
-        setScore(0);
-        setMemo("");
-        setPreviewPhotos([]);
-        setSendServerPhotos([]);
+        setDayRecord({
+            timestamp: "",
+            sleep: 8,
+            dream: "",
+            score: 0,
+            KOL: [],
+            tags: [],
+            memo: "",
+            imgURL: [],
+        });
     }, [close]);
 
     const updateDailyRecord = useCallback(async () => {
         const result = await updateUserFeeling({
             id,
-            data: {
-                timestamp: "2023-08-27T00:00:00.000Z",
-                score: 8,
-                imgURL: sendServerPhotos,
-                tags: ["happy"],
-                KOL: ["Wang", "Jessy^^", "$Liu Wang", "18"],
-                dream: "我想要吃酸菜魚、土豆絲",
-                memo: "今天心情很差，有點抑鬱，可能是跟朋友出去的關係吧?",
-                sleep: 12,
-            }
+            data: dayRecord
         });
-    }, [sendServerPhotos, updateUserFeeling]);
+    }, [selectedDateValue, updateUserFeeling, dayRecord, id]);
 
     return (
         <Modal styles={{
@@ -162,7 +154,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                             <div className={classes["title"]}>Sleep Quality</div>
                             <Slider
                                 mt={"md"}
-                                value={sleep} onChange={setSleep}
+                                value={dayRecord.sleep} onChange={(val) => setDayRecord((preVal) => { return { ...preVal, sleep: val }; })}
                                 marks={sleepMarks}
                                 min={0}
                                 max={24}
@@ -173,7 +165,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                         </div>
                         <div style={{ marginTop: "30px" }}>
                             <div className={classes["title"]}>Dream Content</div>
-                            <Textarea value={dream} onChange={(event) => setDream(event.currentTarget.value)} styles={{ input: { height: "200px" } }} />
+                            <Textarea value={dayRecord.dream} onChange={(event) => setDayRecord((preVal) => { return { ...preVal, dream: event.currentTarget.value }; })} styles={{ input: { height: "200px" } }} />
                         </div>
                     </div>
                 </Tabs.Panel>
@@ -183,7 +175,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                         <div>
                             <div className={classes["title"]}>Mood Score</div>
                             <div className={classes["mood-list"]}>
-                                {moodList.map((item) => <Button key={item.score} variant={item.score === score ? "light" : ""} styles={{ root: { padding: 0 } }} onClick={() => setScore(item.score)}>
+                                {moodList.map((item) => <Button key={item.score} variant={item.score === dayRecord.score ? "light" : ""} styles={{ root: { padding: 0 } }} onClick={() => setDayRecord((preVal) => { return { ...preVal, score: item.score }; })}>
                                     <img style={{ width: "40px", height: "40px" }} src={item.icon} alt="Mood" />
                                 </Button>)}
                             </div>
@@ -195,6 +187,8 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                                     placeholder="Pick people who mainly affect your mood today"
                                     data={['Parent', 'Sibling', 'Alan', 'Myself']}
                                     searchable
+                                    value={dayRecord.KOL}
+                                    onChange={(val) => setDayRecord((preVal) => { return { ...preVal, KOL: val }; })}
                                 />
                             </div>
                         </div>
@@ -205,12 +199,14 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                                     placeholder="Pick hashtags for today"
                                     data={['Happy', 'Angry', 'Tired', 'Exhausted']}
                                     searchable
+                                    value={dayRecord.tags}
+                                    onChange={(val) => setDayRecord((preVal) => { return { ...preVal, tags: val }; })}
                                 />
                             </div>
                         </div>
                         <div style={{ marginTop: "20px" }}>
                             <div className={classes["title"]}>Memo</div>
-                            <Textarea value={memo} onChange={(event) => setMemo(event.currentTarget.value)} styles={{ input: { height: "200px" } }} />
+                            <Textarea value={dayRecord.memo} onChange={(event) => setDayRecord((preVal) => { return { ...preVal, memo: event.currentTarget.value }; })} styles={{ input: { height: "200px" } }} />
                         </div>
                         <div style={{ marginTop: "20px" }}>
                             <div className={classes["title"]}>Snapshot</div>

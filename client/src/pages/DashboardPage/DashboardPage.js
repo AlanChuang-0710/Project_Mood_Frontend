@@ -51,8 +51,10 @@ const DashboardPage = () => {
   /* 心情 Modal */
   const [opened, { open, close }] = useDisclosure(false);
   const dateChangeHandler = useCallback((selectedDate) => {
-    setSelectedDateValue(selectedDate);
-    open();
+    if (selectedDate) {
+      setSelectedDateValue(selectedDate.getTime()); // 統一設置成number格式
+      open();
+    }
   }, [open]);
 
 
@@ -120,7 +122,7 @@ const DashboardPage = () => {
       < Grid.Col md={5} lg={4} >
         <div style={useGetComponentStyle()} >
           <div className={classes.calendar}>
-            <DatePicker allowDeselect value={selectedDateValue} onChange={dateChangeHandler} hideOutsideDates styles={calendarStyle}
+            <DatePicker value={selectedDateValue} onChange={dateChangeHandler} hideOutsideDates styles={calendarStyle}
               size="md" locale="zh-tw"
             // monthLabelFormat="YYYY年 M月"
             />

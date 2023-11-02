@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { Image, Grid, Button, Modal, Tabs, Slider, useMantineTheme, Textarea, MultiSelect, Group, FileButton, CloseButton } from "@mantine/core";
 import classes from "./DailyRecordModal.module.scss";
 import happy from "../../../assets/emotion_set/happy.svg";
@@ -6,51 +6,53 @@ import smile from "../../../assets/emotion_set/smile.svg";
 import normal from "../../../assets/emotion_set/normal.svg";
 import sad from "../../../assets/emotion_set/sad.svg";
 import depressed from "../../../assets/emotion_set/depressed.svg";
-import { IconCloudUpload } from '@tabler/icons-react';
+// import { IconCloudUpload } from '@tabler/icons-react';
 import moment from "moment";
 import { useUpdateUserFeelingMutation, useGetUserFeelingQuery } from "../../../store/api/feelingApi";
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from "../../../store/reducer/authSlice";
+const moodList = [
+    {
+        icon: happy,
+        score: 2
+    },
+    {
+        icon: smile,
+        score: 1
+    },
+    {
+        icon: normal,
+        score: 0
+    },
+    {
+        icon: sad,
+        score: -1
+    },
+    {
+        icon: depressed,
+        score: -2
+    }
+];
+const sleepMarks = [
+    { value: 8, label: '8hr' },
+    { value: 16, label: '16hr' },
+];
 
 const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     const id = useSelector(selectCurrentUserId);
     const theme = useMantineTheme();
     const [updateUserFeeling] = useUpdateUserFeelingMutation();
     const { data: dayFeeling, isSuccess } = useGetUserFeelingQuery({ id, startTime: selectedDateValue - 5, endTime: selectedDateValue + 5 });
+
+    /* 心情 Modal */
     const formatSelectedDate = useMemo(() => {
         const date = moment(selectedDateValue);
         return date.format('YYYY-MM-DD');
     }, [selectedDateValue]);
-
-    /* 心情 Modal */
     const [activeTab, setActiveTab] = useState("night");
 
-    // 今日score
-    const moodList = [
-        {
-            icon: happy,
-            score: 2
-        },
-        {
-            icon: smile,
-            score: 1
-        },
-        {
-            icon: normal,
-            score: 0
-        },
-        {
-            icon: sad,
-            score: -1
-        },
-        {
-            icon: depressed,
-            score: -2
-        }
-    ];
-
     const [dayRecord, setDayRecord] = useState({
-        timestamp: selectedDateValue,
+        timestamp: "",
         sleep: 8,
         dream: "",
         score: 0,
@@ -59,11 +61,6 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
         memo: "",
         imgURL: [],
     });
-
-    const sleepMarks = [
-        { value: 8, label: '8hr' },
-        { value: 16, label: '16hr' },
-    ];
 
     // 今日snapshot
     const [previewPhotos, setPreviewPhotos] = useState([]);
@@ -83,7 +80,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
             resetRef.current?.();
         } else {
             setPreviewPhotos([]);
-            setDayRecord((preVal) => { return { ...preVal, imgURL: [] }; });
+            setDayRecord((preVal) => ({ ...preVal, imgURL: [] }));
             resetRef.current?.();
         }
     }, []);
@@ -95,13 +92,6 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
         // 較驗相片的規格
         if (FileList.length > 3) {
             return alert("每日快照最多上傳三張相片!");
-
-            /* 使用mantine notification 組件 */
-            // return notifications.show({
-            //     title: 'Notification',
-            //     message: '每日快照最多上傳三張相片! ',
-            //     position: "top-center"
-            // });
         };
 
         if (FileList.some((file) => file.size / 1024 > 1024)) {
@@ -110,12 +100,13 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
 
         let urlArray = FileList.map((file) => URL.createObjectURL(file));
         setPreviewPhotos(urlArray);
-        setDayRecord((preVal) => { return { ...preVal, imgURL: FileList }; });
+        setDayRecord((preVal) => ({ ...preVal, imgURL: FileList }));
     }, []);
 
     const closeModalHandler = useCallback(() => {
         close();
         setActiveTab("night");
+        setPreviewPhotos([]);
         setDayRecord({
             timestamp: "",
             sleep: 8,
@@ -129,11 +120,44 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     }, [close]);
 
     const updateDailyRecord = useCallback(async () => {
+        const form = new FormData();
+        Object.keys(dayRecord).forEach((prop) => {
+            if (dayRecord[prop] instanceof Array) {
+                dayRecord[prop].forEach((item) => {
+                    form.append(prop, item);
+                });
+            } else {
+                form.append(prop, dayRecord[prop]);
+            }
+        });
         const result = await updateUserFeeling({
             id,
-            data: dayRecord
+            data: form
         });
-    }, [selectedDateValue, updateUserFeeling, dayRecord, id]);
+    }, [updateUserFeeling, dayRecord, id]);
+
+    // 更新日期
+    useEffect(() => {
+        setDayRecord((preVal) => ({ ...preVal, timestamp: selectedDateValue }));
+    }, [selectedDateValue]);
+
+    // 提換上資料庫的每日資料
+    useEffect(() => {
+        if (dayFeeling?.data?.length > 0 && isSuccess) {
+            setDayRecord(dayFeeling.data[0]);
+        } else {
+            setDayRecord({
+                timestamp: selectedDateValue,
+                sleep: 8,
+                dream: "",
+                score: 0,
+                KOL: [],
+                tags: [],
+                memo: "",
+                imgURL: [],
+            });
+        }
+    }, [dayFeeling, selectedDateValue, isSuccess]);
 
     return (
         <Modal styles={{
@@ -154,7 +178,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                             <div className={classes["title"]}>Sleep Quality</div>
                             <Slider
                                 mt={"md"}
-                                value={dayRecord.sleep} onChange={(val) => setDayRecord((preVal) => { return { ...preVal, sleep: val }; })}
+                                value={dayRecord.sleep} onChange={(val) => setDayRecord((preVal) => ({ ...preVal, sleep: val }))}
                                 marks={sleepMarks}
                                 min={0}
                                 max={24}
@@ -165,7 +189,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                         </div>
                         <div style={{ marginTop: "30px" }}>
                             <div className={classes["title"]}>Dream Content</div>
-                            <Textarea value={dayRecord.dream} onChange={(event) => setDayRecord((preVal) => { return { ...preVal, dream: event.currentTarget.value }; })} styles={{ input: { height: "200px" } }} />
+                            <Textarea value={dayRecord.dream} onChange={(event) => { setDayRecord((preVal) => ({ ...preVal, dream: event.target.value })); }} styles={{ input: { height: "200px" } }} />
                         </div>
                     </div>
                 </Tabs.Panel>
@@ -206,7 +230,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                         </div>
                         <div style={{ marginTop: "20px" }}>
                             <div className={classes["title"]}>Memo</div>
-                            <Textarea value={dayRecord.memo} onChange={(event) => setDayRecord((preVal) => { return { ...preVal, memo: event.currentTarget.value }; })} styles={{ input: { height: "200px" } }} />
+                            <Textarea value={dayRecord.memo} onChange={(event) => setDayRecord((preVal) => ({ ...preVal, memo: event.target.value }))} styles={{ input: { height: "200px" } }} />
                         </div>
                         <div style={{ marginTop: "20px" }}>
                             <div className={classes["title"]}>Snapshot</div>
@@ -240,7 +264,8 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                 </Tabs.Panel>
 
                 <div style={{ textAlign: "center", paddingTop: "7px" }}>
-                    <Button leftIcon={<IconCloudUpload size="1rem" />} loading={false} onClick={updateDailyRecord}>
+                    {/* <Button leftIcon={<IconCloudUpload size="1rem" />} loading={false} onClick={updateDailyRecord}> */}
+                    <Button loading={false} onClick={updateDailyRecord}>
                         Save Record
                     </Button>
                 </div>

@@ -12,8 +12,6 @@ const storage = multer.diskStorage({
     // 如果destination使用函數，則必須自己創建目標資料夾
     // 如果destination使用string，則multer會協助創建
     destination: function (req, file, cb) {
-
-
         // 用戶照片存儲資料夾結構改成
         // public/images/userId/timestamp(unix格式)
         // 寫法參考以下代碼
@@ -30,10 +28,22 @@ const storage = multer.diskStorage({
         // 創建userId資料夾
         const userId = req.params.id;
         const targetDir = path.resolve(__dirname, `../../public/images/${userId}`);
-        if (fs.existsSync(targetDir)) {
 
+        // 有時回傳的時間格式為"2023-11-01T16:00:00.000Z"
+        // 有時回傳的時間格式為"1920220000000" (form 對象會將時間轉為string)
+        req.body.timestamp = req.body.timestamp instanceof Date ? req.body.timestamp : new Date(parseInt(req.body.timestamp, 10)); // 限制只能存儲Date對象
+
+        if (fs.existsSync(targetDir)) {
             // 如果該文件夾存在，則刪除所有內部文件，理論上最多只有3張
-            console.log("File already exists");
+            // 第一張照片進來時，先清理掉所有照片，並將clearPhoto設為true，表示舊照片清理完畢。
+            // 第二張照片進來時，就不再清理照片。
+            if (!req.body.clearPhoto) {
+                fs.readdirSync(targetDir).forEach((file) => {
+                    const curPath = path.join(targetDir, file);
+                    fs.unlinkSync(curPath);
+                    req.body.clearPhoto = true;
+                });
+            }
         } else {
             fs.mkdir(targetDir, err => { console.log(err); });
         }
@@ -41,7 +51,7 @@ const storage = multer.diskStorage({
     },
     // destination: path.resolve(__dirname, "../../public/images"),
     filename: function (req, file, cb) {
-        const date = new Date(req.body.timestamp);
+        const date = req.body.timestamp;
         const timestamp = moment(date).format("YYYY-MM-DD"); //只取年月日
         const ext = file.mimetype.split("/")[1];
         const fileName = `${file.fieldname}-${timestamp}-${nanoid(5)}.${ext}`;
@@ -106,8 +116,8 @@ router.get("/:id", checkTokenMiddleware, function (req, res) {
 // 新建特定日心情
 router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (req, res) {
     const userId = req.params.id;
-    const timestamp = new Date(req.body.timestamp);
-    req.body.timestamp = timestamp; // 限制只能存儲Date對象
+    req.body.timestamp = req.body.timestamp instanceof Date ? req.body.timestamp : new Date(parseInt(req.body.timestamp, 10));
+    const timestamp = req.body.timestamp;
 
     /* 高消耗寫法 */
     FeelingModel.findOne({ userId }).then((user) => {
@@ -159,46 +169,6 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (r
             data: null
         });
     });
-
-    /* 原子寫法 但要遍歷兩次*/
-    // FeelingModel.findOne(
-    //     { userId, 'dailyFeeling.timestamp': timestamp }
-    // ).then((data) => {
-    //     if (data) {
-    //         // 找到匹配的文档，不进行任何修改，直接结束操作
-    //         res.json({
-    //             code: "2000",
-    //             msg: "Feeling already exists!",
-    //             data
-    //         });
-    //     } else {
-    //         // 未找到匹配的文档，执行更新操作
-    //         FeelingModel.findOneAndUpdate(
-    //             { userId },
-    //             {
-    //                 $push: {
-    //                     'dailyFeeling': {
-    //                         ...req.body
-    //                     }
-    //                 }
-    //             },
-    //             { upsert: true, new: true }
-    //         ).then((updatedResult) => {
-    //             res.json({
-    //                 code: "2000",
-    //                 msg: "New feeling created",
-    //                 data: updatedResult
-    //             });
-    //         });
-    //     }
-    // }).catch((err) => {
-    //     res.json({
-    //         code: "5000",
-    //         msg: err,
-    //         data: null
-    //     });
-    // });
-
 });
 
 // 刪除特定日心情

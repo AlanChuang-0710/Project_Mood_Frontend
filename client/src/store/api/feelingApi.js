@@ -6,6 +6,7 @@ const baseQuery = fetchBaseQuery({
     baseUrl: "http://127.0.0.1:3000/feeling",
     credentials: "include", // 即便跨域也會攜帶上cookie
     mode: 'cors',
+    timeout: 10000,
     // 統一修改請求頭 參數包括(headers && redux store倉庫)
     prepareHeaders: (headers, { getState }) => {
         const accessToken = getState().auth.accessToken;
@@ -52,6 +53,7 @@ const feelingApi = createApi({
                         params: { startTime, endTime }
                     };
                 },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
                 providesTags: [{
                     type: "getFeeling",
                 }]
@@ -65,9 +67,9 @@ const feelingApi = createApi({
                         body: data,
                     };
                 },
+                keepUnusedDataFor: 0,
                 providesTags: [{
                     type: "addFeeling",
-                    id: ""
                 }]
             })
 

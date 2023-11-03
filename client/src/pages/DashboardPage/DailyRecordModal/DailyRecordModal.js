@@ -42,13 +42,14 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     const id = useSelector(selectCurrentUserId);
     const theme = useMantineTheme();
     const [updateUserFeeling] = useUpdateUserFeelingMutation();
-    const { data: dayFeeling, isSuccess } = useGetUserFeelingQuery({ id, startTime: selectedDateValue - 5, endTime: selectedDateValue + 5 });
+    const { data: dayFeeling, isSuccess } = useGetUserFeelingQuery({ id, startTime: selectedDateValue.getTime() - 5, endTime: selectedDateValue.getTime() + 5 });
 
     /* 心情 Modal */
     const formatSelectedDate = useMemo(() => {
         const date = moment(selectedDateValue);
         return date.format('YYYY-MM-DD');
     }, [selectedDateValue]);
+
     const [activeTab, setActiveTab] = useState("night");
 
     const [dayRecord, setDayRecord] = useState({
@@ -120,6 +121,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     }, [close]);
 
     const updateDailyRecord = useCallback(async () => {
+
         const form = new FormData();
         Object.keys(dayRecord).forEach((prop) => {
             if (dayRecord[prop] instanceof Array) {
@@ -134,7 +136,11 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
             id,
             data: form
         });
-    }, [updateUserFeeling, dayRecord, id]);
+        if (result?.data?.code === "2000") {
+            closeModalHandler();
+        }
+
+    }, [updateUserFeeling, dayRecord, id, closeModalHandler]);
 
     // 更新日期
     useEffect(() => {
@@ -144,7 +150,8 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     // 提換上資料庫的每日資料
     useEffect(() => {
         if (dayFeeling?.data?.length > 0 && isSuccess) {
-            setDayRecord(dayFeeling.data[0]);
+            setPreviewPhotos(dayFeeling.data[0].imgURL);
+            setDayRecord({ ...dayFeeling.data[0], timestamp: selectedDateValue });
         } else {
             setDayRecord({
                 timestamp: selectedDateValue,

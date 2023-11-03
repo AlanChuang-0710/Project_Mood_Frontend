@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Image, Grid, MediaQuery, Button, useMantineTheme, } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { DatePicker } from '@mantine/dates';
@@ -13,7 +13,17 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 
 const DashboardPage = () => {
-  const { data } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId) });
+  let startTime = new Date();
+  startTime.setDate(1);
+  startTime.setHours(0, 0, 0, 0);
+  startTime = startTime.getTime();
+  let endTime = new Date();
+  endTime.setMonth(new Date().getMonth() + 1, 1);
+  endTime.setDate(endTime.getDate() - 1);
+  endTime.setHours(0, 0, 0, 0);
+  endTime = endTime.getTime();
+
+  const { data: monthlyRecord, isSuccess } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId), startTime, endTime });
   const theme = useMantineTheme();
 
   /* date relative */
@@ -46,16 +56,24 @@ const DashboardPage = () => {
       }
     },
   };
-  const [selectedDateValue, setSelectedDateValue] = useState(new Date().setHours(0, 0, 0, 0));
+  let today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const [selectedDateValue, setSelectedDateValue] = useState(today);
 
   /* 心情 Modal */
   const [opened, { open, close }] = useDisclosure(false);
   const dateChangeHandler = useCallback((selectedDate) => {
     if (selectedDate) {
-      setSelectedDateValue(selectedDate.getTime()); // 統一設置成number格式
+      setSelectedDateValue(selectedDate); // 統一設置成number格式
       open();
     }
   }, [open]);
+
+  useEffect(() => {
+    if (isSuccess && monthlyRecord.code === "2000") {
+      // console.log(monthlyRecord.data);
+    }
+  }, [isSuccess]);
 
 
   return (
@@ -122,7 +140,7 @@ const DashboardPage = () => {
       < Grid.Col md={5} lg={4} >
         <div style={useGetComponentStyle()} >
           <div className={classes.calendar}>
-            <DatePicker value={selectedDateValue} onChange={dateChangeHandler} hideOutsideDates styles={calendarStyle}
+            <DatePicker type="default" allowDeselect value={selectedDateValue} onChange={dateChangeHandler} hideOutsideDates styles={calendarStyle}
               size="md" locale="zh-tw"
             // monthLabelFormat="YYYY年 M月"
             />

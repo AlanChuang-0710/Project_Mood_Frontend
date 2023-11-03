@@ -9,49 +9,38 @@ const { nanoid } = require("nanoid");
 const multer = require('multer');
 const path = require("path");
 const storage = multer.diskStorage({
-    // 如果destination使用函數，則必須自己創建目標資料夾
-    // 如果destination使用string，則multer會協助創建
+    // 如果destination使用函數，則必須自己創建目標資料夾; 如果destination使用string，則multer會協助創建
     destination: function (req, file, cb) {
-        // 用戶照片存儲資料夾結構改成
-        // public/images/userId/timestamp(unix格式)
-        // 寫法參考以下代碼
-        // 2. 遞回創建文件夾
-        // 先創建src目錄->創建level1目錄->創建level2目錄
-        // fs.mkdir("./src/level1/level2", { recursive: true }, err => {
-        //     if (err) {
-        //         console.log(err);
-        //         return;
-        //     }
-        //     console.log("創建成功!");
-        // });
+        // 回傳的時間格式為"2023-11-01T16:00:00.000Z"
+        req.body.timestamp = new Date(req.body.timestamp); // 限制只能存儲Date對象
 
-        // 創建userId資料夾
         const userId = req.params.id;
-        const targetDir = path.resolve(__dirname, `../../public/images/${userId}`);
+        const timestamp = moment(req.body.timestamp).format("YYYY-MM-DD"); //只取年月日
+        const targetIdDir = path.resolve(__dirname, `../../public/images/${userId}`);
+        const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${timestamp}`);
 
-        // 有時回傳的時間格式為"2023-11-01T16:00:00.000Z"
-        // 有時回傳的時間格式為"1920220000000" (form 對象會將時間轉為string)
-        req.body.timestamp = req.body.timestamp instanceof Date ? req.body.timestamp : new Date(parseInt(req.body.timestamp, 10)); // 限制只能存儲Date對象
-
-        if (fs.existsSync(targetDir)) {
-            // 如果該文件夾存在，則刪除所有內部文件，理論上最多只有3張
-            // 第一張照片進來時，先清理掉所有照片，並將clearPhoto設為true，表示舊照片清理完畢。
-            // 第二張照片進來時，就不再清理照片。
-            if (!req.body.clearPhoto) {
-                fs.readdirSync(targetDir).forEach((file) => {
-                    const curPath = path.join(targetDir, file);
-                    fs.unlinkSync(curPath);
-                    req.body.clearPhoto = true;
-                });
-            }
-        } else {
-            fs.mkdir(targetDir, err => { console.log(err); });
+        if (!fs.existsSync(targetIdDir)) {
+            fs.mkdirSync(targetIdDir);
         }
-        cb(null, targetDir);
+
+        if (fs.existsSync(targetDayDir)) {
+            // 如果該文件夾存在，則刪除所有內部文件，第一張照片進來時，先清理掉所有照片，並將clearPhoto設為true，表示舊照片清理完畢。第二張照片進來時，就不再清理照片。
+            // if (!req.body.clearPhoto) {
+            //     fs.readdirSync(targetDayDir).forEach((file) => {
+            //         const curPath = path.join(targetDayDir, file);
+            //         fs.unlinkSync(curPath);
+            //         req.body.clearPhoto = true;
+            //     });
+            // }
+        } else {
+            fs.mkdirSync(targetDayDir);
+        }
+        cb(null, targetDayDir);
     },
     // destination: path.resolve(__dirname, "../../public/images"),
     filename: function (req, file, cb) {
         const date = req.body.timestamp;
+        const userId = req.params.id;
         const timestamp = moment(date).format("YYYY-MM-DD"); //只取年月日
         const ext = file.mimetype.split("/")[1];
         const fileName = `${file.fieldname}-${timestamp}-${nanoid(5)}.${ext}`;
@@ -60,7 +49,8 @@ const storage = multer.diskStorage({
 
         // 將檔案存儲位置暫時放置req，最後由路由返回給前端
         if (!(req.body.imgURL instanceof Array)) req.body.imgURL = [];
-        req.body.imgURL.push(fileName);
+        req.body.imgURL.push(`http://127.0.0.1:3000/images/${userId}/${timestamp}/${fileName}`);
+        req.body.addPhoto = true;
     }
 });
 const upload = multer({ storage: storage });
@@ -76,7 +66,7 @@ router.get("/:id", checkTokenMiddleware, function (req, res) {
     const userId = req.params.id;
     const startTime = req.query.startTime; //api的query都會轉換成string
     const endTime = req.query.endTime; //api的query都會轉換成string
-    // 獲取startTime 到 endTime 之間的心情
+
     if (startTime && endTime) {
         FeelingModel.findOne(
             { userId: userId }
@@ -116,10 +106,42 @@ router.get("/:id", checkTokenMiddleware, function (req, res) {
 // 新建特定日心情
 router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (req, res) {
     const userId = req.params.id;
-    req.body.timestamp = req.body.timestamp instanceof Date ? req.body.timestamp : new Date(parseInt(req.body.timestamp, 10));
+    req.body.timestamp = req.body.timestamp instanceof Date ? req.body.timestamp : new Date(req.body.timestamp); // 限制只能存儲Date對象
+
+    const yearMonthDateTimestamp = moment(req.body.timestamp).format("YYYY-MM-DD"); //只取年月日
+    const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${yearMonthDateTimestamp}`);
+
+    // 如果沒有imgURL，就清空圖片
+    if (!req.body.imgURL) {
+        if (fs.existsSync(targetDayDir)) {
+            fs.rmdirSync(targetDayDir, { recursive: true });
+        }
+    }
+
+    // 沒經過muler處理 (沒有傳圖片但有傳imgURL)
+    if (req.body.imgURL && !req.body.addPhoto) {
+
+        // 只傳一個imgURL(http...)
+        if (req.body.imgURL && !(req.body.imgURL instanceof Array)) {
+            req.body.imgURL = [req.body.imgURL];
+        }
+
+        // 傳多個imgURL(http...) 
+        const reserveList = req.body.imgURL.map((item) => {
+            let newArr = item.split("/");
+            return newArr[newArr.length - 1];
+        });
+        fs.readdirSync(targetDayDir).forEach((file) => {
+            console.log(file);
+            if (reserveList.indexOf(file) === -1) {
+                const curPath = path.join(targetDayDir, file);
+                fs.unlinkSync(curPath);
+            }
+        });
+
+    }
     const timestamp = req.body.timestamp;
 
-    /* 高消耗寫法 */
     FeelingModel.findOne({ userId }).then((user) => {
         if (user) {
             // 用户存在，查找是否有匹配的timestamp

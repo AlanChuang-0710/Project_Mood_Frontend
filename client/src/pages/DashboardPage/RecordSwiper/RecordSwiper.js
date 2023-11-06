@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Grid, useMantineTheme, } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
 import classes from "./RecordSwiper.module.scss";
@@ -15,72 +15,61 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
+import moment from 'moment';
 
 
 SwiperCore.use([Scrollbar, Mousewheel]);
 
-const RecordSwiper = ({ openDailyRecord }) => {
+const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) => {
     // 獲得視口寬度
     const { width } = useViewportSize();
-    // const [value, setValue] = useState('All');
 
     const theme = useMantineTheme();
 
-    const fakeData = [
-        {
-            id: "4691",
-            month: "Oct.",
-            date: 18,
-            mood: happy,
-            tagList: ["愉快", "放鬆"],
-            memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
-        },
-        {
-            id: "3259",
-            month: "Nov.",
-            date: 20,
-            mood: happy,
-            tagList: ["生氣", "憤怒"],
-            memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
-        },
-        {
-            id: "329",
-            month: "Nov.",
-            date: 20,
-            mood: smile,
-            tagList: ["生氣", "憤怒"],
-            memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
-        },
-        {
-            id: "59",
-            month: "Nov.",
-            date: 20,
-            mood: sad,
-            tagList: ["生氣", "憤怒"],
-            memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
-        },
-        {
-            id: "32",
-            month: "Nov.",
-            date: 20,
-            mood: normal,
-            tagList: ["生氣", "憤怒"],
-            memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
-        },
-        {
-            id: "35",
-            month: "Nov.",
-            date: 20,
-            mood: depressed,
-            tagList: ["生氣", "憤怒"],
-            memo: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti provident ex, commodi assumenda ab dolorem, necessitatibus natus accusantium totam velit voluptates, doloribus aut. Maiores sint dolores illo nisi recusandae ipsa animi, voluptate minima explicabo ad non iusto magnam, laborum ea perferendis at delectus esse harum ullam distinctio molestias? Optio, consequatur."
+    const monthData = useMemo(() => {
+        if (monthlyRecord?.data) {
+            const getIcon = (score) => {
+                let icon;
+                switch (score) {
+                    case -2:
+                        icon = depressed;
+                        break;
+                    case -1:
+                        icon = sad;
+                        break;
+                    case 1:
+                        icon = smile;
+                        break;
+                    case 2:
+                        icon = happy;
+                        break;
+                    default:
+                        icon = normal;
+                        break;
+                }
+                return icon;
+            };
+            return monthlyRecord.data.map((dayRecord) => {
+                const time = moment(dayRecord.timestamp);
+                const month = time.format('MMM.');
+                const date = time.format('DD');
+                const icon = getIcon(dayRecord.score);
+                return { ...dayRecord, month, date, icon };
+            });
+        } else {
+            return [];
         }
-    ];
+    }, [monthlyRecord]);
 
     const toolList = [
         { icon: uploadIcon, fn: () => { console.log("update"); } },
         { icon: deleteIcon, fn: () => { console.log("delete"); } },
-        { icon: editIcon, fn: () => { openDailyRecord(); } }
+        {
+            icon: editIcon, fn: ({ timestamp }) => {
+                setSelectedDateValue(new Date(timestamp));
+                openDailyRecord();
+            }
+        }
     ];
 
     const [slidesPerView, setSlidesPerView] = useState(3);
@@ -118,16 +107,15 @@ const RecordSwiper = ({ openDailyRecord }) => {
                 className={classes["swiper-day"]}
                 style={{ height: `${swiperHeight}px` }}
             >
-                {fakeData.map((item) => < SwiperSlide key={item.id} tag="div" className={classes["swiper-slide-day"]}>
+                {monthData.map((item) => < SwiperSlide key={item._id} tag="div" className={classes["swiper-slide-day"]}>
                     <div className={classes["day-tool-list"]}>
-                        {toolList.map((tool, index) => <div className={classes["day-tool"]} key={index} onClick={tool.fn}>
+                        {toolList.map((tool, index) => <div className={classes["day-tool"]} key={index} onClick={() => tool.fn({ timestamp: item.timestamp })}>
                             <SVG src={tool.icon} width={"100%"} height={"100%"}></SVG>
                         </div>)}
                     </div>
                     <div className={classes["day-wrapper"]} style={{ backgroundColor: theme.colorScheme === "light" ? "rgba(213, 240, 206, .5)" : "" }}>
                         <Grid>
                             <Grid.Col span="content">
-                                {/* <div className={classes["month-date"]} style={{ background: `url(${swiperBackground}) no-repeat`, backgroundSize: "contain" }}> */}
                                 <div className={classes["month-date"]} >
                                     <div className={classes["month"]}>{item.month}</div>
                                     <div className={classes["date"]}>{item.date}</div>
@@ -135,18 +123,19 @@ const RecordSwiper = ({ openDailyRecord }) => {
                             </Grid.Col>
                             <Grid.Col span="content">
                                 <div className={classes["mood"]}>
-                                    <img src={item.mood} alt="Mood" />
+                                    <img src={item.icon} alt="Mood" />
                                 </div>
                             </Grid.Col>
                             <Grid.Col span="auto">
                                 <div >
                                     <div className={classes["tag-list"]}>
-                                        {item.tagList.map((item, index) => <div key={index} className={classes.tag}>
+                                        {item.tags.length === 0 ? <div className={classes.tag}> Empty
+                                        </div> : item.tags.map((item, index) => <div key={index} className={classes.tag}>
                                             {item}
                                         </div>)}
                                     </div>
                                     <div className={classes.memo}>
-                                        {item.memo}
+                                        {item.memo ? item.memo : "No memo recorded"}
                                     </div>
                                 </div>
                             </Grid.Col>

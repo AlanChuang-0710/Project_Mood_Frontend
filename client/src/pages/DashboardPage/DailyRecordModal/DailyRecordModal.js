@@ -42,7 +42,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     const id = useSelector(selectCurrentUserId);
     const theme = useMantineTheme();
     const [updateUserFeeling] = useUpdateUserFeelingMutation();
-    const { data: dayFeeling, isSuccess } = useGetUserFeelingQuery({ id, startTime: selectedDateValue.getTime() - 5, endTime: selectedDateValue.getTime() + 5 });
+    const { data: dayFeeling, isSuccess } = useGetUserFeelingQuery({ id, startTime: selectedDateValue.getTime() - 5, endTime: selectedDateValue.getTime() + 5, opened }); // mantine的modal一直掛載，此處放入opened是為了每次顯現modal都會因為opened變化而主動調用useQuery。
 
     /* 心情 Modal */
     const formatSelectedDate = useMemo(() => {
@@ -142,16 +142,12 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
 
     }, [updateUserFeeling, dayRecord, id, closeModalHandler]);
 
-    // 更新日期
-    useEffect(() => {
-        setDayRecord((preVal) => ({ ...preVal, timestamp: selectedDateValue }));
-    }, [selectedDateValue]);
 
-    // 提換上資料庫的每日資料
+    // 替換上資料庫的每日資料
     useEffect(() => {
         if (dayFeeling?.data?.length > 0 && isSuccess) {
-            setPreviewPhotos(dayFeeling.data[0].imgURL);
             setDayRecord({ ...dayFeeling.data[0], timestamp: selectedDateValue });
+            setPreviewPhotos(dayFeeling.data[0].imgURL);
         } else {
             setDayRecord({
                 timestamp: selectedDateValue,
@@ -163,8 +159,10 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                 memo: "",
                 imgURL: [],
             });
+            setPreviewPhotos([]);
         }
-    }, [dayFeeling, selectedDateValue, isSuccess]);
+    }, [dayFeeling, isSuccess]);
+
 
     return (
         <Modal styles={{
@@ -279,6 +277,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
             </Tabs>
 
         </Modal>
+
     );
 };
 

@@ -69,13 +69,6 @@ const DashboardPage = () => {
     }
   }, [open]);
 
-  useEffect(() => {
-    if (isSuccess && monthlyRecord.code === "2000") {
-      // console.log(monthlyRecord.data);
-    }
-  }, [isSuccess]);
-
-
   return (
     <Grid>
       {/* Positive Phrase Section */}
@@ -140,7 +133,7 @@ const DashboardPage = () => {
       < Grid.Col md={5} lg={4} >
         <div style={useGetComponentStyle()} >
           <div className={classes.calendar}>
-            <DatePicker type="default" allowDeselect value={selectedDateValue} onChange={dateChangeHandler} hideOutsideDates styles={calendarStyle}
+            <DatePicker type="default" value={selectedDateValue} onChange={dateChangeHandler} hideOutsideDates styles={calendarStyle}
               size="md" locale="zh-tw"
             // monthLabelFormat="YYYY年 M月"
             />
@@ -151,7 +144,7 @@ const DashboardPage = () => {
       {/* Month record */}
       <Grid.Col md={7} lg={6}>
         <div className={classes["month-wrapper"]} style={useGetComponentStyle()} >
-          <RecordSwiper openDailyRecord={open} />
+          <RecordSwiper openDailyRecord={open} monthlyRecord={monthlyRecord} setSelectedDateValue={setSelectedDateValue} />
         </div>
       </Grid.Col>
 
@@ -163,7 +156,7 @@ const DashboardPage = () => {
       </Grid.Col>
 
       {/* 新增心情 Modal */}
-      <DailyRecordModal opened={opened} open={open} close={close} selectedDateValue={selectedDateValue} />
+      {<DailyRecordModal opened={opened} open={open} close={close} selectedDateValue={selectedDateValue} />}
     </Grid >
   );
 };

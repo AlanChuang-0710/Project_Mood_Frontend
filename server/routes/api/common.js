@@ -2,9 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
-// 導入情感模型
 const CommonModel = require('../../models/CommonModel');
-// 導入用戶模型
 const UserModel = require("../../models/UserModel");
 
 // 導入token較驗中間件
@@ -16,7 +14,7 @@ router.get("/:id", checkTokenMiddleware, function (req, res) {
     const property = req.body.property;
 
     // 從資料庫中確認用戶存在 並獲取common data
-    // findById 或 findOne兩種寫法都ok，當使用findOne搜索id時，必須回歸使用_id，否則找不到
+    // findById 或 findOne兩種寫法都ok，當使用findOne搜索id時，必須使用_id，否則找不到
     // UserModel.findOne({ _id: id }).then((data) => {
     UserModel.findById(id).then(() => {
         CommonModel.findOne().then((data) => {

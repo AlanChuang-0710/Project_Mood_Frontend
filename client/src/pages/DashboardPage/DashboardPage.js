@@ -23,7 +23,7 @@ const DashboardPage = () => {
   endTime.setHours(0, 0, 0, 0);
   endTime = endTime.getTime();
 
-  const { data: monthlyRecord, isSuccess } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId), startTime, endTime });
+  const { data: monthlyRecord } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId), startTime, endTime });
   const theme = useMantineTheme();
 
   /* date relative */

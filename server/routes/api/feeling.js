@@ -153,10 +153,10 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
         if (user) {
             // 用户存在，查找是否有匹配的timestamp
             const existingEntryIndex = user.dailyFeeling.findIndex(item => item.timestamp.toString() == timestamp.toString());
+            let insertIndex = 0;
             if (existingEntryIndex !== -1) {
                 user.dailyFeeling[existingEntryIndex] = { ...req.body };
             } else {
-                let insertIndex = 0;
                 const result = user.dailyFeeling.every((item, index) => {
                     if (item.timestamp.getTime() > timestamp.getTime()) {
                         insertIndex = index;
@@ -174,7 +174,7 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
             res.json({
                 code: "2000",
                 msg: existingEntryIndex !== -1 ? "Feeling revised" : "New feeling created",
-                data: existingEntryIndex !== -1 ? data.dailyFeeling[existingEntryIndex] : data.dailyFeeling[0]
+                data: existingEntryIndex !== -1 ? data.dailyFeeling[existingEntryIndex] : data.dailyFeeling[insertIndex]
             });
         } else {
             const newUser = new FeelingModel({

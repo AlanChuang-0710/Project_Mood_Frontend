@@ -22,6 +22,8 @@ const DashboardPage = () => {
   endTime.setDate(endTime.getDate() - 1);
   endTime.setHours(0, 0, 0, 0);
   endTime = endTime.getTime();
+  console.log("startTime", startTime);
+  console.log("ENDTime", endTime);
 
   const { data: monthlyRecord, isSuccess } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId), startTime, endTime });
   const theme = useMantineTheme();

@@ -11,7 +11,7 @@ const path = require("path");
 const storage = multer.diskStorage({
     // 如果destination使用函數，則必須自己創建目標資料夾; 如果destination使用string，則multer會協助創建
     destination: function (req, file, cb) {
-        // 回傳的時間格式為"2023-11-01T16:00:00.000Z"
+        // 因為form.append的關係，前端回傳的時間格式為 string "2023-11-01T16:00:00.000Z"
         req.body.timestamp = new Date(req.body.timestamp); // 限制只能存儲Date對象
 
         const userId = req.params.id;
@@ -69,9 +69,9 @@ router.get("/:id", checkTokenMiddleware, function (req, res) {
 
     if (startTime && endTime) {
         FeelingModel.findOne(
-            { userId: userId }
+            { userId }
         ).then((data) => {
-            let periodFeeling = data.dailyFeeling.filter((item) => item.timestamp > startTime && item.timestamp < endTime);
+            let periodFeeling = data.dailyFeeling.filter((item) => item.timestamp >= startTime && item.timestamp <= endTime);
             res.json({
                 code: "2000",
                 msg: "A period of feeling got!",
@@ -103,7 +103,7 @@ router.get("/:id", checkTokenMiddleware, function (req, res) {
     });
 });
 
-// 新建特定日心情
+// 新建/更新特定日心情
 router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (req, res) {
     const userId = req.params.id;
     req.body.timestamp = req.body.timestamp instanceof Date ? req.body.timestamp : new Date(req.body.timestamp); // 限制只能存儲Date對象
@@ -132,7 +132,6 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (r
             return newArr[newArr.length - 1];
         });
         fs.readdirSync(targetDayDir).forEach((file) => {
-            console.log(file);
             if (reserveList.indexOf(file) === -1) {
                 const curPath = path.join(targetDayDir, file);
                 fs.unlinkSync(curPath);
@@ -194,20 +193,28 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (r
 });
 
 // 刪除特定日心情
-router.delete("/:id/:feelingId", checkTokenMiddleware, function (req, res) {
-    const userId = req.params.id;
-    const feelingId = req.params.feelingId;
-    FeelingModel.findOne({ userId }).then((user) => {
+router.delete("/:id/:feelingId", checkTokenMiddleware, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const feelingId = req.params.feelingId;
+
+        const user = await FeelingModel.findOne({ userId });
+
         if (user) {
             const existingEntryIndex = user.dailyFeeling.findIndex(item => item.id == feelingId);
             if (existingEntryIndex !== -1) {
-                user.dailyFeeling.splice(existingEntryIndex, 1);
-                user.save().then((data) => {
-                    res.json({
-                        code: "2000",
-                        msg: "Feeling deleted!",
-                        data: null
-                    });
+
+                // 刪除images
+                let [{ timestamp }] = user.dailyFeeling.splice(existingEntryIndex, 1);
+                let yearMonthDateTimestamp = moment(timestamp).format("YYYY-MM-DD");
+                const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${yearMonthDateTimestamp}`);
+                fs.rmdirSync(targetDayDir, { recursive: true });
+
+                await user.save();
+                res.json({
+                    code: "2000",
+                    msg: "Feeling deleted!",
+                    data: null
                 });
             } else {
                 res.json({
@@ -216,14 +223,16 @@ router.delete("/:id/:feelingId", checkTokenMiddleware, function (req, res) {
                     data: null
                 });
             }
+        } else {
+            throw new Error();
         }
-    }).catch((err) => {
+    } catch (err) {
         res.json({
             code: "2002",
             msg: "User not exists",
             data: null
         });
-    });
+    }
 });
 
 module.exports = router;

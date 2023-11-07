@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Grid, useMantineTheme, } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
+import { useDeleteFeelingMutation } from '../../../store/api/feelingApi';
 import classes from "./RecordSwiper.module.scss";
 import happy from "../../../assets/emotion_set/happy.svg";
 import smile from "../../../assets/emotion_set/smile.svg";
@@ -16,45 +17,54 @@ import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import moment from 'moment';
-
+import { useSelector } from 'react-redux';
+import { selectCurrentUserId } from "../../../store/reducer/authSlice";
 
 SwiperCore.use([Scrollbar, Mousewheel]);
 
 const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) => {
     // 獲得視口寬度
     const { width } = useViewportSize();
-
     const theme = useMantineTheme();
+
+    const userId = useSelector(selectCurrentUserId);
+
+    const [deleteFeeling, { isLoading, isSuccess }] = useDeleteFeelingMutation();
 
     const monthData = useMemo(() => {
         if (monthlyRecord?.data) {
             const getIcon = (score) => {
-                let icon;
+                let icon, backgroundColor;
                 switch (score) {
                     case -2:
                         icon = depressed;
+                        backgroundColor = "rgba(220, 17, 18 , 0.3)";
                         break;
                     case -1:
                         icon = sad;
+                        backgroundColor = "rgba(255, 87, 51 , 0.3)";
                         break;
                     case 1:
                         icon = smile;
+                        backgroundColor = "rgba(213, 240, 206, .5)";
                         break;
                     case 2:
                         icon = happy;
+                        backgroundColor = "rgba(213, 240, 206, .7)";
                         break;
                     default:
                         icon = normal;
+                        backgroundColor = "rgba(255, 195, 0, 0.3) ";
                         break;
                 }
-                return icon;
+                return { icon, backgroundColor };
             };
             return monthlyRecord.data.map((dayRecord) => {
                 const time = moment(dayRecord.timestamp);
                 const month = time.format('MMM.');
                 const date = time.format('DD');
-                const icon = getIcon(dayRecord.score);
-                return { ...dayRecord, month, date, icon };
+                const { icon, backgroundColor } = getIcon(dayRecord.score);
+                return { ...dayRecord, month, date, icon, backgroundColor, userId };
             });
         } else {
             return [];
@@ -62,8 +72,12 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
     }, [monthlyRecord]);
 
     const toolList = [
-        { icon: uploadIcon, fn: () => { console.log("update"); } },
-        { icon: deleteIcon, fn: () => { console.log("delete"); } },
+        { icon: uploadIcon, fn: () => { console.log("upload"); } },
+        {
+            icon: deleteIcon, fn: (({ userId: id, _id: feelingId }) => {
+                deleteFeeling({ id, feelingId });
+            })
+        },
         {
             icon: editIcon, fn: ({ timestamp }) => {
                 setSelectedDateValue(new Date(timestamp));
@@ -74,6 +88,7 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
 
     const [slidesPerView, setSlidesPerView] = useState(3);
     const [swiperHeight, setSwiperHeight] = useState(404);
+
 
     useEffect(() => {
         if (width > 1198) {
@@ -107,18 +122,21 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
                 className={classes["swiper-day"]}
                 style={{ height: `${swiperHeight}px` }}
             >
-                {monthData.map((item) => < SwiperSlide key={item._id} tag="div" className={classes["swiper-slide-day"]}>
+                {monthData.length > 0 ? monthData.map((item) => < SwiperSlide key={item._id} tag="div" className={classes["swiper-slide-day"]}>
                     <div className={classes["day-tool-list"]}>
-                        {toolList.map((tool, index) => <div className={classes["day-tool"]} key={index} onClick={() => tool.fn({ timestamp: item.timestamp })}>
+                        {toolList.map((tool, index) => <div className={classes["day-tool"]} key={index} onClick={() => tool.fn(item)}>
                             <SVG src={tool.icon} width={"100%"} height={"100%"}></SVG>
                         </div>)}
                     </div>
-                    <div className={classes["day-wrapper"]} style={{ backgroundColor: theme.colorScheme === "light" ? "rgba(213, 240, 206, .5)" : "" }}>
+                    <div className={classes["day-wrapper"]} >
                         <Grid>
                             <Grid.Col span="content">
-                                <div className={classes["month-date"]} >
-                                    <div className={classes["month"]}>{item.month}</div>
-                                    <div className={classes["date"]}>{item.date}</div>
+                                <div className={classes["container"]}>
+                                    <div className={classes["badge"]} style={{ backgroundColor: theme.colorScheme === "light" ? item.backgroundColor : "" }} ></div>
+                                    <div className={classes["month-date"]} >
+                                        <div className={classes["month"]}>{item.month}</div>
+                                        <div className={classes["date"]}>{item.date}</div>
+                                    </div>
                                 </div>
                             </Grid.Col>
                             <Grid.Col span="content">
@@ -141,7 +159,7 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
                             </Grid.Col>
                         </Grid>
                     </div >
-                </SwiperSlide>)
+                </SwiperSlide>) : <SwiperSlide tag="div" className={`${classes["swiper-slide-day"]} ${classes["no-month-data"]}`}>There is no any record in this month yet.</SwiperSlide>
                 }
             </Swiper >
         </>

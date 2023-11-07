@@ -67,32 +67,34 @@ const feelingApi = createApi({
                         body: data,
                     };
                 },
-                keepUnusedDataFor: 0,
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                //     用來轉換響應數據的格式，可以設定返回的data數據格式
+                //     transformResponse(baseQueryReturnValue) {
+                //         return baseQueryReturnValue.data;
+                //     },
                 providesTags: [{
                     type: "addFeeling",
-                }]
+                }],
+                invalidatesTags: ["getFeeling"]
+            }),
+
+            deleteFeeling: build.mutation({
+                query({ id, feelingId }) {
+                    return {
+                        url: `/${id}/${feelingId}`,
+                        method: "delete",
+                    };
+                },
+                providesTags: [{
+                    type: "deleteFeeling",
+                }],
+                invalidatesTags: ["getFeeling"]
             })
-
-
-            // getStudentById: build.query({
-            //     query(id) { //調用鉤子函數時會傳入參數
-            //         return `students/id`;
-            //     },
-            //     // 用來轉換響應數據的格式，可以設定返回的data數據格式
-            //     transformResponse(baseQueryReturnValue) {
-            //         return baseQueryReturnValue.data;
-            //     },
-            //     // keepUnusedDataFor: 2, // 設置數據緩存的時間，單位為秒，默認60s
-            //     providesTags: [{
-            //         type: "ATags",
-            //         id: "XXX"
-            //     }]
-            // }),
         };
     }
 });
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetUserFeelingQuery, useUpdateUserFeelingMutation } = feelingApi;
+export const { useGetUserFeelingQuery, useUpdateUserFeelingMutation, useDeleteFeelingMutation } = feelingApi;
 export default feelingApi;

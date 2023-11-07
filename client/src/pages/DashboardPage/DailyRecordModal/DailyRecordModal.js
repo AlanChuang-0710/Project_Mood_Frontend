@@ -1,16 +1,11 @@
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
-import { Image, Grid, Button, Modal, Tabs, Slider, useMantineTheme, Textarea, MultiSelect, Group, FileButton, CloseButton } from "@mantine/core";
-import classes from "./DailyRecordModal.module.scss";
-import happy from "../../../assets/emotion_set/happy.svg";
-import smile from "../../../assets/emotion_set/smile.svg";
-import normal from "../../../assets/emotion_set/normal.svg";
-import sad from "../../../assets/emotion_set/sad.svg";
-import depressed from "../../../assets/emotion_set/depressed.svg";
-// import { IconCloudUpload } from '@tabler/icons-react';
-import moment from "moment";
-import { useUpdateUserFeelingMutation, useGetUserFeelingQuery } from "../../../store/api/feelingApi";
 import { useSelector } from 'react-redux';
+import { Image, Grid, Button, Modal, Tabs, Slider, useMantineTheme, Textarea, MultiSelect, Group, FileButton, CloseButton } from "@mantine/core";
+import moment from "moment";
+import { happy, smile, normal, sad, depressed } from "../../../assets/index";
+import { useUpdateUserFeelingMutation, useGetUserFeelingQuery } from "../../../store/api/feelingApi";
 import { selectCurrentUserId } from "../../../store/reducer/authSlice";
+import classes from "./DailyRecordModal.module.scss";
 const moodList = [
     {
         icon: happy,

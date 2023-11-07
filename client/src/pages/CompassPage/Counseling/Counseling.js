@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid, } from "@mantine/core";
-import { useGetComponentStyle } from "../../../styles/dayNightStyle";
 import Map from './Map/Map';
 import AddressTable from './AddressTable/AddressTable';
+import { useGetComponentStyle } from "../../../styles/dayNightStyle";
 import classes from "./Counseling.module.scss";
 
 const Counseling = () => {

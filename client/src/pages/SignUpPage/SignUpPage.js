@@ -1,15 +1,14 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRegisterMutation } from "../../store/api/authApi";
 import { useDisclosure } from '@mantine/hooks';
 import { PasswordInput, TextInput, Button, Checkbox, Tabs, LoadingOverlay } from "@mantine/core";
 import { useForm } from '@mantine/form';
-import classes from "./SignUpPage.module.scss";
-import dayBg from "../../assets/loginSignup/day_bg.svg";
-import nightBg from "../../assets/loginSignup/night_bg.svg";
 import Verification from "./Verification/Verification";
 import OTPcheck from './OTPcheck/OTPcheck';
 import SignupResult from "./SignupResult/SignupResult";
+import { useRegisterMutation } from "../../store/api/authApi";
+import { dayBg, nightBg } from "../../assets/index.js";
+import classes from "./SignUpPage.module.scss";
 
 const SignUpPage = () => {
     const nav = useNavigate();

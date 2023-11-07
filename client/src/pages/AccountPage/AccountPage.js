@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Image, Button, TextInput, Group, Grid, Space, Checkbox, Spoiler } from '@mantine/core';
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import test from "../../assets/test.jpg";
 import { IconPencil } from '@tabler/icons-react';
+import test from "../../assets/test.jpg";
+import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import classes from "./AccountPage.module.scss";
 
 const AccountPage = () => {

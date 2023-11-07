@@ -1,16 +1,16 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { Image, Grid, MediaQuery, Button, useMantineTheme, } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { DatePicker } from '@mantine/dates';
-import classes from "./DashboardPage.module.scss";
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
-import userImage from "../../assets/dashboard/user.png";
 import RecordSwiper from "./RecordSwiper/RecordSwiper";
 import EssaySwiper from './EssaySwiper/EssaySwiper';
 import DailyRecordModal from './DailyRecordModal/DailyRecordModal';
 import { useGetUserFeelingQuery } from "../../store/api/feelingApi";
-import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
+import { useGetComponentStyle } from "../../styles/dayNightStyle";
+import { userImage } from "../../assets/index";
+import classes from "./DashboardPage.module.scss";
 
 const DashboardPage = () => {
   let startTime = new Date();
@@ -22,8 +22,6 @@ const DashboardPage = () => {
   endTime.setDate(endTime.getDate() - 1);
   endTime.setHours(0, 0, 0, 0);
   endTime = endTime.getTime();
-  console.log("startTime", startTime);
-  console.log("ENDTime", endTime);
 
   const { data: monthlyRecord, isSuccess } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId), startTime, endTime });
   const theme = useMantineTheme();

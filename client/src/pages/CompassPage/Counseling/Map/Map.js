@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 const Map = () => {
     const mapContainer = useRef(null);

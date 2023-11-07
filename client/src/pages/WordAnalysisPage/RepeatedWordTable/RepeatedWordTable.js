@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DataTable } from 'mantine-datatable';
 import { useMantineTheme, HoverCard, Text } from "@mantine/core";
-import classes from "./RepeatedWordTable.module.scss";
 import { IconInfoCircleFilled } from '@tabler/icons-react';
+import classes from "./RepeatedWordTable.module.scss";
 
 // datatable document
 // https://icflorescu.github.io/mantine-datatable/examples/basic-usage

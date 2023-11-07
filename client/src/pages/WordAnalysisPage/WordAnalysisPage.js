@@ -1,10 +1,10 @@
 import React from 'react';
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import { Grid, useMantineTheme, SegmentedControl, } from "@mantine/core";
-// import classes from "./WordAnalysisPage.module.scss";
 import ScoreKOLTable from './ScoreKOLTable/ScoreKOLTable';
 import RepeatedWordTable from './RepeatedWordTable/RepeatedWordTable';
 import WorldCloudChart from './WordCloudChart/WorldCloudChart';
+import { useGetComponentStyle } from "../../styles/dayNightStyle";
+// import classes from "./WordAnalysisPage.module.scss";
 
 const WordAnalysisPage = () => {
     const theme = useMantineTheme();

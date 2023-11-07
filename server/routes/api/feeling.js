@@ -62,49 +62,57 @@ const FeelingModel = require('../../models/FeelingModel');
 const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware");
 
 // 獲取特定用戶的一段日期/全部心情
-router.get("/:id", checkTokenMiddleware, function (req, res) {
-    const userId = req.params.id;
-    const startTime = req.query.startTime; //api的query都會轉換成string
-    const endTime = req.query.endTime; //api的query都會轉換成string
+router.get("/:id", checkTokenMiddleware, async function (req, res) {
+    try {
+        const userId = req.params.id;
+        const startTime = req.query.startTime; //api的query都會轉換成string
+        const endTime = req.query.endTime; //api的query都會轉換成string
 
-    if (startTime && endTime) {
-        FeelingModel.findOne(
-            { userId }
-        ).then((data) => {
-            let periodFeeling = data.dailyFeeling.filter((item) => item.timestamp >= startTime && item.timestamp <= endTime);
+        if (startTime && endTime) {
+            const data = await FeelingModel.findOne(
+                { userId }
+            );
+
+            if (!data) {
+                return res.json({
+                    code: "2001",
+                    msg: "User not exists",
+                    data: null
+                });
+            }
+            const periodFeeling = data.dailyFeeling.filter((item) => item.timestamp >= startTime && item.timestamp <= endTime);
             res.json({
                 code: "2000",
                 msg: "A period of feeling got!",
                 data: periodFeeling
             });
-        }).catch((err) => {
+        } else {
+            // 獲取所有日心情
+            const data = await FeelingModel.findOne({ userId });
+            if (!data) {
+                return res.json({
+                    code: "2001",
+                    msg: "User not exists",
+                    data: null
+                });
+            };
             res.json({
-                code: "2001",
-                msg: "User not exists",
-                data: null
+                code: "2000",
+                msg: "All feeling got!",
+                data: data
             });
-        });
-        return;
-    }
-
-    // 獲取所有日心情
-    FeelingModel.findOne({ userId }).then((data) => {
-        res.json({
-            code: "2000",
-            msg: "All feeling got!",
-            data: data
-        });
-    }).catch((err) => {
+        }
+    } catch (err) {
         res.json({
             code: "2001",
-            msg: "User not exists",
+            msg: err,
             data: null
         });
-    });
+    }
 });
 
 // 新建/更新特定日心情
-router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (req, res) {
+router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async function (req, res) {
     const userId = req.params.id;
     req.body.timestamp = req.body.timestamp instanceof Date ? req.body.timestamp : new Date(req.body.timestamp); // 限制只能存儲Date對象
 
@@ -140,8 +148,8 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (r
 
     }
     const timestamp = req.body.timestamp;
-
-    FeelingModel.findOne({ userId }).then((user) => {
+    try {
+        const user = await FeelingModel.findOne({ userId });
         if (user) {
             // 用户存在，查找是否有匹配的timestamp
             const existingEntryIndex = user.dailyFeeling.findIndex(item => item.timestamp.toString() == timestamp.toString());
@@ -162,34 +170,31 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), function (r
                 user.dailyFeeling.splice(insertIndex, 0, { ...req.body });
             }
             // 保存更新后的用户数据
-            user.save().then((data) => {
-                res.json({
-                    code: "2000",
-                    msg: existingEntryIndex !== -1 ? "Feeling revised" : "New feeling created",
-                    data: existingEntryIndex !== -1 ? data.dailyFeeling[existingEntryIndex] : data.dailyFeeling[0]
-                });
+            const data = await user.save();
+            res.json({
+                code: "2000",
+                msg: existingEntryIndex !== -1 ? "Feeling revised" : "New feeling created",
+                data: existingEntryIndex !== -1 ? data.dailyFeeling[existingEntryIndex] : data.dailyFeeling[0]
             });
         } else {
             const newUser = new FeelingModel({
                 userId,
                 dailyFeeling: [{ ...req.body }]
             });
-            newUser.save().then((data) => {
-                res.json({
-                    code: "2000",
-                    msg: "New feeling created",
-                    data: data.dailyFeeling[0]
-                });
+            const data = await newUser.save();
+            res.json({
+                code: "2000",
+                msg: "New feeling created",
+                data: data.dailyFeeling[0]
             });
         };
-    }).catch((err) => {
-        console.log(err);
+    } catch (err) {
         res.json({
             code: "5000",
             msg: err,
             data: null
         });
-    });
+    }
 });
 
 // 刪除特定日心情

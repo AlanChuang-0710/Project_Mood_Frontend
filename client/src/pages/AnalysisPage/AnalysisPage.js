@@ -1,11 +1,11 @@
 import React from 'react';
-import classes from "./AnalysisPage.module.scss";
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import { Grid, useMantineTheme, SegmentedControl } from "@mantine/core";
 import ScoreRatioPieChart from "./ScoreRatioPieChart/ScoreRatioPieChart";
 import ScoreFlowChart from './ScoreFlowChart/ScoreFlowChart';
 import ScoreDayChart from './ScoreDayChart/ScoreDayChart';
 import SleepFlowChart from './SleepFlowChart/SleepFlowChart';
+import { useGetComponentStyle } from "../../styles/dayNightStyle";
+import classes from "./AnalysisPage.module.scss";
 
 const AnalysisPage = () => {
   const theme = useMantineTheme();

@@ -1,24 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Grid, useMantineTheme, } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
-import { useDeleteFeelingMutation } from '../../../store/api/feelingApi';
-import classes from "./RecordSwiper.module.scss";
-import happy from "../../../assets/emotion_set/happy.svg";
-import smile from "../../../assets/emotion_set/smile.svg";
-import normal from "../../../assets/emotion_set/normal.svg";
-import sad from "../../../assets/emotion_set/sad.svg";
-import depressed from "../../../assets/emotion_set/depressed.svg";
-import uploadIcon from "../../../assets/tool/upload.svg";
-import deleteIcon from "../../../assets/tool/delete.svg";
-import editIcon from "../../../assets/tool/edit.svg";
 import SVG from "react-inlinesvg";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/scrollbar';
 import moment from 'moment';
+import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css/scrollbar';
+import 'swiper/css';
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from "../../../store/reducer/authSlice";
+import { useDeleteFeelingMutation } from '../../../store/api/feelingApi';
+import { happy, smile, normal, sad, depressed, deleteIcon, editIcon, uploadIcon } from "../../../assets/index";
+import classes from "./RecordSwiper.module.scss";
 
 SwiperCore.use([Scrollbar, Mousewheel]);
 

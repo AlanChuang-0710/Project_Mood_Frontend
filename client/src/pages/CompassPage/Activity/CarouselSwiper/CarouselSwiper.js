@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import classes from "./CarouselSwiper.module.scss";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Scrollbar, Mousewheel, Autoplay } from 'swiper';
+import 'swiper/css/scrollbar';
+import 'swiper/css';
 import slide1 from "../../../../assets/compass/carousel_slide1.png";
 import slide2 from "../../../../assets/compass/carousel_slide2.jpg";
-import 'swiper/css';
-import 'swiper/css/scrollbar';
+import classes from "./CarouselSwiper.module.scss";
+
 SwiperCore.use([Scrollbar, Mousewheel, Autoplay]);
 
 const CarouselSwiper = ({ height }) => {

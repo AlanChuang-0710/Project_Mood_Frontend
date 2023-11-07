@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import classes from "./SignupResult.module.scss";
 import { Button } from "@mantine/core";
-import signupSuccess from "../../../assets/loginSignup/signup_success.svg";
+import { signupSuccess } from "../../../assets/index.js";
+import classes from "./SignupResult.module.scss";
 
 
 const SignupResult = () => {

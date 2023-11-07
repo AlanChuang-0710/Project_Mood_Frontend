@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PasswordInput, TextInput, Button, LoadingOverlay } from "@mantine/core";
-import { useDisclosure } from '@mantine/hooks';
-import { useForm } from '@mantine/form';
-import { useLoginMutation } from "../../store/api/authApi";
 import { useDispatch } from 'react-redux';
+import { useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
+import { PasswordInput, TextInput, Button, LoadingOverlay } from "@mantine/core";
+import { useLoginMutation } from "../../store/api/authApi";
 import { setCredentials } from "../../store/reducer/authSlice";
+import { googleIcon, facebookIcon, nightBg, dayBg } from "../../assets/index";
 import classes from "./LoginPage.module.scss";
-import dayBg from "../../assets/loginSignup/day_bg.svg";
-import nightBg from "../../assets/loginSignup/night_bg.svg";
-import facebookIcon from "../../assets/loginSignup/facebook.svg";
-import googleIcon from "../../assets/loginSignup/google.svg";
-
 const LoginPage = () => {
 
     // 獲得當地時間判斷是否 day or night background

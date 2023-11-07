@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
 import { TextInput, Button } from "@mantine/core";
-import loginByPhone from "../../../assets/loginSignup/login_by_phone.svg";
+import { loginByPhone } from "../../../assets/index.js";
 import classes from "./Verification.module.scss";
 
 const Verification = () => {

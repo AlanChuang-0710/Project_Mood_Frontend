@@ -1,12 +1,8 @@
 import React from 'react';
 import { Table, Badge, HoverCard, Text } from "@mantine/core";
 import { IconInfoCircleFilled } from '@tabler/icons-react';
+import { happy, smile, normal, sad, depressed, } from "../../../assets/index.js";
 import classes from "./ScoreKOLTable.module.scss";
-import happy from "../../../assets/emotion_set/happy.svg";
-import smile from "../../../assets/emotion_set/smile.svg";
-import normal from "../../../assets/emotion_set/normal.svg";
-import sad from "../../../assets/emotion_set/sad.svg";
-import depressed from "../../../assets/emotion_set/depressed.svg";
 
 const ScoreKOLTable = ({ title, subtitle }) => {
     const elements = [

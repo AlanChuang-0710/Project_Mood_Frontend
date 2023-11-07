@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { DataTable } from 'mantine-datatable';
 import { Modal, useMantineTheme, HoverCard, Text } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
-import classes from "./AddressTable.module.scss";
 import { IconInfoCircleFilled } from '@tabler/icons-react';
+import classes from "./AddressTable.module.scss";
 
 // datatable document
 // https://icflorescu.github.io/mantine-datatable/examples/basic-usage

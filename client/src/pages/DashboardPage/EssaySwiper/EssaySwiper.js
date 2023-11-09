@@ -1,75 +1,23 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Chip, Group, Grid, Image } from "@mantine/core";
 // import { useViewportSize } from '@mantine/hooks';
-import classes from "./Essay.module.scss";
-import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
-import test from "../../../assets/test.jpg";
-import test2 from "../../../assets/test2.png";
-
+import classes from "./Essay.module.scss";
 
 SwiperCore.use([Scrollbar, Mousewheel]);
 
-const EssaySwiper = () => {
+const EssaySwiper = ({ commonData }) => {
   // const theme = useMantineTheme();
-  const [value, setValue] = useState('All');
+  const [value, setValue] = useState('all');
+  const [essayData, setEssayData] = useState(commonData);
 
   // 獲得視口寬度
   // const { height, width } = useViewportSize();
   // const [direction, setDirection] = useState("vertical");
 
-  const fakeData = [
-    {
-      id: 1293,
-      url: "https://www.google.com/",
-      photo: test,
-      title: "How to get away with Depression, top 10 sales!",
-      author: "Alan Chuang",
-      intro: "Meditation is a form of yoga and, like yoga, starts to shift you from identifying with your mind to identifying with your awareness"
-    },
-    {
-      id: 1292,
-      url: "https://www.google.com/",
-      photo: test2,
-      title: "Mountain therapy ",
-      author: "Eric Bennett",
-      intro: "A short stroll through the woods, a hike in the mountains, looking out at the ocean, or sitting  quietly in the desert can quickly begin to heal."
-    },
-    {
-      id: 1290,
-      url: "https://www.google.com/",
-      photo: test,
-      title: "SUP discovery course ",
-      author: "Atoll Board Corp.",
-      intro: "Stand up paddle boarding is an activity that completely alters your state of mind and physical body, where we could have great satisfaction"
-    },
-    {
-      id: 13,
-      url: "https://www.google.com/",
-      photo: test,
-      title: "How to get away with Depression, top 10 sales!",
-      author: "Alan Chuang",
-      intro: "Meditation is a form of yoga and, like yoga, starts to shift you from identifying with your mind to identifying with your awareness"
-    },
-    {
-      id: 12,
-      url: "https://www.google.com/",
-      photo: test2,
-      title: "Mountain therapy ",
-      author: "Eric Bennett",
-      intro: "A short stroll through the woods, a hike in the mountains, looking out at the ocean, or sitting  quietly in the desert can quickly begin to heal."
-    },
-    {
-      id: 120,
-      url: "https://www.google.com/",
-      photo: test,
-      title: "SUP discovery course ",
-      author: "Atoll Board Corp.",
-      intro: "Stand up paddle boarding is an activity that completely alters your state of mind and physical body, where we could have great satisfaction"
-    }
-  ];
 
   const essayClickHandler = useCallback((url) => {
     window.open(url);
@@ -83,14 +31,22 @@ const EssaySwiper = () => {
   // }
   // }, [width]);
 
+
+  useEffect(() => {
+    if (commonData) {
+      let newArr = commonData.filter((item) => item.tags.includes(value));
+      setEssayData(newArr);
+    }
+  }, [value, commonData]);
+
   return (
     <div>
       <Chip.Group multiple value={value} onChange={setValue} >
         <Group position="left" mb="xs">
-          <Chip variant="light" value="All">All</Chip>
-          <Chip variant="light" value="Happiness">Happiness</Chip>
-          <Chip variant="light" value="Depression">Depression</Chip>
-          <Chip variant="light" value="Sad">Sad</Chip>
+          <Chip variant="light" value="all">All</Chip>
+          <Chip variant="light" value="happiness">Happiness</Chip>
+          <Chip variant="light" value="depression">Depression</Chip>
+          <Chip variant="light" value="saddness">Saddness</Chip>
         </Group>
       </Chip.Group>
 
@@ -102,12 +58,12 @@ const EssaySwiper = () => {
         className={classes["essay-swiper"]}
       >
 
-        {[...fakeData].map((essay) =>
-          < SwiperSlide tag="div" className={classes["essay-slide"]} key={essay.id} onClick={() => essayClickHandler(essay.url)}>
+        {essayData && essayData.map((essay) =>
+          < SwiperSlide tag="div" className={classes["essay-slide"]} key={essay._id} onClick={() => essayClickHandler(essay.url)}>
             <Grid>
               <Grid.Col span={4} >
                 <div>
-                  <Image height={130} radius="md" fit='cover' src={essay.photo} alt="Random image" />
+                  <Image height={130} radius="md" fit='cover' src={essay.cover} alt="Random image" />
                 </div>
               </Grid.Col>
               <Grid.Col span={8} >
@@ -119,8 +75,8 @@ const EssaySwiper = () => {
                     by {essay.author}
                   </div>
                 </div>
-                <div className={classes.intro}>
-                  {essay.intro}
+                <div className={classes.introduction}>
+                  {essay.introduction}
                 </div>
               </Grid.Col>
             </Grid>

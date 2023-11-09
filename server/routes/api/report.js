@@ -20,8 +20,7 @@ const { getUserPeriodFeelingMiddleware } = require("../../middleware/getUserPeri
 router.get("/:id/score_pie_chart", checkTokenMiddleware, getUserPeriodFeelingMiddleware, async function (req, res) {
     try {
         // 透過中間件獲取特定時間段的情緒
-        const periodFeeling = req.periodFeeling;
-        const { startTime, endTime } = req;
+        const { startTime, endTime, periodFeeling } = req;
 
         // 將原始數組轉換為一個Map，其中日期作為鍵
         const dataMap = new Map();

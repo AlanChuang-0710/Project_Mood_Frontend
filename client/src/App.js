@@ -11,6 +11,7 @@ import AccountPage from "./pages/AccountPage/AccountPage";
 import CompassPage from "./pages/CompassPage/CompassPage";
 import WordAnalysisPage from "./pages/WordAnalysisPage/WordAnalysisPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import AdministratorPage from "./pages/Administrator/AdministratorPage";
 function App() {
   const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
@@ -45,6 +46,7 @@ function App() {
               <Route path="/analysis" element={<AnalysisPage />}></Route>
               <Route path="/word-analysis" element={<WordAnalysisPage />}></Route>
               <Route path="/compass" element={<CompassPage />}></Route>
+              <Route path="/administrator" element={<AdministratorPage />}></Route>
             </Route>
             <Route path="*" element={<NotFoundPage />}></Route>
           </Routes>

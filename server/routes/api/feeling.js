@@ -64,6 +64,7 @@ const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware"
 // 獲取特定用戶的一段日期/全部心情
 router.get("/:id", checkTokenMiddleware, async function (req, res) {
     try {
+        // 前端回傳的時間格式 "1701273600000"
         const userId = req.params.id;
         const startTime = req.query.startTime; //api的query都會轉換成string
         const endTime = req.query.endTime; //api的query都會轉換成string
@@ -75,7 +76,7 @@ router.get("/:id", checkTokenMiddleware, async function (req, res) {
 
             if (!data) {
                 return res.json({
-                    code: "2001",
+                    code: "4000",
                     msg: "User not exists",
                     data: null
                 });
@@ -91,7 +92,7 @@ router.get("/:id", checkTokenMiddleware, async function (req, res) {
             const data = await FeelingModel.findOne({ userId });
             if (!data) {
                 return res.json({
-                    code: "2001",
+                    code: "4000",
                     msg: "User not exists",
                     data: null
                 });
@@ -104,7 +105,7 @@ router.get("/:id", checkTokenMiddleware, async function (req, res) {
         }
     } catch (err) {
         res.json({
-            code: "2001",
+            code: "4000",
             msg: err,
             data: null
         });

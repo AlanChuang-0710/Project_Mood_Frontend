@@ -9,9 +9,9 @@ const UserModel = require("../../models/UserModel");
 const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware");
 
 // 獲取所有用戶通用的資料
-router.get("/:id", checkTokenMiddleware, function (req, res) {
+router.get("/:id/:property", checkTokenMiddleware, function (req, res) {
     const id = req.user.id;
-    const property = req.body.property;
+    const property = req.params.property;
 
     // 從資料庫中確認用戶存在 並獲取common data
     // findById 或 findOne兩種寫法都ok，當使用findOne搜索id時，必須使用_id，否則找不到

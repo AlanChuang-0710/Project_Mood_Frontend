@@ -7,6 +7,7 @@ import RecordSwiper from "./RecordSwiper/RecordSwiper";
 import EssaySwiper from './EssaySwiper/EssaySwiper';
 import DailyRecordModal from './DailyRecordModal/DailyRecordModal';
 import { useGetUserFeelingQuery } from "../../store/api/feelingApi";
+import { useGetCommonEssayDataQuery } from "../../store/api/commonApi";
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import { userImage } from "../../assets/index";
@@ -24,6 +25,7 @@ const DashboardPage = () => {
   endTime = endTime.getTime();
 
   const { data: monthlyRecord } = useGetUserFeelingQuery({ id: useSelector(selectCurrentUserId), startTime, endTime });
+  const { data: commonData } = useGetCommonEssayDataQuery({ id: useSelector(selectCurrentUserId) });
   const theme = useMantineTheme();
 
   /* date relative */
@@ -151,7 +153,7 @@ const DashboardPage = () => {
       {/* Essay recommend */}
       <Grid.Col xs={12} lg={6}>
         <div className={classes["essay-wrapper"]} style={useGetComponentStyle()} >
-          <EssaySwiper />
+          <EssaySwiper commonData={commonData?.data?.essay} />
         </div>
       </Grid.Col>
 

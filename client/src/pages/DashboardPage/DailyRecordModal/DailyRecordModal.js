@@ -156,7 +156,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
             });
             setPreviewPhotos([]);
         }
-    }, [dayFeeling, isSuccess]);
+    }, [dayFeeling, isSuccess, selectedDateValue]);
 
 
     return (

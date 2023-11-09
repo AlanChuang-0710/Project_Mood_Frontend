@@ -3,7 +3,7 @@ import { setCredentials, logout } from "../reducer/authSlice";
 
 //指定查詢的基礎信息，發信請求的工具
 const baseQuery = fetchBaseQuery({
-    baseUrl: "http://127.0.0.1:3000/common",
+    baseUrl: "http://127.0.0.1:3000/report",
     credentials: "include", // 即便跨域也會攜帶上cookie
     mode: 'cors',
     timeout: 10000,
@@ -32,29 +32,30 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     return result;
 };
 
-const commonApi = createApi({
+const analysisApi = createApi({
 
     //Api的標示，不能跟其他Api或是reducer重複
-    reducerPath: "common",
+    reducerPath: "analysis",
 
     //指定查詢的基礎信息，發信請求的工具
     baseQuery: baseQueryWithReauth,
 
-    tagTypes: ["getCommonData"], //用來指定Api中的標籤類型
+    tagTypes: ["getScorePieChartData"], //用來指定Api中的標籤類型
 
     endpoints(build) {
         //build是請求的構建器，通過build來設置請求的相關信息
         return {
-            getCommonEssayData: build.query({
-                query({ id }) {
+            getScorePieChartData: build.query({
+                query({ id, startTime, endTime }) {
                     return {
-                        url: `/${id}/essay`,
+                        url: `/${id}/score_pie_chart`,
                         method: "get",
+                        params: { startTime, endTime }
                     };
                 },
                 keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
                 providesTags: [{
-                    type: "getCommonData",
+                    type: "getScorePieChartData",
                 }]
             }),
 
@@ -64,5 +65,5 @@ const commonApi = createApi({
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetCommonEssayDataQuery } = commonApi;
-export default commonApi;
+export const { useGetScorePieChartDataQuery } = analysisApi;
+export default analysisApi;

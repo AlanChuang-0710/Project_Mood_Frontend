@@ -40,7 +40,7 @@ const feelingApi = createApi({
     //指定查詢的基礎信息，發信請求的工具
     baseQuery: baseQueryWithReauth,
 
-    tagTypes: ["getFeeling"], //用來指定Api中的標籤類型
+    tagTypes: ["getFeeling", "addFeeling", "deleteFeeling"], //用來指定Api中的標籤類型
 
     endpoints(build) {
         //build是請求的構建器，通過build來設置請求的相關信息
@@ -54,9 +54,7 @@ const feelingApi = createApi({
                     };
                 },
                 keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
-                providesTags: [{
-                    type: "getFeeling",
-                }]
+                providesTags: ["getFeeling"]
             }),
 
             updateUserFeeling: build.mutation({

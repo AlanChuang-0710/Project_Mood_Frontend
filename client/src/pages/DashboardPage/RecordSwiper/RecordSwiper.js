@@ -31,23 +31,23 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
                 switch (score) {
                     case -2:
                         icon = depressed;
-                        backgroundColor = "rgba(220, 17, 18 , 0.3)";
+                        backgroundColor = theme.colors.emotion[4];
                         break;
                     case -1:
                         icon = sad;
-                        backgroundColor = "rgba(255, 87, 51 , 0.3)";
+                        backgroundColor = theme.colors.emotion[3];
                         break;
                     case 1:
                         icon = smile;
-                        backgroundColor = "rgba(213, 240, 206, .5)";
+                        backgroundColor = theme.colors.emotion[1];
                         break;
                     case 2:
                         icon = happy;
-                        backgroundColor = "rgba(213, 240, 206, .7)";
+                        backgroundColor = theme.colors.emotion[0];
                         break;
                     default:
                         icon = normal;
-                        backgroundColor = "rgba(255, 195, 0, 0.3) ";
+                        backgroundColor = theme.colors.emotion[2];
                         break;
                 }
                 return { icon, backgroundColor };

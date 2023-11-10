@@ -56,7 +56,7 @@ router.get("/:id/score_pie_chart", checkTokenMiddleware, getUserPeriodFeelingMid
         );
 
         res.json({
-            code: 2000,
+            code: "2000",
             msg: "Score pie chart data got",
             data: {
                 total: result.length,
@@ -72,8 +72,7 @@ router.get("/:id/score_pie_chart", checkTokenMiddleware, getUserPeriodFeelingMid
 router.get("/:id/score_day_bar", checkTokenMiddleware, getUserPeriodFeelingMiddleware, async function (req, res) {
     try {
         // 透過中間件獲取特定時間段的情緒
-        const periodFeeling = req.periodFeeling;
-        const { startTime, endTime } = req;
+        const { startTime, endTime, periodFeeling } = req;
 
         // 將原始數組轉換為一個Map，其中日期作為鍵
         const dataMap = new Map();
@@ -132,7 +131,7 @@ router.get("/:id/score_day_bar", checkTokenMiddleware, getUserPeriodFeelingMiddl
         };
 
         res.json({
-            code: 2000,
+            code: "2000",
             msg: "Score day bar data got",
             data: {
                 total: result.length,
@@ -148,8 +147,7 @@ router.get("/:id/score_day_bar", checkTokenMiddleware, getUserPeriodFeelingMiddl
 router.get("/:id/score_line_chart", checkTokenMiddleware, getUserPeriodFeelingMiddleware, async function (req, res) {
     try {
         // 透過中間件獲取特定時間段的情緒
-        const periodFeeling = req.periodFeeling;
-        const { startTime, endTime } = req;
+        const { startTime, endTime, periodFeeling } = req;
 
         // 將原始數組轉換為一個Map，其中日期作為鍵
         const dataMap = new Map();
@@ -173,7 +171,7 @@ router.get("/:id/score_line_chart", checkTokenMiddleware, getUserPeriodFeelingMi
         };
 
         res.json({
-            code: 2000,
+            code: "2000",
             msg: "Score line chart data got",
             data: result
         });
@@ -186,8 +184,7 @@ router.get("/:id/score_line_chart", checkTokenMiddleware, getUserPeriodFeelingMi
 router.get("/:id/sleep_line_chart", checkTokenMiddleware, getUserPeriodFeelingMiddleware, async function (req, res) {
     try {
         // 透過中間件獲取特定時間段的情緒
-        const periodFeeling = req.periodFeeling;
-        const { startTime, endTime } = req;
+        const { startTime, endTime, periodFeeling } = req;
 
         // 將原始數組轉換為一個Map，其中日期作為鍵
         const dataMap = new Map();
@@ -211,7 +208,7 @@ router.get("/:id/sleep_line_chart", checkTokenMiddleware, getUserPeriodFeelingMi
         };
 
         res.json({
-            code: 2000,
+            code: "2000",
             msg: "Sleep line chart data got",
             data: result
         });

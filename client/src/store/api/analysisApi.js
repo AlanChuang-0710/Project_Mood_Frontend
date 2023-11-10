@@ -59,11 +59,52 @@ const analysisApi = createApi({
                 }]
             }),
 
+            getScoreLineChartData: build.query({
+                query({ id, startTime, endTime }) {
+                    return {
+                        url: `/${id}/score_line_chart`,
+                        method: "get",
+                        params: { startTime, endTime }
+                    };
+                },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                providesTags: [{
+                    type: "getScoreLineChartData",
+                }]
+            }),
+
+            getScoreDayBarData: build.query({
+                query({ id, startTime, endTime }) {
+                    return {
+                        url: `/${id}/score_day_bar`,
+                        method: "get",
+                        params: { startTime, endTime }
+                    };
+                },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                providesTags: [{
+                    type: "getScoreDayBarData",
+                }]
+            }),
+
+            getSleepLineChartData: build.query({
+                query({ id, startTime, endTime }) {
+                    return {
+                        url: `/${id}/sleep_line_chart`,
+                        method: "get",
+                        params: { startTime, endTime }
+                    };
+                },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                providesTags: [{
+                    type: "getSleepLineChartData",
+                }]
+            }),
         };
     }
 });
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetScorePieChartDataQuery } = analysisApi;
+export const { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery } = analysisApi;
 export default analysisApi;

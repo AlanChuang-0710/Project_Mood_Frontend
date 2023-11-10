@@ -5,7 +5,7 @@ import ScoreRatioPieChart from "./ScoreRatioPieChart/ScoreRatioPieChart";
 import ScoreFlowChart from './ScoreFlowChart/ScoreFlowChart';
 import ScoreDayChart from './ScoreDayChart/ScoreDayChart';
 import SleepFlowChart from './SleepFlowChart/SleepFlowChart';
-import { useGetScorePieChartDataQuery } from '../../store/api/analysisApi';
+import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery } from '../../store/api/analysisApi';
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import classes from "./AnalysisPage.module.scss";
@@ -13,24 +13,49 @@ import classes from "./AnalysisPage.module.scss";
 
 const AnalysisPage = () => {
   const theme = useMantineTheme();
+  const id = useSelector(selectCurrentUserId);
+
   const [value, setValue] = useState('month');
   let startTime = new Date();
-  startTime.setDate(1);
   startTime.setHours(0, 0, 0, 0);
   startTime = startTime.getTime();
   let endTime = new Date();
-  endTime.setMonth(new Date().getMonth() + 1, 1);
-  endTime.setDate(endTime.getDate() - 1);
+  if (value === "month") {
+    endTime.setMonth(new Date().getMonth() + 1);
+  } else {
+    endTime.setFullYear(new Date().getFullYear() + 1);
+  }
   endTime.setHours(0, 0, 0, 0);
   endTime = endTime.getTime();
-  const { data: pieChartData, isSuccess: pieChartIsSuccess } = useGetScorePieChartDataQuery({ id: useSelector(selectCurrentUserId), startTime, endTime });
+
+  // 獲得score pie chart資訊
+  const { data: scorePieChartData, isSuccess: scorePieChartIsSuccess } = useGetScorePieChartDataQuery({ id, startTime, endTime });
+
+  // 獲得score line chart資訊
+  const { data: scoreLineChartData, isSuccess: scoreLineChartIsSuccess } = useGetScoreLineChartDataQuery({ id, startTime, endTime });
+
+  // 獲得score day bar資訊
+  const { data: scoreDayBarData, isSuccess: scoreDayBarDataIsSuccess } = useGetScoreDayBarDataQuery({ id, startTime, endTime });
+
+  const { data: sleepLineChartData, isSuccess: sleepLineChartIsSuceess } = useGetSleepLineChartDataQuery({ id, startTime, endTime });
 
   useEffect(() => {
-    if (pieChartIsSuccess) {
-      console.log(pieChartData);
+    if (scoreLineChartIsSuccess) {
+      // console.log(scoreLineChartData);
     }
-  }, [pieChartData, pieChartIsSuccess]);
+  }, [scoreLineChartData, scoreLineChartIsSuccess]);
 
+  useEffect(() => {
+    if (scoreDayBarDataIsSuccess) {
+      // console.log(scoreDayBarData);
+    }
+  }, [scoreDayBarData, scoreDayBarDataIsSuccess]);
+
+  useEffect(() => {
+    if (sleepLineChartIsSuceess) {
+      // console.log(sleepLineChartData);
+    }
+  }, [sleepLineChartData, sleepLineChartIsSuceess]);
   return (
     <div>
       {/* Annual Month Tab*/}
@@ -53,7 +78,7 @@ const AnalysisPage = () => {
       <Grid>
         <Grid.Col xs={12} md={4}>
           <div style={useGetComponentStyle()}>
-            <ScoreRatioPieChart height={250} />
+            <ScoreRatioPieChart height={250} scorePieChartData={scorePieChartData} />
           </div>
         </Grid.Col>
         <Grid.Col xs={12} md={8}>

@@ -26,6 +26,7 @@ function App() {
             colorScheme, // light or dark
             colors: { // 設定主題色
               brand: ["#6a6cff", "#09c0e8", "#73db3d", "#f7e048"], // 藍  青藍 青綠 淡橘黃
+              emotion: ["#3ab34c", "#8fc962", "#fbae43", "#d65b37", "#d12a2f"], // 五種情緒顏色，對應情緒icon 排序: 開心到憂鬱
               light: ["#fff"], // 0是白色背景 
               night: ["#2b2c40"], // 0是深藍背景 
               tool: ["#717b8a", "#9BA2AD"], // 0是灰色 用於工具 1是淺灰 用於日曆

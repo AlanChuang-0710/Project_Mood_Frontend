@@ -19,8 +19,8 @@ const DashboardPage = () => {
   startTime.setHours(0, 0, 0, 0);
   startTime = startTime.getTime();
   let endTime = new Date();
-  endTime.setMonth(new Date().getMonth() + 1, 1);
-  endTime.setDate(endTime.getDate() - 1);
+  endTime.setMonth(new Date().getMonth() + 1);
+  endTime.setDate(0); // setDate(0) 會將日期設為上個月的最後一天
   endTime.setHours(0, 0, 0, 0);
   endTime = endTime.getTime();
 

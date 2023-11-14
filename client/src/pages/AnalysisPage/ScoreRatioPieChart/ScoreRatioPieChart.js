@@ -30,7 +30,7 @@ const ScoreRatioPieChart = ({ height, scorePieChartData }) => {
                 formatter: (params) => `<div style="font-size: 18px; margin:0 0; display: flex; align-items: center; ">
                 <span style=" width: 8px; height: 8px; background-color:${params.color}; border-radius:50%; margin-right: 6px"></span>
                 <span style="margin-right: 10px">${params.data.name}</span>
-                <span>${params.data.value} days</span>
+                <span>${params.data.value} ${params.data.value > 1 ? "days" : "day"}</span>
                 </div>
                 `,
             },

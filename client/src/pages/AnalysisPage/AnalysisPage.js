@@ -16,17 +16,19 @@ const AnalysisPage = () => {
   const id = useSelector(selectCurrentUserId);
 
   const [value, setValue] = useState('month');
-  let startTime = new Date();
-  startTime.setHours(0, 0, 0, 0);
-  startTime = startTime.getTime();
   let endTime = new Date();
-  if (value === "month") {
-    endTime.setMonth(new Date().getMonth() + 1);
-  } else {
-    endTime.setFullYear(new Date().getFullYear() + 1);
-  }
   endTime.setHours(0, 0, 0, 0);
   endTime = endTime.getTime();
+  let startTime = new Date();
+  if (value === "month") {
+    // 往回推1個月
+    startTime.setMonth(new Date().getMonth() - 1);
+  } else {
+    // 往回推1年
+    startTime.setFullYear(new Date().getFullYear() - 1);
+  }
+  startTime.setHours(0, 0, 0, 0);
+  startTime = startTime.getTime();
 
   // 獲得score pie chart資訊
   const { data: scorePieChartData, isSuccess: scorePieChartIsSuccess } = useGetScorePieChartDataQuery({ id, startTime, endTime });

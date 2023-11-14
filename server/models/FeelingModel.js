@@ -5,6 +5,7 @@ const DailyFeelingSchema = new mongoose.Schema({
     timestamp: {
         type: Date,
         required: true,
+        index: 1
     },
     score: {
         type: Number,

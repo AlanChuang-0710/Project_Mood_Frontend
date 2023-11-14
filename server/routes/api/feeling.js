@@ -158,6 +158,7 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
             if (existingEntryIndex !== -1) {
                 user.dailyFeeling[existingEntryIndex] = { ...req.body };
             } else {
+                /* 方法一: 手動排序插入，較少的元素操作，適合大型數據庫 */
                 const result = user.dailyFeeling.every((item, index) => {
                     if (item.timestamp.getTime() > timestamp.getTime()) {
                         insertIndex = index;
@@ -169,6 +170,9 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
                     insertIndex = user.dailyFeeling.length;
                 }
                 user.dailyFeeling.splice(insertIndex, 0, { ...req.body });
+                /* 方法二: 插入後調用mongodb的排序方法，較直觀，但多元素的操作，適合小數據庫 */
+                // user.dailyFeeling.push({ ...req.body });
+                // user.dailyFeeling.sort((a, b) => a.timestamp - b.timestamp);
             }
             // 保存更新后的用户数据
             const data = await user.save();

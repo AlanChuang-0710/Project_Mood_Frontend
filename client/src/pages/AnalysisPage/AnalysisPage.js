@@ -31,10 +31,10 @@ const AnalysisPage = () => {
   startTime = startTime.getTime();
 
   // 獲得score pie chart資訊
-  const { data: scorePieChartData, isSuccess: scorePieChartIsSuccess } = useGetScorePieChartDataQuery({ id, startTime, endTime });
+  const { data: scorePieChartData } = useGetScorePieChartDataQuery({ id, startTime, endTime });
 
   // 獲得score line chart資訊
-  const { data: scoreLineChartData, isSuccess: scoreLineChartIsSuccess } = useGetScoreLineChartDataQuery({ id, startTime, endTime });
+  const { data: scoreFlowChartData, isSuccess: scoreFlowChartIsSuccess } = useGetScoreLineChartDataQuery({ id, startTime, endTime });
 
   // 獲得score day bar資訊
   const { data: scoreDayBarData, isSuccess: scoreDayBarDataIsSuccess } = useGetScoreDayBarDataQuery({ id, startTime, endTime });
@@ -42,10 +42,10 @@ const AnalysisPage = () => {
   const { data: sleepLineChartData, isSuccess: sleepLineChartIsSuceess } = useGetSleepLineChartDataQuery({ id, startTime, endTime });
 
   useEffect(() => {
-    if (scoreLineChartIsSuccess) {
-      // console.log(scoreLineChartData);
+    if (scoreFlowChartIsSuccess) {
+      // console.log(scoreFlowChartData);
     }
-  }, [scoreLineChartData, scoreLineChartIsSuccess]);
+  }, [scoreFlowChartData, scoreFlowChartIsSuccess]);
 
   useEffect(() => {
     if (scoreDayBarDataIsSuccess) {
@@ -85,7 +85,7 @@ const AnalysisPage = () => {
         </Grid.Col>
         <Grid.Col xs={12} md={8}>
           <div style={useGetComponentStyle()}>
-            <ScoreFlowChart height={250} />
+            <ScoreFlowChart height={250} scoreFlowChartData={scoreFlowChartData} />
           </div>
         </Grid.Col>
         <Grid.Col xs={12} md={6}>

@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as echarts from 'echarts';
 import moment from "moment";
-// import { useMantineTheme, } from "@mantine/core";
+import { useMantineTheme, } from "@mantine/core";
 
 const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
-    // const theme = useMantineTheme();
+    const theme = useMantineTheme();
     const scoreFlowDOM = useRef(null);
     const [scoreFlowChart, setScoreFlowChart] = useState(null);
 
@@ -13,8 +13,24 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
         let dataArray;
         let timestampArray;
         let option;
-        if (scoreFlowChartData) {
-            dataArray = scoreFlowChartData.data.map((item) => ({ value: item.score, ...item }));
+        if (!scoreFlowChart) {
+            // 此處極為重要，目的是避免DOM尚未被渲染就執行init，會出現頁面不顯示圖表，且控制台報錯的問題:
+            // Can't get DOM width or height. Please check dom.clientWidth and dom.clientHeight.
+            // setTimeout(() => {
+            setScoreFlowChart(echarts.init(scoreFlowDOM.current));
+            // }, 100);
+        }
+        if (scoreFlowChart && scoreFlowChartData) {
+            const nameMap = ["Depressed", "Sad", "Peace", "Smile", "Happy"];
+            const colorMap = theme.colors.emotion;
+            dataArray = scoreFlowChartData.data.map((item) => {
+                let newProp = {
+                    label: item.score !== null ? nameMap[item.score + 2] : "No record",
+                    color: item.score !== null ? colorMap[item.score + 2] : "#A9A9A9",
+                    value: item.score
+                };
+                return { ...newProp, ...item };
+            });
             timestampArray = scoreFlowChartData.data.map((item) => moment(item.timestamp).format('YYYY-MM-DD'));
             option = {
                 title: {
@@ -29,6 +45,7 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
                     type: 'category',
                     data: timestampArray,
                     axisLine: {
+                        show: false,
                         onZero: false,
                         lineStyle: {
                             color: "#aaabb3"
@@ -41,7 +58,22 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
                     offset: 2,
                 },
                 yAxis: {
-                    type: 'value'
+                    type: 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: ["#4e4a4a"],
+                            width: 1,
+                            type: 'solid',
+                            opacity: 1
+                        }
+                    },
+                    // axisLabel: {
+                    //     color: (value, index) => {
+                    //         // 注意返回值為string
+                    //         return colorMap[value * 1 + 2];
+                    //     }
+                    // }
                 },
                 axisPointer: [
                     {
@@ -62,25 +94,24 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
                         let y = pt[1] - 25 + "px";
                         return [x, y];
                     },
+                    backgroundColor: "rgba(0, 0, 0, 0)",
+                    borderWidth: 0,
                     formatter: (params) => {
-                        console.log(params);
-                        return `<div style="width: 150px">
-                        <div style="display: flex; justify-content: space-between">
-                        <div style="float: left">Date</div>
-                        <div style="float: right">${params[0].axisValue}</div>
+                        return `<div style="width: 150px; padding: 5px 6px; border-radius: 5px; border:3px solid ${params[0].data.color}; background: #FFF">
+                            <div style="display: flex; justify-content: space-between">
+                                <div >Date</div>
+                                <div >${params[0].axisValue}</div>
                             </div>
-                        <div >
-                            <div>
-                            <div style="float: left">Score</div>
-                            <div style="float: right">${params[0].data.score ? params[0].data.score : "No record"}</div>
-                            </div>
+                            <div style="display: flex; justify-content: space-between">
+                                <div>Score</div>
+                                <div>${params[0].data.label}</div>
                             </div>
                         </div>`;
                     },
                 },
                 grid: {
                     top: "35px",
-                    left: "2px",
+                    left: "8px",
                     right: "2px",
                     bottom: "15px",
                     containLabel: true
@@ -94,31 +125,30 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
                         // connectNulls: false,
                         // 折線線條
                         lineStyle: {
-                            color: "#4e4a4a",
+                            color: '#ccc',
                         },
+                        // 改為實心點點
+                        symbol: "circle",
+                        symbolSize: 5,
                         // 折線數據點
                         itemStyle: {
-                            color: "transparent",
+                            color: (data) => data.data.color,
                             borderWidth: 0,
                         },
+                        emphasis: {
+                            scale: 2
+                        }
                     }
                 ]
             };
-        }
-        if (!scoreFlowChart) {
-            // 此處極為重要，目的是避免DOM尚未被渲染就執行init，會出現頁面不顯示圖表，且控制台報錯的問題:
-            // Can't get DOM width or height. Please check dom.clientWidth and dom.clientHeight.
-            setTimeout(() => {
-                setScoreFlowChart(echarts.init(scoreFlowDOM.current));
-            }, 100);
-        }
-        scoreFlowChart?.setOption(option);
+            scoreFlowChart.setOption(option);
+        };
         const handleResize = () => scoreFlowChart?.resize();
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [scoreFlowChart, scoreFlowChartData]);
+    }, [scoreFlowChart, scoreFlowChartData, theme]);
 
     return (
         <div ref={scoreFlowDOM} style={{ height: height + "px" }}></div>

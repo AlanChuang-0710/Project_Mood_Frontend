@@ -130,12 +130,20 @@ router.get("/:id/score_day_bar", checkTokenMiddleware, getUserPeriodFeelingMiddl
             dayArray[prop] = scoreArray.map((score) => dayArray[prop].filter((item) => item.score === score).length);
         };
 
+        let newArr = [];
+        scoreArray.forEach((item, index) => {
+            for (let prop in dayArray) {
+                if (!newArr[index]) newArr[index] = [];
+                newArr[index].push(dayArray[prop][index]);
+            }
+        });
+
         res.json({
             code: "2000",
             msg: "Score day bar data got",
             data: {
                 total: result.length,
-                data: dayArray
+                data: newArr
             }
         });
     } catch (err) {

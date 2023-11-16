@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Grid, useMantineTheme, SegmentedControl } from "@mantine/core";
 import ScoreRatioPieChart from "./ScoreRatioPieChart/ScoreRatioPieChart";
 import ScoreFlowChart from './ScoreFlowChart/ScoreFlowChart';
-import ScoreDayChart from './ScoreDayChart/ScoreDayChart';
+import ScoreDayBarChart from './ScoreDayBarChart/ScoreDayBarChart';
 import SleepFlowChart from './SleepFlowChart/SleepFlowChart';
 import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery } from '../../store/api/analysisApi';
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
@@ -34,30 +34,20 @@ const AnalysisPage = () => {
   const { data: scorePieChartData } = useGetScorePieChartDataQuery({ id, startTime, endTime });
 
   // 獲得score line chart資訊
-  const { data: scoreFlowChartData, isSuccess: scoreFlowChartIsSuccess } = useGetScoreLineChartDataQuery({ id, startTime, endTime });
+  const { data: scoreFlowChartData } = useGetScoreLineChartDataQuery({ id, startTime, endTime });
 
   // 獲得score day bar資訊
-  const { data: scoreDayBarData, isSuccess: scoreDayBarDataIsSuccess } = useGetScoreDayBarDataQuery({ id, startTime, endTime });
+  const { data: scoreDayBarChartData } = useGetScoreDayBarDataQuery({ id, startTime, endTime });
 
   const { data: sleepLineChartData, isSuccess: sleepLineChartIsSuceess } = useGetSleepLineChartDataQuery({ id, startTime, endTime });
 
-  useEffect(() => {
-    if (scoreFlowChartIsSuccess) {
-      // console.log(scoreFlowChartData);
-    }
-  }, [scoreFlowChartData, scoreFlowChartIsSuccess]);
-
-  useEffect(() => {
-    if (scoreDayBarDataIsSuccess) {
-      // console.log(scoreDayBarData);
-    }
-  }, [scoreDayBarData, scoreDayBarDataIsSuccess]);
 
   useEffect(() => {
     if (sleepLineChartIsSuceess) {
       // console.log(sleepLineChartData);
     }
   }, [sleepLineChartData, sleepLineChartIsSuceess]);
+  
   return (
     <div>
       {/* Annual Month Tab*/}
@@ -90,7 +80,7 @@ const AnalysisPage = () => {
         </Grid.Col>
         <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
-            <ScoreDayChart height={350} />
+            <ScoreDayBarChart height={350} scoreDayBarChartData={scoreDayBarChartData} />
           </div>
         </Grid.Col>
         <Grid.Col xs={12} md={6}>

@@ -39,15 +39,8 @@ const AnalysisPage = () => {
   // 獲得score day bar資訊
   const { data: scoreDayBarChartData } = useGetScoreDayBarDataQuery({ id, startTime, endTime });
 
-  const { data: sleepLineChartData, isSuccess: sleepLineChartIsSuceess } = useGetSleepLineChartDataQuery({ id, startTime, endTime });
+  const { data: sleepFlowChartData } = useGetSleepLineChartDataQuery({ id, startTime, endTime });
 
-
-  useEffect(() => {
-    if (sleepLineChartIsSuceess) {
-      // console.log(sleepLineChartData);
-    }
-  }, [sleepLineChartData, sleepLineChartIsSuceess]);
-  
   return (
     <div>
       {/* Annual Month Tab*/}
@@ -92,7 +85,7 @@ const AnalysisPage = () => {
         </Grid.Col>
         <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
-            <SleepFlowChart height={350} />
+            <SleepFlowChart height={350} sleepFlowChartData={sleepFlowChartData} />
           </div>
         </Grid.Col>
         <Grid.Col xs={12} md={6}>

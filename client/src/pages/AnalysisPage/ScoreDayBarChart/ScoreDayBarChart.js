@@ -29,6 +29,7 @@ const ScoreDayBarChart = ({ height, scoreDayBarChartData }) => {
                     formatter: (params) => {
                         if (!params.value) return "";
                         return params.value;
+                        // return params.value + (params.value > 1 ? "days" : "day");
                     }
                 },
                 emphasis: {
@@ -47,7 +48,7 @@ const ScoreDayBarChart = ({ height, scoreDayBarChartData }) => {
                 grid: {
                     left: '3%',
                     right: '4%',
-                    bottom: '3%',
+                    bottom: '1%',
                     top: "3%",
                     containLabel: true
                 },
@@ -58,11 +59,14 @@ const ScoreDayBarChart = ({ height, scoreDayBarChartData }) => {
                     type: 'category',
                     data: ['Sunday', 'Saturday', 'Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday']
                 },
+                legend: {
+                    show: false
+                },
                 color: theme.colors.emotion,
                 series: [
                     {
                         ...unitBarOption,
-                        name: 'Depression',
+                        name: 'Depressed',
                         data: dataArray[0]
                     },
                     {

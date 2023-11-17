@@ -35,7 +35,7 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
             option = {
                 title: {
                     text: "Mood Flow",
-                    show: true,
+                    show: false,
                     left: "center",
                     right: "center",
                     // color: theme.colorScheme === "light" ? "#333332" : theme.colors.brand[1]
@@ -68,12 +68,13 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
                             opacity: 1
                         }
                     },
-                    // axisLabel: {
-                    //     color: (value, index) => {
-                    //         // 注意返回值為string
-                    //         return colorMap[value * 1 + 2];
-                    //     }
-                    // }
+                    axisLabel: {
+                        formatter: (value) => nameMap[value + 2],
+                        // color: (value, index) => {
+                        //     // 注意返回值為string
+                        //     return colorMap[value * 1 + 2];
+                        // }
+                    }
                 },
                 axisPointer: [
                     {
@@ -99,8 +100,8 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
                     formatter: (params) => {
                         return `<div style="width: 150px; padding: 5px 6px; border-radius: 5px; border:3px solid ${params[0].data.color}; background: #FFF">
                             <div style="display: flex; justify-content: space-between">
-                                <div >Date</div>
-                                <div >${params[0].axisValue}</div>
+                                <div>Date</div>
+                                <div>${params[0].axisValue}</div>
                             </div>
                             <div style="display: flex; justify-content: space-between">
                                 <div>Score</div>
@@ -110,7 +111,7 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
                     },
                 },
                 grid: {
-                    top: "35px",
+                    top: "20px",
                     left: "8px",
                     right: "2px",
                     bottom: "15px",

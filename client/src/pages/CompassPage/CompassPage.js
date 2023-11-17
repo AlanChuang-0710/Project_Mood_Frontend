@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Grid, Tabs } from "@mantine/core";
-import classes from "./CompassPage.module.scss";
 import Activity from './Activity/Activity';
 import Counseling from './Counseling/Counseling';
+import classes from "./CompassPage.module.scss";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
 
 const CompassPage = () => {

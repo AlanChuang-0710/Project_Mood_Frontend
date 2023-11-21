@@ -47,7 +47,16 @@ const SleepFlowChart = ({ height, sleepFlowChartData }) => {
                     offset: 2,
                 },
                 yAxis: {
-                    type: 'value'
+                    type: 'value',
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: ["#4e4a4a"],
+                            width: 1,
+                            type: 'solid',
+                            opacity: 1
+                        }
+                    },
                 },
                 axisPointer: [
                     {
@@ -98,10 +107,10 @@ const SleepFlowChart = ({ height, sleepFlowChartData }) => {
                             color: '#ccc'
                         },
                         itemStyle: {
-                            color: "#4e4a4a"
+                            color: theme.colorScheme === 'light' ? "#c5c9c6" : "#fff"
                         },
                         emphasis: {
-                            scale: 2
+                            scale: theme.colorScheme === 'light' ? 1.2 : 2
                         }
                     }
                 ]
@@ -113,7 +122,7 @@ const SleepFlowChart = ({ height, sleepFlowChartData }) => {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [sleepFlowChart, sleepFlowChartData]);
+    }, [sleepFlowChart, sleepFlowChartData, theme]);
 
     return (
         <div ref={sleepFlowDOM} style={{ height: height + "px" }}></div>

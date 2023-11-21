@@ -306,8 +306,9 @@ router.get("/:id/dream_keyword_chart", checkTokenMiddleware, getUserPeriodFeelin
 
         // 提取出所有dream
         const dreamString = periodFeeling.reduce((accumulator, item) => {
-            return accumulator += item.dream;
+            return accumulator + item.dream;
         }, "");
+
         // 選擇jieba提取出來的top詞數量
         const topN = 5;
         const extractKeyword = jieba.extract(dreamString, topN).filter((word) => !deleteDict.includes(word.keyword));
@@ -315,7 +316,7 @@ router.get("/:id/dream_keyword_chart", checkTokenMiddleware, getUserPeriodFeelin
 
         res.json({
             code: 2000,
-            msg: "Keywords Frequently Occurring in Dreams got!",
+            msg: "Keywords Frequently Occurred in Dreams got!",
             data: keywords
         });
     } catch (err) {

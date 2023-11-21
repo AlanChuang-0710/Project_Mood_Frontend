@@ -100,11 +100,25 @@ const analysisApi = createApi({
                     type: "getSleepLineChartData",
                 }]
             }),
+
+            getDreamKeywordData: build.query({
+                query({ id, startTime, endTime }) {
+                    return {
+                        url: `/${id}/dream_keyword_chart`,
+                        method: "get",
+                        params: { startTime, endTime }
+                    };
+                },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                providesTags: [{
+                    type: "getDreamKeywordDat",
+                }]
+            })
         };
     }
 });
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery } = analysisApi;
+export const { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetDreamKeywordDataQuery } = analysisApi;
 export default analysisApi;

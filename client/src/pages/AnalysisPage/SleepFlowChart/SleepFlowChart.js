@@ -48,6 +48,12 @@ const SleepFlowChart = ({ height, sleepFlowChartData }) => {
                 },
                 yAxis: {
                     type: 'value',
+                    name: "sleeping hour per day",
+                    nameLocation: "middle",
+                    nameGap: 22,
+                    nameTextStyle: {
+                        color: "#aaa",
+                    },
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -91,8 +97,8 @@ const SleepFlowChart = ({ height, sleepFlowChartData }) => {
                 },
                 grid: {
                     top: "20px",
-                    left: "8px",
-                    right: "2px",
+                    left: "14px",
+                    right: "8px",
                     bottom: "15px",
                     containLabel: true
                 },

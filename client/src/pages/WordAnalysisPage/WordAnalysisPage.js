@@ -33,7 +33,7 @@ const WordAnalysisPage = () => {
         console.log(dreamKeywordData);;
     }, [dreamKeywordData]);
 
-    
+
     return (
         <div>
             {/* Annual Month Tab*/}
@@ -57,7 +57,7 @@ const WordAnalysisPage = () => {
                 {/* world cloud */}
                 <Grid.Col xs={12}>
                     <div style={useGetComponentStyle()}>
-                        <WorldCloudChart height={300} />
+                        <WorldCloudChart height={300} dreamKeywordData={dreamKeywordData} title={"Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
                     </div>
                 </Grid.Col>
 
@@ -69,6 +69,7 @@ const WordAnalysisPage = () => {
                 <Grid.Col xs={12} md={5}>
                     <div style={useGetComponentStyle()}>
                         <RepeatedWordTable
+                            repeatedWordData={dreamKeywordData?.data}
                             title={"Repeated words in Dream"}
                             subtitle={"The following table compiles the words that frequently appear in daily dreams."}
                         />

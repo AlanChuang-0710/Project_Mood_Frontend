@@ -1,8 +1,7 @@
 import React from 'react';
-import { Table, Badge, HoverCard, Text } from "@mantine/core";
-import { IconInfoCircleFilled } from '@tabler/icons-react';
+import { Table, Badge } from "@mantine/core";
+import ChartTableHeader from "../../../components/ChartTableHeader/ChartTableHeader";
 import { happy, smile, normal, sad, depressed, } from "../../../assets/index.js";
-import classes from "./ScoreKOLTable.module.scss";
 
 const ScoreKOLTable = ({ title, subtitle }) => {
     const elements = [
@@ -24,21 +23,7 @@ const ScoreKOLTable = ({ title, subtitle }) => {
 
     return (
         <div>
-            <div style={{ position: "relative" }}>
-                <div className={classes.title}>{title}</div>
-                <div style={{ position: "absolute", right: "0", top: "3px" }}>
-                    <HoverCard width={280} shadow="md">
-                        <HoverCard.Target>
-                            <IconInfoCircleFilled />
-                        </HoverCard.Target>
-                        <HoverCard.Dropdown>
-                            <Text size="sm">
-                                {subtitle}
-                            </Text>
-                        </HoverCard.Dropdown>
-                    </HoverCard>
-                </div>
-            </div>
+            <ChartTableHeader title={title} subtitle={subtitle} />
             <Table >
                 <thead>
                     <tr>

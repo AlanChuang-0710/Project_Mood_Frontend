@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useMantineTheme, } from "@mantine/core";
 import { DataTable } from 'mantine-datatable';
-import { useMantineTheme, HoverCard, Text } from "@mantine/core";
-import { IconInfoCircleFilled } from '@tabler/icons-react';
+import ChartTableHeader from "../../../components/ChartTableHeader/ChartTableHeader";
 import classes from "./RepeatedWordTable.module.scss";
 
 // datatable document
@@ -13,36 +13,25 @@ for (let index = 1; index < 20; index++) {
     employees.push({ id: index, rank: index, repeatedWord: "Chuang", count: 5 });
 }
 
-const RepeatedWordTable = ({ title, subtitle }) => {
+const RepeatedWordTable = ({ title, subtitle, repeatedWordData }) => {
     const theme = useMantineTheme();
 
     const [page, setPage] = useState(1);
-    const [records, setRecords] = useState(employees.slice(0, PAGE_SIZE));
+    const [records, setRecords] = useState(repeatedWordData?.slice(0, PAGE_SIZE));
 
     useEffect(() => {
-        const from = (page - 1) * PAGE_SIZE;
-        const to = from + PAGE_SIZE;
-        setRecords(employees.slice(from, to));
-    }, [page]);
+        if (repeatedWordData) {
+            const data = repeatedWordData.map((keyword, index) => ({ ...keyword, id: keyword.name, rank: index + 1 }));
+            const from = (page - 1) * PAGE_SIZE;
+            const to = from + PAGE_SIZE;
+            setRecords(data?.slice(from, to));
+        }
+    }, [page, repeatedWordData]);
 
 
     return (
         <div style={{ borderRadius: "5px 5px 0 0" }}>
-            <div style={{ position: "relative" }}>
-                <div className={classes.title}>{title}</div>
-                <div style={{ position: "absolute", right: "0", top: "3px" }}>
-                    <HoverCard width={280} shadow="md">
-                        <HoverCard.Target>
-                            <IconInfoCircleFilled />
-                        </HoverCard.Target>
-                        <HoverCard.Dropdown>
-                            <Text size="sm">
-                                {subtitle}
-                            </Text>
-                        </HoverCard.Dropdown>
-                    </HoverCard>
-                </div>
-            </div>
+            <ChartTableHeader title={title} subtitle={subtitle} />
             <div className={classes["table-wrapper"]}>
                 <DataTable
                     styles={{
@@ -56,10 +45,10 @@ const RepeatedWordTable = ({ title, subtitle }) => {
                     records={records}
                     columns={[
                         { accessor: 'rank', width: 30, textAlignment: "center" },
-                        { accessor: 'repeatedWord', width: 150, ellipsis: true, },
-                        { accessor: 'count', width: 30, ellipsis: true, textAlignment: "center" },
+                        { accessor: 'name', width: 150, ellipsis: true, },
+                        { accessor: 'value', width: 30, ellipsis: true, textAlignment: "center" },
                     ]}
-                    totalRecords={employees.length}
+                    totalRecords={repeatedWordData?.length || 0}
                     recordsPerPage={PAGE_SIZE}
                     page={page}
                     onPageChange={(p) => setPage(p)}

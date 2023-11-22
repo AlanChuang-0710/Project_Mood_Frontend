@@ -298,7 +298,7 @@ router.get("/:id/tags_score_chart", checkTokenMiddleware, getUserPeriodFeelingMi
     }
 });
 
-// 獲取一段時間內 dream 高頻出現的詞彙
+// 獲取一段時間內 dream 高頻出現的詞彙 (雲圖 和 高頻詞)
 router.get("/:id/dream_keyword_chart", checkTokenMiddleware, getUserPeriodFeelingMiddleware, async function (req, res) {
     try {
         // 透過中間件獲取特定時間段的情緒
@@ -310,9 +310,14 @@ router.get("/:id/dream_keyword_chart", checkTokenMiddleware, getUserPeriodFeelin
         }, "");
 
         // 選擇jieba提取出來的top詞數量
-        const topN = 5;
-        const extractKeyword = jieba.extract(dreamString, topN).filter((word) => !deleteDict.includes(word.keyword));
-        const keywords = extractKeyword.map((item) => item.keyword);
+        const topN = 100;
+        let extractKeyword = jieba.extract(dreamString, topN).filter((word) => !deleteDict.includes(word.keyword));
+        const keywords = extractKeyword.map((item) => {
+            let target = new RegExp(item.keyword, 'g');
+            const matches = dreamString.match(target);
+            return { name: item.keyword, value: matches ? matches.length : 0 };
+        });
+        // const keywords = extractKeyword.map((item) => ({ name: item.keyword, value: parseInt(item.weight * 1000) }));
 
         res.json({
             code: 2000,

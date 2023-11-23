@@ -45,7 +45,8 @@ const RepeatedWordTable = ({ title, subtitle, repeatedWordData }) => {
                     records={records}
                     columns={[
                         { accessor: 'rank', width: 30, textAlignment: "center" },
-                        { accessor: 'name', width: 150, ellipsis: true, },
+                        { accessor: 'name', width: 80, ellipsis: true, },
+                        { accessor: 'weight', width: 30, ellipsis: true, textAlignment: "center" },
                         { accessor: 'value', width: 30, ellipsis: true, textAlignment: "center" },
                     ]}
                     totalRecords={repeatedWordData?.length || 0}

@@ -4,34 +4,19 @@ import { Grid, useMantineTheme, SegmentedControl, } from "@mantine/core";
 import ScoreKOLTable from './ScoreKOLTable/ScoreKOLTable';
 import RepeatedWordTable from './RepeatedWordTable/RepeatedWordTable';
 import WorldCloudChart from './WordCloudChart/WorldCloudChart';
-import { useGetDreamKeywordDataQuery } from "../../store/api/analysisApi";
+import { useGetDreamKeywordDataQuery, useGetMemoKeywordDataQuery } from "../../store/api/analysisApi";
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
+import { getStartEndTime } from "../../utils/getStartEndTime";
 // import classes from "./WordAnalysisPage.module.scss";
 
 const WordAnalysisPage = () => {
     const theme = useMantineTheme();
     const id = useSelector(selectCurrentUserId);
     const [value, setValue] = useState('month');
-    let endTime = new Date();
-    endTime.setHours(0, 0, 0, 0);
-    endTime = endTime.getTime();
-    let startTime = new Date();
-    if (value === "month") {
-        // 往回推1個月
-        startTime.setMonth(new Date().getMonth() - 1);
-    } else {
-        // 往回推1年
-        startTime.setFullYear(new Date().getFullYear() - 1);
-    }
-    startTime.setHours(0, 0, 0, 0);
-    startTime = startTime.getTime();
-
+    const { startTime, endTime } = getStartEndTime(value);
     const { data: dreamKeywordData } = useGetDreamKeywordDataQuery({ id, startTime, endTime });
-
-    useEffect(() => {
-        console.log(dreamKeywordData);;
-    }, [dreamKeywordData]);
+    const { data: memoKeywordData } = useGetMemoKeywordDataQuery({ id, startTime, endTime });
 
 
     return (
@@ -57,7 +42,7 @@ const WordAnalysisPage = () => {
                 {/* world cloud */}
                 <Grid.Col xs={12}>
                     <div style={useGetComponentStyle()}>
-                        <WorldCloudChart height={300} dreamKeywordData={dreamKeywordData} title={"Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
+                        <WorldCloudChart height={300} dreamKeywordData={dreamKeywordData?.data} title={"Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
                     </div>
                 </Grid.Col>
 
@@ -83,6 +68,7 @@ const WordAnalysisPage = () => {
                 <Grid.Col xs={12} md={5}>
                     <div style={useGetComponentStyle()}>
                         <RepeatedWordTable
+                            repeatedWordData={memoKeywordData?.data}
                             title={"Repeated words in Reality"}
                             subtitle={"The following table compiles the words that frequently appear in reality."}
                         />

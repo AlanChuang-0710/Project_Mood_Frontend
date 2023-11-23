@@ -9,6 +9,7 @@ const jieba = require("@node-rs/jieba");
 const fs = require("fs");
 const path = require("path");
 const deleteDict = fs.readFileSync(path.resolve(__dirname, "../../jieba/delete-word-dict.txt"), "utf8").split("\n");
+deleteDict.push('\r\n');
 const userDict = fs.readFileSync(path.resolve(__dirname, "../../jieba/dict.txt"));
 jieba.loadDict(userDict);
 
@@ -315,9 +316,8 @@ router.get("/:id/dream_keyword_chart", checkTokenMiddleware, getUserPeriodFeelin
         const keywords = extractKeyword.map((item) => {
             let target = new RegExp(item.keyword, 'g');
             const matches = dreamString.match(target);
-            return { name: item.keyword, value: matches ? matches.length : 0 };
+            return { name: item.keyword, value: matches ? matches.length : 0, weight: item.weight.toFixed(4) };
         });
-        // const keywords = extractKeyword.map((item) => ({ name: item.keyword, value: parseInt(item.weight * 1000) }));
 
         res.json({
             code: 2000,
@@ -329,20 +329,25 @@ router.get("/:id/dream_keyword_chart", checkTokenMiddleware, getUserPeriodFeelin
     }
 });
 
-// 獲取一段時間內 心情筆記 高頻出現的詞彙
+// 獲取一段時間內 心情筆記 高頻出現的詞彙 (高頻詞)
 router.get("/:id/memo_keyword_chart", checkTokenMiddleware, getUserPeriodFeelingMiddleware, async function (req, res) {
     try {
         // 透過中間件獲取特定時間段的情緒
         const periodFeeling = req.periodFeeling;
 
-        // 提取出所有dream
+        // 提取出所有memo
         const memoString = periodFeeling.reduce((accumulator, item) => {
             return accumulator += item.memo;
         }, "");
+
         // 選擇jieba提取出來的top詞數量
-        const topN = 5;
-        const extractKeyword = jieba.extract(memoString, topN).filter((word) => !deleteDict.includes(word.keyword));
-        const keywords = extractKeyword.map((item) => item.keyword);
+        const topN = 100;
+        let extractKeyword = jieba.extract(memoString, topN).filter((word) => !deleteDict.includes(word.keyword));
+        const keywords = extractKeyword.map((item) => {
+            let target = new RegExp(item.keyword, 'g');
+            const matches = memoString.match(target);
+            return { name: item.keyword, value: matches ? matches.length : 0, weight: item.weight.toFixed(4) };
+        });
 
         res.json({
             code: 2000,

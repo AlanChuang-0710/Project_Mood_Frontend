@@ -111,7 +111,21 @@ const analysisApi = createApi({
                 },
                 keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
                 providesTags: [{
-                    type: "getDreamKeywordDat",
+                    type: "getDreamKeywordData",
+                }]
+            }),
+
+            getMemoKeywordData: build.query({
+                query({ id, startTime, endTime }) {
+                    return {
+                        url: `/${id}/memo_keyword_chart`,
+                        method: "get",
+                        params: { startTime, endTime }
+                    };
+                },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                providesTags: [{
+                    type: "getMemoKeywordData",
                 }]
             })
         };
@@ -120,5 +134,5 @@ const analysisApi = createApi({
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetDreamKeywordDataQuery } = analysisApi;
+export const { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetDreamKeywordDataQuery, useGetMemoKeywordDataQuery } = analysisApi;
 export default analysisApi;

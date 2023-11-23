@@ -29,8 +29,7 @@ const WorldCloudChart = ({ height, dreamKeywordData, title, subtitle }) => {
                 const index = Math.floor(Math.random() * 10) % 3;
                 return colorArr[index];
             };
-            dataArray = dreamKeywordData.data;
-            dataArray = dataArray.map((item) => ({ ...item, textStyle: { color: getColor() } }));
+            dataArray = dreamKeywordData.map((item) => ({ ...item, value: item.weight, count: item.value, textStyle: { color: getColor() } }));
             const option = {
                 backgroundColor: theme.colorScheme === 'light' ? theme.colors.light[0] : "transparent",
                 // backgroundColor: theme.colorScheme === 'light' ? theme.colors.light[0] : theme.colors.night[0],

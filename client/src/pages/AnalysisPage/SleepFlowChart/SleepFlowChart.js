@@ -15,9 +15,9 @@ const SleepFlowChart = ({ height, sleepFlowChartData }) => {
         if (!sleepFlowChart) {
             // 此處極為重要，目的是避免DOM尚未被渲染就執行init，會出現頁面不顯示圖表，且控制台報錯的問題:
             // Can't get DOM width or height. Please check dom.clientWidth and dom.clientHeight.
-            setTimeout(() => {
-                setScoreFlowChart(echarts.init(sleepFlowDOM.current));
-            }, 100);
+            // setTimeout(() => {
+            setScoreFlowChart(echarts.init(sleepFlowDOM.current));
+            // }, 100);
         }
         if (sleepFlowChart && sleepFlowChartData) {
             timestampArray = sleepFlowChartData.data.map((item) => moment(item.timestamp).format('YYYY-MM-DD'));

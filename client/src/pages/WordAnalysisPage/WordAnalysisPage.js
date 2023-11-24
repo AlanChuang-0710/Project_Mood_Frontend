@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, useMantineTheme, SegmentedControl, } from "@mantine/core";
-import ScoreKOLTable from './ScoreKOLTable/ScoreKOLTable';
+// import ScoreKOLTable from './ScoreKOLTable/ScoreKOLTable';
 import RepeatedWordTable from './RepeatedWordTable/RepeatedWordTable';
 import WorldCloudChart from './WordCloudChart/WorldCloudChart';
 import { useGetDreamKeywordDataQuery, useGetMemoKeywordDataQuery } from "../../store/api/analysisApi";
@@ -38,44 +38,44 @@ const WordAnalysisPage = () => {
             </Grid>
 
             <Grid>
-
-                {/* world cloud */}
-                <Grid.Col xs={12}>
-                    <div style={useGetComponentStyle()}>
-                        <WorldCloudChart height={300} dreamKeywordData={dreamKeywordData?.data} title={"Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
-                    </div>
+                <Grid.Col xs={12} md={6}>
+                    <Grid>
+                        <Grid.Col xs={12}>
+                            <div style={useGetComponentStyle()}>
+                                <WorldCloudChart height={300} keywordData={dreamKeywordData?.data} title={"Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
+                            </div>
+                        </Grid.Col>
+                        <Grid.Col xs={12}>
+                            <div style={useGetComponentStyle()}>
+                                <RepeatedWordTable
+                                    repeatedWordData={dreamKeywordData?.data}
+                                    title={"Repeated words in Dream"}
+                                    subtitle={"The following table compiles the words that frequently appear in daily dreams."}
+                                />
+                            </div>
+                        </Grid.Col>
+                    </Grid>
                 </Grid.Col>
 
-                <Grid.Col xs={12} md={7}>
-                    <div style={useGetComponentStyle()}>
-                        <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />
-                    </div>
-                </Grid.Col>
-                <Grid.Col xs={12} md={5}>
-                    <div style={useGetComponentStyle()}>
-                        <RepeatedWordTable
-                            repeatedWordData={dreamKeywordData?.data}
-                            title={"Repeated words in Dream"}
-                            subtitle={"The following table compiles the words that frequently appear in daily dreams."}
-                        />
-                    </div>
-                </Grid.Col>
-                <Grid.Col xs={12} md={7}>
-                    <div style={useGetComponentStyle()}>
-                        <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />
-                    </div>
-                </Grid.Col>
-                <Grid.Col xs={12} md={5}>
-                    <div style={useGetComponentStyle()}>
-                        <RepeatedWordTable
-                            repeatedWordData={memoKeywordData?.data}
-                            title={"Repeated words in Reality"}
-                            subtitle={"The following table compiles the words that frequently appear in reality."}
-                        />
-                    </div>
+                <Grid.Col xs={12} md={6}>
+                    <Grid>
+                        <Grid.Col xs={12}>
+                            <div style={useGetComponentStyle()}>
+                                <WorldCloudChart height={300} keywordData={memoKeywordData?.data} title={"Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
+                            </div>
+                        </Grid.Col>
+                        <Grid.Col xs={12}>
+                            <div style={useGetComponentStyle()}>
+                                <RepeatedWordTable
+                                    repeatedWordData={memoKeywordData?.data}
+                                    title={"Repeated words in Reality"}
+                                    subtitle={"The following table compiles the words that frequently appear in reality."}
+                                />
+                            </div>
+                        </Grid.Col>
+                    </Grid>
                 </Grid.Col>
             </Grid>
-
         </div>
     );
 };

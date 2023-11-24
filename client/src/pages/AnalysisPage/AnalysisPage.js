@@ -5,6 +5,7 @@ import ScoreRatioPieChart from "./ScoreRatioPieChart/ScoreRatioPieChart";
 import ScoreFlowChart from './ScoreFlowChart/ScoreFlowChart';
 import ScoreDayBarChart from './ScoreDayBarChart/ScoreDayBarChart';
 import SleepFlowChart from './SleepFlowChart/SleepFlowChart';
+import ScoreKOLTable from "./ScoreKOLTable/ScoreKOLTable";
 import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery } from '../../store/api/analysisApi';
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
@@ -93,6 +94,16 @@ const AnalysisPage = () => {
             <div className={classes["score-report2"]}>
               數據分析
             </div>
+          </div>
+        </Grid.Col>
+        <Grid.Col xs={12} md={6}>
+          <div style={useGetComponentStyle()}>
+            <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />
+          </div>
+        </Grid.Col>
+        <Grid.Col xs={12} md={6}>
+          <div style={useGetComponentStyle()}>
+            <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />
           </div>
         </Grid.Col>
       </Grid >

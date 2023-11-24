@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Badge } from "@mantine/core";
-import ChartTableHeader from "../../../components/ChartTableHeader/ChartTableHeader";
+import ChartTableHeader from "../../../components/ChartTableHeader/ChartTableHeader.js";
 import { happy, smile, normal, sad, depressed, } from "../../../assets/index.js";
 
 const ScoreKOLTable = ({ title, subtitle }) => {

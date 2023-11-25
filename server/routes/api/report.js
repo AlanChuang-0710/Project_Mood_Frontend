@@ -233,31 +233,45 @@ router.get("/:id/kol_score_chart", checkTokenMiddleware, getUserPeriodFeelingMid
         // 透過中間件獲取特定時間段的情緒
         const periodFeeling = req.periodFeeling;
 
-        // 提取出所有kol
         const allKOLArray = periodFeeling.reduce((accumulator, item) => {
-            return accumulator.concat(item.KOL);
-        }, []);
+            accumulator[`score${item.score}`] = accumulator[`score${item.score}`].concat(item.KOL);
+            return accumulator;
+        }, {
+            score0: [],
+            score1: [],
+            score2: [],
+            "score-1": [],
+            "score-2": [],
+        });
 
-        // 計算重複次數
-        const countMap = {};
-        allKOLArray.forEach((item) => {
-            if (countMap[item]) {
-                countMap[item]++;
-            } else {
-                countMap[item] = 1;
-            }
-        });
-        let sortedCounts = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
-        sortedCounts = sortedCounts.map((item) => {
-            const result = {};
-            result[item[0]] = item[1];
-            return result;
-        });
+        for (const score in allKOLArray) {
+            const countMap = {};
+            allKOLArray[score].forEach((kol) => {
+                if (countMap[kol]) {
+                    countMap[kol]++;
+                } else {
+                    countMap[kol] = 1;
+                }
+            });
+
+            let sortedCounts = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
+            allKOLArray[score] = sortedCounts;
+        }
+
+        // {
+        //     score0: [],
+        //     score1: [ [ 'Parent', 1 ], [ 'Alan', 1 ] ],
+        //     score2: [ [ 'Sibling', 3 ], [ 'Myself', 3 ], [ 'Parent', 2 ], [ 'Alan', 1 ] ],
+        //     'score-1': [],
+        //     'score-2': [ [ 'Sibling', 1 ], [ 'Myself', 1 ] ]
+        // }
+
         res.json({
             code: 2000,
-            msg: "Sleep line chart data got",
-            data: sortedCounts
+            msg: "Top 5 highly-associated KOL got",
+            data: allKOLArray
         });
+
     } catch (err) {
         console.log(err);
     }
@@ -266,34 +280,49 @@ router.get("/:id/kol_score_chart", checkTokenMiddleware, getUserPeriodFeelingMid
 // 獲取一段時間內5種score top5 tag
 router.get("/:id/tags_score_chart", checkTokenMiddleware, getUserPeriodFeelingMiddleware, async function (req, res) {
     try {
+
         // 透過中間件獲取特定時間段的情緒
         const periodFeeling = req.periodFeeling;
 
-        // 提取出所有kol
-        const allKOLArray = periodFeeling.reduce((accumulator, item) => {
-            return accumulator.concat(item.tags);
-        }, []);
+        const allTagsArray = periodFeeling.reduce((accumulator, item) => {
+            accumulator[`score${item.score}`] = accumulator[`score${item.score}`].concat(item.tags);
+            return accumulator;
+        }, {
+            score0: [],
+            score1: [],
+            score2: [],
+            "score-1": [],
+            "score-2": [],
+        });
 
-        // 計算重複次數
-        const countMap = {};
-        allKOLArray.forEach((item) => {
-            if (countMap[item]) {
-                countMap[item]++;
-            } else {
-                countMap[item] = 1;
-            }
-        });
-        let sortedCounts = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
-        sortedCounts = sortedCounts.map((item) => {
-            const result = {};
-            result[item[0]] = item[1];
-            return result;
-        });
+        for (const score in allTagsArray) {
+            const countMap = {};
+            allTagsArray[score].forEach((tags) => {
+                if (countMap[tags]) {
+                    countMap[tags]++;
+                } else {
+                    countMap[tags] = 1;
+                }
+            });
+
+            let sortedCounts = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
+            allTagsArray[score] = sortedCounts;
+        }
+
+        // {
+        //     score0: [],
+        //     score1: [ [ 'Parent', 1 ], [ 'Alan', 1 ] ],
+        //     score2: [ [ 'Sibling', 3 ], [ 'Myself', 3 ], [ 'Parent', 2 ], [ 'Alan', 1 ] ],
+        //     'score-1': [],
+        //     'score-2': [ [ 'Sibling', 1 ], [ 'Myself', 1 ] ]
+        // }
+
         res.json({
             code: 2000,
-            msg: "Sleep line chart data got",
-            data: sortedCounts
+            msg: "Top 5 highly-associated Tags got",
+            data: allTagsArray
         });
+
     } catch (err) {
         console.log(err);
     }
@@ -312,6 +341,7 @@ router.get("/:id/dream_keyword_chart", checkTokenMiddleware, getUserPeriodFeelin
 
         // 選擇jieba提取出來的top詞數量
         const topN = 100;
+        // fs.writeFileSync(path.resolve(__dirname, "./delete.txt"), deleteDict.join(""));
         let extractKeyword = jieba.extract(dreamString, topN).filter((word) => !deleteDict.includes(word.keyword));
         const keywords = extractKeyword.map((item) => {
             let target = new RegExp(item.keyword, 'g');

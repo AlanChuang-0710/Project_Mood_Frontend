@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table, Badge } from "@mantine/core";
 import ChartTableHeader from "../../../components/ChartTableHeader/ChartTableHeader.js";
 import { happy, smile, normal, sad, depressed, } from "../../../assets/index.js";
 
-const ScoreKOLTable = ({ title, subtitle }) => {
+const ScoreAssociatedChart = ({ title, subtitle, data }) => {
     const elements = [
         { icon: happy, KOL: ['Alan', "Alex"] },
         { icon: smile, KOL: ['Nitrogen'] },
@@ -21,6 +21,12 @@ const ScoreKOLTable = ({ title, subtitle }) => {
         </tr>
     ));
 
+    useEffect(() => {
+        if (data) {
+            console.log(data);
+        }
+    }, [data]);
+
     return (
         <div>
             <ChartTableHeader title={title} subtitle={subtitle} />
@@ -37,4 +43,4 @@ const ScoreKOLTable = ({ title, subtitle }) => {
     );
 };
 
-export default ScoreKOLTable;
+export default ScoreAssociatedChart;

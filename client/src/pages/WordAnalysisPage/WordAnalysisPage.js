@@ -42,7 +42,7 @@ const WordAnalysisPage = () => {
                     <Grid>
                         <Grid.Col xs={12}>
                             <div style={useGetComponentStyle()}>
-                                <WorldCloudChart height={300} keywordData={dreamKeywordData?.data} title={"Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
+                                <WorldCloudChart height={300} keywordData={dreamKeywordData?.data} title={"Dream Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
                             </div>
                         </Grid.Col>
                         <Grid.Col xs={12}>
@@ -61,7 +61,7 @@ const WordAnalysisPage = () => {
                     <Grid>
                         <Grid.Col xs={12}>
                             <div style={useGetComponentStyle()}>
-                                <WorldCloudChart height={300} keywordData={memoKeywordData?.data} title={"Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
+                                <WorldCloudChart height={300} keywordData={memoKeywordData?.data} title={"Reality Word Cloud"} subtitle={"The larger the font of a vocabulary, the more frequently it occurred."} />
                             </div>
                         </Grid.Col>
                         <Grid.Col xs={12}>

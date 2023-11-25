@@ -5,10 +5,11 @@ import ScoreRatioPieChart from "./ScoreRatioPieChart/ScoreRatioPieChart";
 import ScoreFlowChart from './ScoreFlowChart/ScoreFlowChart';
 import ScoreDayBarChart from './ScoreDayBarChart/ScoreDayBarChart';
 import SleepFlowChart from './SleepFlowChart/SleepFlowChart';
-import ScoreKOLTable from "./ScoreKOLTable/ScoreKOLTable";
-import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery } from '../../store/api/analysisApi';
+import ScoreAssociatedChart from "./ScoreAssociatedChart/ScoreAssociatedChart";
+import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetTagsScoreDataQuery, useGetKOLScoreDataQuery } from '../../store/api/analysisApi';
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
+import { getStartEndTime } from "../../utils/getStartEndTime";
 import classes from "./AnalysisPage.module.scss";
 
 
@@ -17,19 +18,7 @@ const AnalysisPage = () => {
   const id = useSelector(selectCurrentUserId);
 
   const [value, setValue] = useState('month');
-  let endTime = new Date();
-  endTime.setHours(0, 0, 0, 0);
-  endTime = endTime.getTime();
-  let startTime = new Date();
-  if (value === "month") {
-    // 往回推1個月
-    startTime.setMonth(new Date().getMonth() - 1);
-  } else {
-    // 往回推1年
-    startTime.setFullYear(new Date().getFullYear() - 1);
-  }
-  startTime.setHours(0, 0, 0, 0);
-  startTime = startTime.getTime();
+  const { startTime, endTime } = getStartEndTime(value);
 
   // 獲得score pie chart資訊
   const { data: scorePieChartData } = useGetScorePieChartDataQuery({ id, startTime, endTime });
@@ -41,6 +30,10 @@ const AnalysisPage = () => {
   const { data: scoreDayBarChartData } = useGetScoreDayBarDataQuery({ id, startTime, endTime });
 
   const { data: sleepFlowChartData } = useGetSleepLineChartDataQuery({ id, startTime, endTime });
+
+  const { data: scoreTagsChartData } = useGetTagsScoreDataQuery({ id, startTime, endTime });
+
+  const { data: scoreKOLChartData } = useGetKOLScoreDataQuery({ id, startTime, endTime });
 
   return (
     <div>
@@ -98,12 +91,12 @@ const AnalysisPage = () => {
         </Grid.Col>
         <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
-            <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />
+            <ScoreAssociatedChart title={"Top 5 highly-associated People"} subtitle={"People hightly associated with daily emotion"} data={scoreKOLChartData} />
           </div>
         </Grid.Col>
         <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
-            <ScoreKOLTable title={"Highly associated People"} subtitle={"People hightly associated with daily emotion"} />
+            <ScoreAssociatedChart title={"Top 5 highly-associated Tags"} subtitle={"Tags hightly associated with daily emotion"} data={scoreTagsChartData} />
           </div>
         </Grid.Col>
       </Grid >

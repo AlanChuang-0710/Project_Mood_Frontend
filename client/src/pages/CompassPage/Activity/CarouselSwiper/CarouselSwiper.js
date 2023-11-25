@@ -47,10 +47,15 @@ const CarouselSwiper = ({ height }) => {
                     scrollbar={{ draggable: true }}
                     className={classes["activity-swiper"]}
                     style={{ height: `${height}px` }}
-                    autoplay={{
-                        delay: 4000,
-                        disableOnInteraction: false,
-                        pauseOnMouseEnter: true,
+                    // autoplay={{
+                    //     delay: 4000,
+                    //     disableOnInteraction: false,
+                    //     pauseOnMouseEnter: true,
+                    // }}
+                    onBeforeTransitionStart={(swiper) => {
+                        if (swiper.destroyed) {
+                            swiper.autoplay.stop();
+                        }
                     }}
                     loop
                 >

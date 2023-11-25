@@ -127,6 +127,34 @@ const analysisApi = createApi({
                 providesTags: [{
                     type: "getMemoKeywordData",
                 }]
+            }),
+
+            getTagsScoreData: build.query({
+                query({ id, startTime, endTime }) {
+                    return {
+                        url: `/${id}/tags_score_chart`,
+                        method: "get",
+                        params: { startTime, endTime }
+                    };
+                },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                providesTags: [{
+                    type: "getTagsScoreData",
+                }]
+            }),
+
+            getKOLScoreData: build.query({
+                query({ id, startTime, endTime }) {
+                    return {
+                        url: `/${id}/kol_score_chart`,
+                        method: "get",
+                        params: { startTime, endTime }
+                    };
+                },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                providesTags: [{
+                    type: "getKOLScoreData",
+                }]
             })
         };
     }
@@ -134,5 +162,5 @@ const analysisApi = createApi({
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetDreamKeywordDataQuery, useGetMemoKeywordDataQuery } = analysisApi;
+export const { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetDreamKeywordDataQuery, useGetMemoKeywordDataQuery, useGetTagsScoreDataQuery, useGetKOLScoreDataQuery } = analysisApi;
 export default analysisApi;

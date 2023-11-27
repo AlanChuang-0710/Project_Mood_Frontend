@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '@mantine/core';
 import classes from "./layout.module.scss";
 import { HouseDoor, Gear, Bell, Search, GraphUp, Compass, BodyText, Award } from "react-bootstrap-icons";
@@ -164,7 +164,9 @@ const Layout = (props) => {
         // }
         >
             <div >
-                <Outlet />
+                <Suspense fallback={<>Loading...</>}>
+                    <Outlet />
+                </Suspense>
             </div>
         </AppShell>
     );

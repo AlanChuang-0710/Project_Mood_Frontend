@@ -1,20 +1,22 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import { useState } from "react";
 import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
-import Layout from './layout/Layout';
-import SignUpPage from "./pages/SignUpPage/SignUpPage";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import AnalysisPage from "./pages/AnalysisPage/AnalysisPage";
-import AccountPage from "./pages/AccountPage/AccountPage";
-import CompassPage from "./pages/CompassPage/CompassPage";
-import WordAnalysisPage from "./pages/WordAnalysisPage/WordAnalysisPage";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
-import AdministratorPage from "./pages/Administrator/AdministratorPage";
+import routes from './routes/router';
+// import Layout from './layout/Layout';
+// import SignUpPage from "./pages/SignUpPage/SignUpPage";
+// import LoginPage from "./pages/LoginPage/LoginPage";
+// import DashboardPage from "./pages/DashboardPage/DashboardPage";
+// import AnalysisPage from "./pages/AnalysisPage/AnalysisPage";
+// import AccountPage from "./pages/AccountPage/AccountPage";
+// import CompassPage from "./pages/CompassPage/CompassPage";
+// import WordAnalysisPage from "./pages/WordAnalysisPage/WordAnalysisPage";
+// import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+// import AdministratorPage from "./pages/Administrator/AdministratorPage";
 function App() {
   const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
+  const routeList = useRoutes(routes);
 
   return (
     <div className="App">
@@ -36,7 +38,8 @@ function App() {
             // primaryColor: 'brand', //只接受colors中的鍵
           }}>
           <Notifications />
-          <Routes>
+          {routeList}
+          {/* <Routes>
             <Route path="/" element={<Navigate to="/login" />}></Route>
             <Route path="/login" element={<LoginPage />}></Route>
             <Route path="/signup" element={<Navigate to="/signup/create" />}></Route>
@@ -50,7 +53,7 @@ function App() {
               <Route path="/administrator" element={<AdministratorPage />}></Route>
             </Route>
             <Route path="*" element={<NotFoundPage />}></Route>
-          </Routes>
+          </Routes> */}
         </MantineProvider>
       </ColorSchemeProvider>
     </div>

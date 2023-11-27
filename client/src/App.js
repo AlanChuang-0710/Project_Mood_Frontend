@@ -3,19 +3,11 @@ import { useState } from "react";
 import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import routes from './routes/router';
-// import Layout from './layout/Layout';
-// import SignUpPage from "./pages/SignUpPage/SignUpPage";
-// import LoginPage from "./pages/LoginPage/LoginPage";
-// import DashboardPage from "./pages/DashboardPage/DashboardPage";
-// import AnalysisPage from "./pages/AnalysisPage/AnalysisPage";
-// import AccountPage from "./pages/AccountPage/AccountPage";
-// import CompassPage from "./pages/CompassPage/CompassPage";
-// import WordAnalysisPage from "./pages/WordAnalysisPage/WordAnalysisPage";
-// import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
-// import AdministratorPage from "./pages/Administrator/AdministratorPage";
 function App() {
   const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
+
+  // 引入路由
   const routeList = useRoutes(routes);
 
   return (
@@ -39,21 +31,6 @@ function App() {
           }}>
           <Notifications />
           {routeList}
-          {/* <Routes>
-            <Route path="/" element={<Navigate to="/login" />}></Route>
-            <Route path="/login" element={<LoginPage />}></Route>
-            <Route path="/signup" element={<Navigate to="/signup/create" />}></Route>
-            <Route path="/signup/:tabValue" element={<SignUpPage />}></Route>
-            <Route element={<Layout />}>
-              <Route path="/dashboard" element={<DashboardPage />}></Route>
-              <Route path="/account" element={<AccountPage />}></Route>
-              <Route path="/analysis" element={<AnalysisPage />}></Route>
-              <Route path="/word-analysis" element={<WordAnalysisPage />}></Route>
-              <Route path="/compass" element={<CompassPage />}></Route>
-              <Route path="/administrator" element={<AdministratorPage />}></Route>
-            </Route>
-            <Route path="*" element={<NotFoundPage />}></Route>
-          </Routes> */}
         </MantineProvider>
       </ColorSchemeProvider>
     </div>

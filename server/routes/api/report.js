@@ -8,7 +8,7 @@ const jieba = require("@node-rs/jieba");
 // 導入自定義/停用辭典
 const fs = require("fs");
 const path = require("path");
-const deleteDict = fs.readFileSync(path.resolve(__dirname, "../../jieba/delete-word-dict.txt"), "utf8").split("\n");
+const deleteDict = fs.readFileSync(path.resolve(__dirname, "../../jieba/delete-word-dict.txt"), "utf8").split("\r\n");
 deleteDict.push('\r\n');
 const userDict = fs.readFileSync(path.resolve(__dirname, "../../jieba/dict.txt"));
 jieba.loadDict(userDict);
@@ -254,7 +254,7 @@ router.get("/:id/kol_score_chart", checkTokenMiddleware, getUserPeriodFeelingMid
                 }
             });
 
-            let sortedCounts = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
+            let sortedCounts = Object.entries(countMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
             allKOLArray[score] = sortedCounts;
         }
 
@@ -305,7 +305,7 @@ router.get("/:id/tags_score_chart", checkTokenMiddleware, getUserPeriodFeelingMi
                 }
             });
 
-            let sortedCounts = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
+            let sortedCounts = Object.entries(countMap).sort((a, b) => b[1] - a[1]).slice(0, 5);;
             allTagsArray[score] = sortedCounts;
         }
 
@@ -371,7 +371,7 @@ router.get("/:id/memo_keyword_chart", checkTokenMiddleware, getUserPeriodFeeling
         }, "");
 
         // 選擇jieba提取出來的top詞數量
-        const topN = 100;
+        const topN = 20;
         let extractKeyword = jieba.extract(memoString, topN).filter((word) => !deleteDict.includes(word.keyword));
         const keywords = extractKeyword.map((item) => {
             let target = new RegExp(item.keyword, 'g');

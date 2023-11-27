@@ -1,11 +1,11 @@
 import { HoverCard, Text } from "@mantine/core";
 import { IconInfoCircleFilled } from '@tabler/icons-react';
 
-const ChartTableHeader = ({ title, subtitle }) => {
+const ChartTableHeader = ({ title, subtitle, textAlign = "center" }) => {
 
     return <div>
         <div style={{ position: "relative" }}>
-            <div style={{ fontSize: "20px", textAlign: "center" }}>{title}</div>
+            <div style={{ fontSize: "20px", textAlign }}>{title}</div>
             <div style={{ position: "absolute", right: "0", top: "3px" }}>
                 <HoverCard width={280} shadow="md">
                     <HoverCard.Target>

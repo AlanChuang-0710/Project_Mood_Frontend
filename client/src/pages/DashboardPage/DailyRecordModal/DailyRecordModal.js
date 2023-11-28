@@ -2,10 +2,12 @@ import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { Image, Grid, Button, Modal, Tabs, Slider, useMantineTheme, Textarea, MultiSelect, Group, FileButton, CloseButton } from "@mantine/core";
 import moment from "moment";
+import { IconUserPlus, IconTags } from '@tabler/icons-react';
 import { happy, smile, normal, sad, depressed } from "../../../assets/index";
 import { useUpdateUserFeelingMutation, useGetUserFeelingQuery } from "../../../store/api/feelingApi";
 import { selectCurrentUserId } from "../../../store/reducer/authSlice";
 import classes from "./DailyRecordModal.module.scss";
+
 const moodList = [
     {
         icon: happy,
@@ -205,7 +207,10 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                             </div>
                         </div>
                         <div style={{ marginTop: "20px" }}>
-                            <div className={classes["title"]}>Influential People</div>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <div className={classes["title"]}>Influential People </div>
+                                <IconUserPlus className={classes['add-kol']} />
+                            </div>
                             <div>
                                 <MultiSelect
                                     placeholder="Pick people who mainly affect your mood today"
@@ -217,7 +222,10 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                             </div>
                         </div>
                         <div style={{ marginTop: "20px" }}>
-                            <div className={classes["title"]}>Hashtags</div>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <div className={classes["title"]}>Hashtags</div>
+                                < IconTags className={classes['add-tag']} />
+                            </div>
                             <div>
                                 <MultiSelect
                                     placeholder="Pick hashtags for today"

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { Grid, useMantineTheme, } from "@mantine/core";
 import { useViewportSize } from '@mantine/hooks';
 import SVG from "react-inlinesvg";
@@ -7,7 +8,6 @@ import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/scrollbar';
 import 'swiper/css';
-import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from "../../../store/reducer/authSlice";
 import { useDeleteFeelingMutation } from '../../../store/api/feelingApi';
 import { happy, smile, normal, sad, depressed, deleteIcon, editIcon, uploadIcon } from "../../../assets/index";

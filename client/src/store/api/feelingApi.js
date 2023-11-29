@@ -87,6 +87,20 @@ const feelingApi = createApi({
                     type: "deleteFeeling",
                 }],
                 invalidatesTags: ["getFeeling"]
+            }),
+
+            getUserKOLTagsOptions: build.query({
+                query({ id, type }) {
+                    return {
+                        url: `/${id}/options`,
+                        method: "get",
+                        params: {
+                            type
+                        }
+                    };
+                },
+                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                providesTags: ["getUserKOLTagsOptions"]
             })
         };
     }
@@ -94,5 +108,5 @@ const feelingApi = createApi({
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetUserFeelingQuery, useUpdateUserFeelingMutation, useDeleteFeelingMutation } = feelingApi;
+export const { useGetUserFeelingQuery, useUpdateUserFeelingMutation, useDeleteFeelingMutation, useGetUserKOLTagsOptionsQuery } = feelingApi;
 export default feelingApi;

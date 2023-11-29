@@ -61,6 +61,41 @@ const FeelingModel = require('../../models/FeelingModel');
 // 導入token較驗中間件
 const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware");
 
+// 獲取特定用戶的KOL, tags選項
+// type為"tags", "KOL" 並且以,隔開。 如果為"",則代表回傳所有選項 
+router.get("/:id/options", checkTokenMiddleware, async function (req, res) {
+    const userId = req.params.id;
+    const userData = await FeelingModel.findOne({ userId });
+    if (!userData) {
+        return res.json({
+            code: "4000",
+            msg: "User not exists",
+            data: null
+        });
+    };
+
+    let data = {};
+    let msg = "All options got";
+    let type = req.query.type;
+
+    if (type === "") {
+        data = userData.options;
+    } else {
+        type = type?.split(",");
+        type.forEach((type) => {
+            if (userData.options[type]) {
+                data[type] = userData.options[type];
+            }
+        });
+    };
+
+    res.json({
+        code: "2000",
+        msg,
+        data
+    });
+});
+
 // 獲取特定用戶的一段日期/全部心情
 router.get("/:id", checkTokenMiddleware, async function (req, res) {
     try {

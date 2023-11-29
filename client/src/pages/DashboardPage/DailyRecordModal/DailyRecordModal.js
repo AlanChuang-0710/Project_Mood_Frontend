@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Image, Grid, Button, Modal, Tabs, Slider, useMantineTheme, Textarea, MultiSelect, Group, FileButton, CloseButton } from "@mantine/core";
+import { Image, Grid, Button, Modal, Tabs, Slider, useMantineTheme, Textarea, MultiSelect, Group, FileButton, CloseButton, } from "@mantine/core";
+import { useDisclosure } from '@mantine/hooks';
 import moment from "moment";
 import { IconUserPlus, IconTags } from '@tabler/icons-react';
-import { happy, smile, normal, sad, depressed } from "../../../assets/index";
-import { useUpdateUserFeelingMutation, useGetUserFeelingQuery } from "../../../store/api/feelingApi";
+import AddTagsKolModal from './AddTagsKolModal/AddTagsKolModal';
+import { useUpdateUserFeelingMutation, useGetUserFeelingQuery, useGetUserKOLTagsOptionsQuery } from "../../../store/api/feelingApi";
 import { selectCurrentUserId } from "../../../store/reducer/authSlice";
+import { happy, smile, normal, sad, depressed } from "../../../assets/index";
 import classes from "./DailyRecordModal.module.scss";
 
 const moodList = [
@@ -40,6 +42,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     const theme = useMantineTheme();
     const [updateUserFeeling] = useUpdateUserFeelingMutation();
     const { data: dayFeeling, isSuccess } = useGetUserFeelingQuery({ id, startTime: selectedDateValue.getTime() - 5, endTime: selectedDateValue.getTime() + 5, opened }); // mantine的modal一直掛載，此處放入opened是為了每次顯現modal都會因為opened變化而主動調用useQuery。
+    const { data: userKOLTagsOptions, isSuccess: userKOLTagsOptionsIsSuccess } = useGetUserKOLTagsOptionsQuery({ id, type: "" });
 
     /* 心情 Modal */
     const formatSelectedDate = useMemo(() => {
@@ -117,6 +120,9 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
         });
     }, [close]);
 
+    const [KOLModalOpened, { toggle: KOLModalToggle, close: KOLModalClose }] = useDisclosure(false);
+    const [tagsModalOpened, { toggle: tagsModalToggle, close: tagsModalClose }] = useDisclosure(false);
+
     const updateDailyRecord = useCallback(async () => {
 
         const form = new FormData();
@@ -160,6 +166,10 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
         }
     }, [dayFeeling, isSuccess, selectedDateValue]);
 
+
+    useEffect(() => {
+        console.log(userKOLTagsOptions);
+    }, [userKOLTagsOptions]);
 
     return (
         <Modal styles={{
@@ -209,7 +219,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                         <div style={{ marginTop: "20px" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                 <div className={classes["title"]}>Influential People </div>
-                                <IconUserPlus className={classes['add-kol']} />
+                                <IconUserPlus className={classes['add-kol']} onClick={KOLModalToggle} />
                             </div>
                             <div>
                                 <MultiSelect
@@ -219,12 +229,17 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                                     value={dayRecord.KOL}
                                     onChange={(val) => setDayRecord((preVal) => { return { ...preVal, KOL: val }; })}
                                 />
+                                <AddTagsKolModal
+                                    opened={KOLModalOpened}
+                                    title="Add A New Influential People"
+                                    placeholder="Influential People"
+                                    close={KOLModalClose} />
                             </div>
                         </div>
                         <div style={{ marginTop: "20px" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                 <div className={classes["title"]}>Hashtags</div>
-                                < IconTags className={classes['add-tag']} />
+                                < IconTags className={classes['add-tag']} onClick={tagsModalToggle} />
                             </div>
                             <div>
                                 <MultiSelect
@@ -234,6 +249,11 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                                     value={dayRecord.tags}
                                     onChange={(val) => setDayRecord((preVal) => { return { ...preVal, tags: val }; })}
                                 />
+                                <AddTagsKolModal
+                                    opened={tagsModalOpened}
+                                    title="Add A New Tag"
+                                    placeholder="Tags"
+                                    close={tagsModalClose} />
                             </div>
                         </div>
                         <div style={{ marginTop: "20px" }}>

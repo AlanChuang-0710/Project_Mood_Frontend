@@ -38,6 +38,16 @@ const FeelingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    options: {
+        KOL: {
+            type: Array,
+            required: true
+        },
+        tags: {
+            type: Array,
+            required: true
+        }
+    },
     dailyFeeling: [DailyFeelingSchema]
 });
 

@@ -109,10 +109,14 @@ router.post("/:id/options/:type", checkTokenMiddleware, async function (req, res
             data: null
         });
     };
-
     const data = req.body[type];
     userData.options[type].push(data);
+    console.log(userData);
     await userData.save();
+    res.json({
+        code: "2000",
+        msg: "Options successfully updated!",
+    });
 });
 
 // 獲取特定用戶的一段日期/全部心情

@@ -166,11 +166,6 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
         }
     }, [dayFeeling, isSuccess, selectedDateValue]);
 
-
-    useEffect(() => {
-        console.log(userKOLTagsOptions);
-    }, [userKOLTagsOptions]);
-
     return (
         <Modal styles={{
             header: { justifyContent: "center" }, title: { fontSize: "30px" },
@@ -224,12 +219,13 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                             <div>
                                 <MultiSelect
                                     placeholder="Pick people who mainly affect your mood today"
-                                    data={['Parent', 'Sibling', 'Alan', 'Myself']}
+                                    data={userKOLTagsOptions?.data?.KOL}
                                     searchable
                                     value={dayRecord.KOL}
                                     onChange={(val) => setDayRecord((preVal) => { return { ...preVal, KOL: val }; })}
                                 />
                                 <AddTagsKolModal
+                                    type="KOL"
                                     opened={KOLModalOpened}
                                     title="Add A New Influential People"
                                     placeholder="Influential People"
@@ -243,13 +239,15 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                             </div>
                             <div>
                                 <MultiSelect
+                                    type="tags"
                                     placeholder="Pick hashtags for today"
-                                    data={['Happy', 'Angry', 'Tired', 'Exhausted']}
+                                    data={userKOLTagsOptions?.data?.tags}
                                     searchable
                                     value={dayRecord.tags}
                                     onChange={(val) => setDayRecord((preVal) => { return { ...preVal, tags: val }; })}
                                 />
                                 <AddTagsKolModal
+                                    type="tags"
                                     opened={tagsModalOpened}
                                     title="Add A New Tag"
                                     placeholder="Tags"

@@ -53,7 +53,7 @@ const feelingApi = createApi({
                         params: { startTime, endTime }
                     };
                 },
-                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                keepUnusedDataFor: 50, // 設置數據緩存的時間，單位為秒，默認60s
                 providesTags: ["getFeeling"]
             }),
 
@@ -111,6 +111,7 @@ const feelingApi = createApi({
                     };
                 },
                 providesTags: ["updateUserKOLTagsOptions"],
+                invalidatesTags: ["getUserKOLTagsOptions"]
             }),
         };
     }

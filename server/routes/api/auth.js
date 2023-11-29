@@ -72,7 +72,7 @@ router.post("/login", async (req, res) => {
 
             // 創建accessToken
             const accessToken = jwt.sign({ email, id }, ACCESS_TOKEN_SECRET,
-                { expiresIn: 10 } // 10秒過期
+                { expiresIn: 60 * 10 } // 10分鐘過期
             );
 
             // 創建refreshToken

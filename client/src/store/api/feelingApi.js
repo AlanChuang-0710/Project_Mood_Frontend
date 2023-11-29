@@ -65,7 +65,6 @@ const feelingApi = createApi({
                         body: data,
                     };
                 },
-                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
                 //     用來轉換響應數據的格式，可以設定返回的data數據格式
                 //     transformResponse(baseQueryReturnValue) {
                 //         return baseQueryReturnValue.data;
@@ -101,12 +100,23 @@ const feelingApi = createApi({
                 },
                 keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
                 providesTags: ["getUserKOLTagsOptions"]
-            })
+            }),
+
+            updateUserKOLTagsOptions: build.mutation({
+                query({ id, type, data }) {
+                    return {
+                        url: `/${id}/options/${type}`,
+                        method: "post",
+                        body: data,
+                    };
+                },
+                providesTags: ["updateUserKOLTagsOptions"],
+            }),
         };
     }
 });
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetUserFeelingQuery, useUpdateUserFeelingMutation, useDeleteFeelingMutation, useGetUserKOLTagsOptionsQuery } = feelingApi;
+export const { useGetUserFeelingQuery, useUpdateUserFeelingMutation, useDeleteFeelingMutation, useGetUserKOLTagsOptionsQuery, useUpdateUserKOLTagsOptionsMutation } = feelingApi;
 export default feelingApi;

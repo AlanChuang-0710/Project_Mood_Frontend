@@ -96,6 +96,25 @@ router.get("/:id/options", checkTokenMiddleware, async function (req, res) {
     });
 });
 
+// 新增特定用戶的KOL, tags選項
+// type為"tags", "KOL"
+router.post("/:id/options/:type", checkTokenMiddleware, async function (req, res) {
+    const userId = req.params.id;
+    const type = req.params.type;
+    const userData = await FeelingModel.findOne({ userId });
+    if (!userData) {
+        return res.json({
+            code: "4000",
+            msg: "User not exists",
+            data: null
+        });
+    };
+
+    const data = req.body[type];
+    userData.options[type].push(data);
+    await userData.save();
+});
+
 // 獲取特定用戶的一段日期/全部心情
 router.get("/:id", checkTokenMiddleware, async function (req, res) {
     try {

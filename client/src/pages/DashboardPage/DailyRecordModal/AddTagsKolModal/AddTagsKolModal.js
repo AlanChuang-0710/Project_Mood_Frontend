@@ -13,7 +13,7 @@ const AddTagsKolModal = ({ opened, close, title, placeholder }) => {
         const data = { type: textRef.current.value };
         const result = await updateUserKOLTags(id, type, data);
         close();
-    }, []);
+    }, [id, updateUserKOLTags, close]);
 
     return (
         <>

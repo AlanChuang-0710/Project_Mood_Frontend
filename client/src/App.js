@@ -1,8 +1,9 @@
-import { useRoutes } from 'react-router-dom';
 import { useState } from "react";
+import { useRoutes } from 'react-router-dom';
 import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import routes from './routes/router';
+
 function App() {
   const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');

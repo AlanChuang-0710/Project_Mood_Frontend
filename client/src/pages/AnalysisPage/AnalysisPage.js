@@ -12,7 +12,6 @@ import { useGetComponentStyle } from "../../styles/dayNightStyle";
 import { getStartEndTime } from "../../utils/public";
 import classes from "./AnalysisPage.module.scss";
 
-
 const AnalysisPage = () => {
   const theme = useMantineTheme();
   const id = useSelector(selectCurrentUserId);

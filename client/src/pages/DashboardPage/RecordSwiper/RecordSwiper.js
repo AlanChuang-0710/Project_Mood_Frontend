@@ -31,19 +31,19 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
                 switch (score) {
                     case -2:
                         icon = depressed;
-                        backgroundColor = theme.colors.emotion[4];
+                        backgroundColor = theme.colors.emotion[0];
                         break;
                     case -1:
                         icon = sad;
-                        backgroundColor = theme.colors.emotion[3];
+                        backgroundColor = theme.colors.emotion[1];
                         break;
                     case 1:
                         icon = smile;
-                        backgroundColor = theme.colors.emotion[1];
+                        backgroundColor = theme.colors.emotion[3];
                         break;
                     case 2:
                         icon = happy;
-                        backgroundColor = theme.colors.emotion[0];
+                        backgroundColor = theme.colors.emotion[4];
                         break;
                     default:
                         icon = normal;
@@ -110,8 +110,6 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
                 direction="vertical"
                 mousewheel={true}
                 scrollbar={{ draggable: true }}
-                // onSlideChange={() => console.log('slide change')}
-                // onSwiper={(swiper) => console.log(swiper)}
                 className={classes["swiper-day"]}
                 style={{ height: `${swiperHeight}px` }}
             >

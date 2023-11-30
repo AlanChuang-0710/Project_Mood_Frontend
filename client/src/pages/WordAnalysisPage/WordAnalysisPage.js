@@ -7,7 +7,7 @@ import WorldCloudChart from './WordCloudChart/WorldCloudChart';
 import { useGetDreamKeywordDataQuery, useGetMemoKeywordDataQuery } from "../../store/api/analysisApi";
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
-import { getStartEndTime } from "../../utils/getStartEndTime";
+import { getStartEndTime } from "../../utils/public";
 // import classes from "./WordAnalysisPage.module.scss";
 
 const WordAnalysisPage = () => {

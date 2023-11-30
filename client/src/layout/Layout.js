@@ -1,14 +1,14 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppShell, Navbar, useMantineTheme, Burger, Menu, Text } from '@mantine/core';
 import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '@mantine/core';
-import classes from "./layout.module.scss";
+import { IconSettings, IconLogout, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
 import { HouseDoor, Gear, Bell, Search, GraphUp, Compass, BodyText, Award } from "react-bootstrap-icons";
 import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { selectCurrentAccessToken, logout } from "../store/reducer/authSlice";
 import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
-import { AppShell, Navbar, useMantineTheme, Burger, Menu, Text } from '@mantine/core';
-import { IconSettings, IconLogout, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
-import { useSelector } from 'react-redux';
-import { selectCurrentAccessToken } from "../store/reducer/authSlice";
+import classes from "./layout.module.scss";
 
 const Layout = (props) => {
     /* 路由權限 */
@@ -62,11 +62,17 @@ const Layout = (props) => {
         },
     ];
 
-
     const navClickHandler = useCallback((route) => {
         setActive(route);
         nav(route);
     }, [nav, setActive]);
+
+    // logout 選項
+    const dispatch = useDispatch();
+    const logoutHandler = useCallback(() => {
+        dispatch(logout());
+        nav("/login");
+    }, [dispatch, nav]);
 
     return (
         <AppShell
@@ -114,6 +120,7 @@ const Layout = (props) => {
                                     <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
                                     <Menu.Item icon={<IconPhoto size={14} />}>Gallery</Menu.Item>
                                     <Menu.Item
+                                        onClick={logoutHandler}
                                         icon={<IconLogout size={14} />}
                                         rightSection={<Text size="xs" color="dimmed">⌘K</Text>}
                                     >

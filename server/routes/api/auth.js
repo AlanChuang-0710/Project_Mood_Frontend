@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
             res.json({
                 code: 2000,
                 msg: "Login succeeds",
-                data: { accessToken, id, username }
+                data: { accessToken, id, username, email }
             });
         } else {
             errRes("Please fill in correct email or password");
@@ -113,7 +113,7 @@ router.get("/refresh", (req, res) => {
                     }
                 } else {
                     const accessToken = jwt.sign({ email: data.email, id: data.id }, ACCESS_TOKEN_SECRET,
-                        { expiresIn: 10 } // 10秒過期
+                        { expiresIn: 60 * 10 } // 10分鐘過期
                     );
                     return res.json({ code: 2000, msg: "Token updated", data: { accessToken } });
                 }
@@ -126,12 +126,12 @@ router.get("/refresh", (req, res) => {
     }
 });
 
-// 用戶登出
-router.post("/logout/:id", checkTokenMiddleware, (req, res) => {
-    // 銷毀session
-    req.session.destroy(() => {
-        res.json({ code: 2000, msg: "Logout successfully!", data: null });
-    });
-});
+// 用戶登出 (採用jwt 後端不控制登出訊息)
+// router.post("/logout/:id", checkTokenMiddleware, (req, res) => {
+//     // 銷毀session
+//     req.session.destroy(() => {
+//         res.json({ code: 2000, msg: "Logout successfully!", data: null });
+//     });
+// });
 
 module.exports = router;

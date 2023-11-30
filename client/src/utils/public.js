@@ -12,5 +12,9 @@ export function getStartEndTime(value) {
     }
     startTime.setHours(0, 0, 0, 0);
     startTime = startTime.getTime();
-    return {startTime, endTime}
+    return { startTime, endTime };
+}
+
+export function removeCookie(key) {
+    document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
 }

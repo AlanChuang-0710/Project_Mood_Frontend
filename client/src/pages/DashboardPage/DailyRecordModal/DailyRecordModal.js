@@ -42,7 +42,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
     const theme = useMantineTheme();
     const [updateUserFeeling] = useUpdateUserFeelingMutation();
     const { data: dayFeeling, isSuccess } = useGetUserFeelingQuery({ id, startTime: selectedDateValue.getTime() - 5, endTime: selectedDateValue.getTime() + 5, opened }); // mantine的modal一直掛載，此處放入opened是為了每次顯現modal都會因為opened變化而主動調用useQuery。
-    const { data: userKOLTagsOptions, isSuccess: userKOLTagsOptionsIsSuccess } = useGetUserKOLTagsOptionsQuery({ id, type: "" });
+    const { data: userKOLTagsOptions } = useGetUserKOLTagsOptionsQuery({ id, type: "" });
 
     /* 心情 Modal */
     const formatSelectedDate = useMemo(() => {
@@ -219,7 +219,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                             <div>
                                 <MultiSelect
                                     placeholder="Pick people who mainly affect your mood today"
-                                    data={userKOLTagsOptions?.data?.KOL}
+                                    data={userKOLTagsOptions?.data?.KOL || []}
                                     searchable
                                     value={dayRecord.KOL}
                                     onChange={(val) => setDayRecord((preVal) => { return { ...preVal, KOL: val }; })}
@@ -241,7 +241,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
                                 <MultiSelect
                                     type="tags"
                                     placeholder="Pick hashtags for today"
-                                    data={userKOLTagsOptions?.data?.tags}
+                                    data={userKOLTagsOptions?.data?.tags || []}
                                     searchable
                                     value={dayRecord.tags}
                                     onChange={(val) => setDayRecord((preVal) => { return { ...preVal, tags: val }; })}

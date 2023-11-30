@@ -101,17 +101,19 @@ router.get("/:id/options", checkTokenMiddleware, async function (req, res) {
 router.post("/:id/options/:type", checkTokenMiddleware, async function (req, res) {
     const userId = req.params.id;
     const type = req.params.type;
-    const userData = await FeelingModel.findOne({ userId });
+    let userData = await FeelingModel.findOne({ userId });
     if (!userData) {
-        return res.json({
-            code: "4000",
-            msg: "User not exists",
-            data: null
+        userData = new FeelingModel({
+            userId,
+            options: {
+                KOL: [],
+                tags: []
+            },
+            dailyFeeling: []
         });
     };
     const data = req.body[type];
     userData.options[type].push(data);
-    console.log(userData);
     await userData.save();
     res.json({
         code: "2000",
@@ -242,6 +244,10 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
         } else {
             const newUser = new FeelingModel({
                 userId,
+                options: {
+                    KOL: {},
+                    tags: {}
+                },
                 dailyFeeling: [{ ...req.body }]
             });
             const data = await newUser.save();

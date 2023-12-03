@@ -21,5 +21,8 @@
   "homepage": "https://github.com/AlanChuang-0710/Project_Mood_Frontend#readme",
   "devDependencies": {
     "npm-run-all": "^4.1.5"
+  },
+  "dependencies": {
+    "echarts-stat": "^1.2.0"
   }
 }

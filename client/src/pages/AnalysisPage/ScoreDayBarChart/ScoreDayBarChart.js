@@ -20,7 +20,24 @@ const ScoreDayBarChart = ({ height, scoreDayBarChartData }) => {
         }
 
         if (scoreDayBarChart && scoreDayBarChartData) {
-            dataArray = scoreDayBarChartData.data.data;
+            dataArray = JSON.parse(JSON.stringify(scoreDayBarChartData.data.data));
+
+
+            // 控制末端原角
+            for (let i = 0; i <= 6; i++) {
+                for (let j = dataArray.length - 1; j >= 0; j--) {
+                    if (dataArray[j][i]) {
+                        dataArray[j][i] = {
+                            value: dataArray[j][i],
+                            itemStyle: {
+                                borderRadius: [0, 10, 10, 0]
+                            }
+                        };
+                        break;
+                    }
+                }
+            };
+
             const unitBarOption = {
                 type: 'bar',
                 stack: 'total',
@@ -32,6 +49,7 @@ const ScoreDayBarChart = ({ height, scoreDayBarChartData }) => {
                         // return params.value + (params.value > 1 ? "days" : "day");
                     }
                 },
+                barWidth: "50%",
                 emphasis: {
                     focus: 'self'
                 },
@@ -43,7 +61,8 @@ const ScoreDayBarChart = ({ height, scoreDayBarChartData }) => {
                     axisPointer: {
                         // Use axis to trigger tooltip
                         type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-                    }
+                    },
+                    confine: false
                 },
                 grid: {
                     left: '3%',

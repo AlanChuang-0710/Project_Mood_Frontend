@@ -6,6 +6,7 @@ import ScoreFlowChart from './ScoreFlowChart/ScoreFlowChart';
 import ScoreDayBarChart from './ScoreDayBarChart/ScoreDayBarChart';
 import SleepFlowChart from './SleepFlowChart/SleepFlowChart';
 import ScoreAssociatedChart from "./ScoreAssociatedChart/ScoreAssociatedChart";
+import SleepScoreScatterChart from './SleepScoreScatterChart/SleepScoreScatterChart';
 import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetTagsScoreDataQuery, useGetKOLScoreDataQuery } from '../../store/api/analysisApi';
 import { selectCurrentUserId } from "../../store/reducer/authSlice";
 import { useGetComponentStyle } from "../../styles/dayNightStyle";
@@ -64,26 +65,24 @@ const AnalysisPage = () => {
             <ScoreFlowChart height={250} scoreFlowChartData={scoreFlowChartData} />
           </div>
         </Grid.Col>
-        <Grid.Col xs={12} md={6}>
+        <Grid.Col xs={12} md={4}>
           <div style={useGetComponentStyle()}>
-            <ScoreDayBarChart height={350} scoreDayBarChartData={scoreDayBarChartData} />
+            <ScoreDayBarChart height={300} scoreDayBarChartData={scoreDayBarChartData} />
           </div>
         </Grid.Col>
-        <Grid.Col xs={12} md={6}>
+        <Grid.Col xs={12} md={8}>
+          <div style={useGetComponentStyle()}>
+            <SleepFlowChart height={300} sleepFlowChartData={sleepFlowChartData} />
+          </div>
+        </Grid.Col>
+        <Grid.Col xs={12} md={4}>
+          <div style={useGetComponentStyle()}>
+            <SleepScoreScatterChart height={350} sleepFlowChartData={sleepFlowChartData} scoreFlowChartData={scoreFlowChartData} />
+          </div>
+        </Grid.Col>
+        <Grid.Col xs={12} md={8}>
           <div style={useGetComponentStyle()}>
             <div className={classes["score-report1"]}>
-              數據分析
-            </div>
-          </div>
-        </Grid.Col>
-        <Grid.Col xs={12} md={6}>
-          <div style={useGetComponentStyle()}>
-            <SleepFlowChart height={350} sleepFlowChartData={sleepFlowChartData} />
-          </div>
-        </Grid.Col>
-        <Grid.Col xs={12} md={6}>
-          <div style={useGetComponentStyle()}>
-            <div className={classes["score-report2"]}>
               數據分析
             </div>
           </div>
@@ -96,6 +95,20 @@ const AnalysisPage = () => {
         <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
             <ScoreAssociatedChart title={"Top 5 highly-associated Tags"} subtitle={"Tags hightly associated with daily emotion"} data={scoreTagsChartData} />
+          </div>
+        </Grid.Col>
+        <Grid.Col xs={12} md={6}>
+          <div style={useGetComponentStyle()}>
+            <div className={classes["score-report1"]}>
+              數據分析
+            </div>
+          </div>
+        </Grid.Col>
+        <Grid.Col xs={12} md={6}>
+          <div style={useGetComponentStyle()}>
+            <div className={classes["score-report2"]}>
+              數據分析
+            </div>
           </div>
         </Grid.Col>
       </Grid >

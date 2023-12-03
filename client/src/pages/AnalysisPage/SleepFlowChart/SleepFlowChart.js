@@ -97,7 +97,7 @@ const SleepFlowChart = ({ height, sleepFlowChartData }) => {
                 },
                 grid: {
                     top: "20px",
-                    left: "14px",
+                    left: "20px",
                     right: "8px",
                     bottom: "15px",
                     containLabel: true

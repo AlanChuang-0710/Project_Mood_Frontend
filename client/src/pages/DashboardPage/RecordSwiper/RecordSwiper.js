@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, useMantineTheme, } from "@mantine/core";
-import { useViewportSize } from '@mantine/hooks';
+import { Grid, useMantineTheme, Modal } from "@mantine/core";
+import { useViewportSize, useDisclosure } from '@mantine/hooks';
 import SVG from "react-inlinesvg";
 import moment from 'moment';
 import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
@@ -19,8 +19,9 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
     // 獲得視口寬度
     const { width } = useViewportSize();
     const theme = useMantineTheme();
-
     const userId = useSelector(selectCurrentUserId);
+
+    const [opened, { open, close }] = useDisclosure(false);
 
     const [deleteFeeling, { isLoading, isSuccess }] = useDeleteFeelingMutation();
 
@@ -65,7 +66,7 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
     }, [monthlyRecord]);
 
     const toolList = [
-        { icon: uploadIcon, fn: () => { console.log("upload"); } },
+        { icon: uploadIcon, fn: () => { open(); } },
         {
             icon: deleteIcon, fn: (({ userId: id, _id: feelingId }) => {
                 deleteFeeling({ id, feelingId });
@@ -105,6 +106,11 @@ const RecordSwiper = ({ openDailyRecord, monthlyRecord, setSelectedDateValue }) 
             </Chip.Group> */}
 
             {/* <div className={classes.title} style={{ color: theme.colorScheme === "light" ? "#4f5250" : theme.colors.tool[1] }}>October 2023</div> */}
+
+            <Modal opened={opened} onClose={close} title="Share">
+                Share with others
+            </Modal>
+
             <Swiper spaceBetween={10}
                 slidesPerView={slidesPerView}
                 direction="vertical"

@@ -69,6 +69,7 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
                         }
                     },
                     axisLabel: {
+                        rotate: 0,
                         formatter: (value) => nameMap[value + 2],
                         // color: (value, index) => {
                         //     // 注意返回值為string

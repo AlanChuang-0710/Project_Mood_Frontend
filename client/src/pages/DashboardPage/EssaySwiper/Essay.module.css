@@ -1,0 +1,27 @@
+.essay-swiper {
+  height: 550px;
+}
+.essay-swiper .essay-slide {
+  cursor: pointer;
+}
+.essay-swiper .essay-slide .title {
+  font-size: 20px;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.essay-swiper .essay-slide .author {
+  font-size: 16px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.essay-swiper .essay-slide .introduction {
+  font-size: 12px;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}/*# sourceMappingURL=Essay.module.css.map */

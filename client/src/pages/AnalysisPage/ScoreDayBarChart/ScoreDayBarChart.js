@@ -20,7 +20,7 @@ const ScoreDayBarChart = ({ height, scoreDayBarChartData }) => {
         }
 
         if (scoreDayBarChart && scoreDayBarChartData) {
-            dataArray = JSON.parse(JSON.stringify(scoreDayBarChartData.data.data));
+            dataArray = JSON.parse(JSON.stringify(scoreDayBarChartData.data.barData));
 
 
             // 控制末端原角

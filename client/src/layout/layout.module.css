@@ -1,0 +1,42 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+@keyframes enter {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.nav {
+  border-radius: 15px;
+  padding: 10px;
+  transform: translateX(-100%);
+  animation: enter 0.5s forwards;
+  height: 100%;
+}
+.nav .nav-logo {
+  font-size: 40px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  color: var(--mantine-color-brand-0);
+}
+.nav button .nav-icon {
+  font-size: 20px;
+  color: var(--mantine-color-tool-0);
+}
+.nav button span {
+  font-size: 16px;
+}
+.nav .nav-close {
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+  top: 0;
+}/*# sourceMappingURL=layout.module.css.map */

@@ -2,6 +2,8 @@
 const express = require("express");
 const router = express.Router();
 
+const moment = require("moment");
+
 // 導入結巴
 const jieba = require("@node-rs/jieba");
 
@@ -96,30 +98,33 @@ router.get("/:id/score_day_bar", checkTokenMiddleware, getUserPeriodFeelingMiddl
             }
         };
 
-        // 切分出各day的情緒
-        const dayArray = { day0: [], day1: [], day2: [], day3: [], day4: [], day5: [], day6: [] };
+        // 確認日期屬於星期幾 (這件任務理應當放在前端，讓前端依據本地時間進行判斷，但此專案暫先不考慮跨時區問題)
+        const dayMapping = { "Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6 };
+
+        // 切分出各day的情緒 規定day0必須是星期日
+        const dayArray = { Sunday: [], Monday: [], Tuesday: [], Wednesday: [], Thursday: [], Friday: [], Saturday: [] };
         result.forEach((item, index) => {
-            switch (index % 7) {
+            switch (dayMapping[moment(item.timestamp).format("dddd")] % 7) {
                 case 0:
-                    dayArray.day0.push(item);
+                    dayArray.Sunday.push(item);
                     break;
                 case 1:
-                    dayArray.day1.push(item);
+                    dayArray.Monday.push(item);
                     break;
                 case 2:
-                    dayArray.day2.push(item);
+                    dayArray.Tuesday.push(item);
                     break;
                 case 3:
-                    dayArray.day3.push(item);
+                    dayArray.Wednesday.push(item);
                     break;
                 case 4:
-                    dayArray.day4.push(item);
+                    dayArray.Thursday.push(item);
                     break;
                 case 5:
-                    dayArray.day5.push(item);
+                    dayArray.Friday.push(item);
                     break;
                 case 6:
-                    dayArray.day6.push(item);
+                    dayArray.Saturday.push(item);
                     break;
                 default:
             }
@@ -144,7 +149,8 @@ router.get("/:id/score_day_bar", checkTokenMiddleware, getUserPeriodFeelingMiddl
             msg: "Score day bar data got",
             data: {
                 total: result.length,
-                data: newArr
+                barData: newArr,
+                dayData: dayArray
             }
         });
     } catch (err) {

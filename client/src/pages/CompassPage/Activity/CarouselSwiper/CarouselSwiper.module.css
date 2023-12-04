@@ -1,0 +1,16 @@
+.title {
+  font-size: 25px;
+  text-align: center;
+}
+
+.swiper-container {
+  padding: 4px;
+}
+.swiper-container .activity-swiper .activity-slide {
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+}
+.swiper-container .activity-swiper .activity-slide img {
+  height: 100%;
+}/*# sourceMappingURL=CarouselSwiper.module.css.map */

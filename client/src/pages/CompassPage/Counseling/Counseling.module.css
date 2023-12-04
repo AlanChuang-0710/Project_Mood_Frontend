@@ -1,0 +1,36 @@
+.card .meditation-option, .card .chat-option, .card .rainbow-card-option, .card .psychological-option {
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.card-wrapper {
+  transition: all 0.5s;
+}
+.card-wrapper:active {
+  transform: translateY(5px);
+}
+
+.card {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.card:hover {
+  transform: scale(1.1);
+}
+.card .psychological-option {
+  background-image: url(../../../assets/compass/option_doctor.svg);
+}
+.card .rainbow-card-option {
+  background-image: url(../../../assets/compass/option_rainbow_card.svg);
+}
+.card .chat-option {
+  background-image: url(../../../assets/compass/option_talk.svg);
+}
+.card .meditation-option {
+  background-image: url(../../../assets/compass/option_meditation.svg);
+}/*# sourceMappingURL=Counseling.module.css.map */

@@ -1,0 +1,21 @@
+.avatar {
+  position: relative;
+  padding: 10px 20px;
+  max-width: 200px;
+  margin: 0 auto;
+}
+.avatar .edit {
+  position: absolute;
+  right: 13px;
+  bottom: 10px;
+}
+
+.form {
+  padding-top: 10px;
+  max-width: 380px;
+}
+
+.privacy-term {
+  padding-left: 20px;
+  margin-top: 2px;
+}/*# sourceMappingURL=AccountPage.module.css.map */

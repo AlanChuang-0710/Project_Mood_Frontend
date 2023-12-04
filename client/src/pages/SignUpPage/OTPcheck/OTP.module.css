@@ -1,0 +1,17 @@
+.otp .phone-icon {
+  text-align: center;
+}
+.otp .title {
+  font-size: 25px;
+}
+.otp .reminder {
+  font-size: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.otp .pin-input {
+  margin-bottom: 58px;
+}
+.otp .btn button {
+  background-color: #da8938;
+}/*# sourceMappingURL=OTP.module.css.map */

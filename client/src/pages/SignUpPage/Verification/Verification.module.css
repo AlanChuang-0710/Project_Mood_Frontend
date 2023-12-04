@@ -1,0 +1,17 @@
+.verification .phone-icon {
+  text-align: center;
+}
+.verification .title {
+  font-size: 25px;
+}
+.verification .reminder {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.verification .phone {
+  height: 80px;
+  margin-bottom: 20px;
+}
+.verification .btn button {
+  background-color: #da8938;
+}/*# sourceMappingURL=Verification.module.css.map */

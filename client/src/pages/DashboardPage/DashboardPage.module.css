@@ -1,0 +1,69 @@
+.shortcut .support-shortcut, .shortcut .sad-shortcut, .shortcut .happy-shortcut {
+  height: 145px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.phrase-wrapper {
+  height: 100%;
+  padding: 10px 0 20px 10px;
+}
+.phrase-wrapper .phrase-title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.phrase-wrapper .phrase-subtitle {
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.shortcut .shortcut-wrapper {
+  transition: all 0.2s;
+  cursor: pointer;
+  overflow: hidden;
+}
+.shortcut .shortcut-wrapper:active {
+  transform: translateY(5px);
+}
+.shortcut .shortcut-title {
+  text-align: center;
+}
+.shortcut .happy-shortcut {
+  background-image: url(../../assets/dashboard/happy_action.svg);
+}
+.shortcut .sad-shortcut {
+  background-image: url(../../assets/dashboard/negative_action.svg);
+  transform: translateY(15px);
+}
+.shortcut .support-shortcut {
+  background-image: url(../../assets/dashboard/support_action.svg);
+  transform: translateY(6px);
+}
+
+.calendar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.calendar button[data-selected] {
+  border-radius: 20px;
+  background-color: var(--mantine-color-brand-3);
+  color: black !important;
+  opacity: 0.6;
+}
+.calendar button[data-selected]:hover,
+.calendar button:hover {
+  border-radius: 20px;
+  background-color: var(--mantine-color-brand-3);
+  color: black !important;
+  opacity: 0.6;
+}
+
+.month-wrapper {
+  padding: 2px 15px 20px;
+}/*# sourceMappingURL=DashboardPage.module.css.map */

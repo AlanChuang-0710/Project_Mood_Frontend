@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, useMantineTheme, SegmentedControl } from "@mantine/core";
 import ScoreRatioPieChart from "./ScoreRatioPieChart/ScoreRatioPieChart";
@@ -34,6 +34,53 @@ const AnalysisPage = () => {
   const { data: scoreTagsChartData } = useGetTagsScoreDataQuery({ id, startTime, endTime });
 
   const { data: scoreKOLChartData } = useGetKOLScoreDataQuery({ id, startTime, endTime });
+
+
+  // 數據分析
+  useEffect(() => {
+
+    // 心情佔比
+    if (scorePieChartData) {
+      let happyRatio = (scorePieChartData.data.data[4].count / scorePieChartData.data.total).toFixed(2) * 100;
+      let depressionRatio = (scorePieChartData.data.data[0].count / scorePieChartData.data.total).toFixed(2) * 100;
+    };
+
+    // 波動率 (介於0 ~ 2之間)
+    if (scoreFlowChartData) {
+      let scoreArray = [];
+
+      scoreFlowChartData.data.forEach((item) => {
+        if (item.score !== null) {
+          scoreArray.push(item.score);
+        }
+      });
+      function calculateStandardDeviation(data) {
+        const n = data.length;
+
+        if (n === 0) return 0;
+        
+        // 計算平均值
+        const mean = data.reduce((sum, value) => sum + value, 0) / n;
+
+        // 計算每個數據點與平均值的差異的平方
+        const squaredDifferences = data.map(value => Math.pow(value - mean, 2));
+
+        // 計算平方差的平均值，然後取平方根得到標準差
+        const variance = squaredDifferences.reduce((sum, value) => sum + value, 0) / n;
+        const standardDeviation = Math.sqrt(variance).toFixed(2);
+        return standardDeviation;
+      };
+      let scoreVolatility = calculateStandardDeviation(scoreArray);
+    }
+
+    // 星期幾低潮佔比較高，建議可以特別注意
+
+    // 睡眠時段主要分布範圍 (幾個小時到幾個小時之間)
+
+    // 結合睡眠與心情時間圖，進行綜合分析，可以發現___
+
+
+  }, [scorePieChartData, scoreFlowChartData]);
 
   return (
     <div>
@@ -83,7 +130,7 @@ const AnalysisPage = () => {
         <Grid.Col xs={12} md={8}>
           <div style={useGetComponentStyle()}>
             <div className={classes["score-report1"]}>
-              數據分析
+              過去一{value === "month" ? "個月" : "年"}當中，XXX總共記錄了___天心情筆記。從筆記中，我們發現開心佔比約___%；低潮佔比約___%。
             </div>
           </div>
         </Grid.Col>

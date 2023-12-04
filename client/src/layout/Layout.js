@@ -5,6 +5,7 @@ import { AppShell, Navbar, useMantineTheme, Burger, Menu, Text } from '@mantine/
 import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '@mantine/core';
 import { IconSettings, IconLogout, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
 import { HouseDoor, Gear, Bell, Search, GraphUp, Compass, BodyText, Award } from "react-bootstrap-icons";
+import Loader from '../components/Loader/Loader';
 import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
 import { selectCurrentAccessToken, logout } from "../store/reducer/authSlice";
 import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
@@ -171,7 +172,8 @@ const Layout = (props) => {
         // }
         >
             <div >
-                <Suspense fallback={<>Loading...</>}>
+                {/* <Suspense fallback={<Loader />}> */}
+                <Suspense fallback={<>Loading</>}>
                     <Outlet />
                 </Suspense>
             </div>

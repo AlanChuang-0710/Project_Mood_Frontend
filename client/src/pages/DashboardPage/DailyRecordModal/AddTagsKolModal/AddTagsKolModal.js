@@ -12,6 +12,7 @@ const AddTagsKolModal = ({ opened, close, title, placeholder, type }) => {
     const addHandler = useCallback(async () => {
         if (textRef.current.value === "") return;
         const data = { [type]: textRef.current.value };
+        console.log(data);
         const result = await updateUserKOLTags({ id, type, data });
         close();
     }, [id, updateUserKOLTags, close]);

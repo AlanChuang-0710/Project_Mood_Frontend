@@ -105,11 +105,6 @@ router.post("/:id/options/:type", checkTokenMiddleware, async function (req, res
     if (!userData) {
         userData = new FeelingModel({
             userId,
-            options: {
-                KOL: [],
-                tags: []
-            },
-            dailyFeeling: []
         });
     };
     const data = req.body[type];
@@ -244,10 +239,6 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
         } else {
             const newUser = new FeelingModel({
                 userId,
-                options: {
-                    KOL: {},
-                    tags: {}
-                },
                 dailyFeeling: [{ ...req.body }]
             });
             const data = await newUser.save();

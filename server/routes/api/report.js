@@ -137,11 +137,12 @@ router.get("/:id/score_day_bar", checkTokenMiddleware, getUserPeriodFeelingMiddl
         };
 
         let newArr = [];
+        const dayArrMapping = ["Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"];
         scoreArray.forEach((item, index) => {
-            for (let prop in dayArray) {
+            dayArrMapping.forEach((item) => {
                 if (!newArr[index]) newArr[index] = [];
-                newArr[index].push(dayArray[prop][index]);
-            }
+                newArr[index].push(dayArray[item][index]);
+            });
         });
 
         res.json({

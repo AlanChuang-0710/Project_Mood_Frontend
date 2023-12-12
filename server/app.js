@@ -1,7 +1,8 @@
 const createError = require('http-errors');
-const express = require('express');
 const path = require('path');
+const fs = require("fs");
 const cookieParser = require('cookie-parser');
+const express = require('express');
 const logger = require('morgan');
 
 // 導入api
@@ -58,6 +59,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 未來前端打包後，發送html設定
+app.get("/", (req, res) => {
+  const readStream = fs.createReadStream(path.resolve(__dirname, "./public/index.html"));
+  readStream.pipe(res);
+});
 app.use('/users', authRouter);
 app.use('/feeling', feelingRouter);
 app.use('/setting', settingRouter);

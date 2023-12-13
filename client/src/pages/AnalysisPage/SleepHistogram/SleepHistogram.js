@@ -32,6 +32,12 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
             let sleepArr = sleepFlowChartData.data.map((item) => item.sleep);
             let option = {
                 xAxis: {
+                    name: "sleeping hours per day",
+                    nameLocation: "middle",
+                    nameGap: 25,
+                    nameTextStyle: {
+                        color: "#aaa",
+                    },
                     axisLine: {
                         onZeroAxisIndex: -3
                     },
@@ -39,11 +45,12 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
                         show: false
                     },
                     min: function (value) {
-                        return value.min - 2;
+                        return 0;
                     },
                     max: function (value) {
-                        return value.max + 2;
+                        return 24;
                     },
+                    interval: 2,
                     splitLine: {
                         lineStyle: {
                             opacity: 0.2
@@ -51,6 +58,12 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
                     },
                 },
                 yAxis: {
+                    name: "counts",
+                    nameLocation: "middle",
+                    nameGap: 21,
+                    nameTextStyle: {
+                        color: "#aaa",
+                    },
                     min: function (value) {
                         return value.min;
                     },
@@ -68,19 +81,31 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
                 },
                 grid: {
                     top: "20px",
-                    left: "12px",
+                    left: "16px",
                     right: "10px",
-                    bottom: "15px",
+                    bottom: "20px",
                     containLabel: true
                 },
                 tooltip: {
-                    show: true
+                    show: true,
+                    formatter: (params) => {
+                        return `<div style="width: 160px; border-radius: 5px">
+                            <div style="display: flex; justify-content: space-between">
+                                <div>Sleeping Hours: </div>
+                                <div>${params.data[0] - 1}~${params.data[0] / 1 + 1}</div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between">
+                                <div>Count: </div>
+                                <div>${params.data[1]}</div>
+                            </div>
+                        </div>`;
+                    },
                 },
                 series: [
                     {
                         name: 'SH Histogram',
                         type: 'bar',
-                        barWidth: '100%',
+                        barWidth: '50%',
                         data: dataTransform(sleepArr),
                         itemStyle: {
                             borderRadius: [15, 15, 0, 0]
@@ -90,6 +115,11 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
             };
             sleepHistogram.setOption(option);
         }
+        const handleResize = () => sleepHistogram?.resize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
 
     }, [sleepFlowChartData, sleepHistogram]);
 

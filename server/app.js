@@ -17,9 +17,10 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
 // 導入配置項
-const { DBHOST, DBPORT, DBNAME } = require("./config/config");
+const { DBHOST, DBPORT, DBNAME, FRONTENDPORT } = require("./config/config");
 
 const app = express();
+
 
 // 設置session中間件
 app.use(session({
@@ -38,9 +39,11 @@ app.use(session({
 
 // 導入cors
 const cors = require('cors');
+const { error } = require('console');
 const corsOptions = {
   origin: [
-    'http://localhost:8550',
+    // 前端url
+    `http://localhost:${FRONTENDPORT}`,
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   credentials: true
@@ -60,8 +63,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 未來前端打包後，發送html設定
-app.get("/", (req, res) => {
-  const readStream = fs.createReadStream(path.resolve(__dirname, "./public/index.html"));
+app.get("/", (req, res, next) => {
+  const readStream = fs.createReadStream(path.resolve(__dirname, "./public/index.html")).on("error", (error) => {
+    next(error);
+  });
   readStream.pipe(res);
 });
 app.use('/users', authRouter);

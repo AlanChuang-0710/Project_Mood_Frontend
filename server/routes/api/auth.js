@@ -65,38 +65,34 @@ router.post("/login", async (req, res) => {
         return errRes();
     }
     // 查詢數據庫
-    try {
-        const data = await UserModel.findOne({ email, password: md5(password) });
-        if (data) {
-            let { id, username } = data;
+    const data = await UserModel.findOne({ email, password: md5(password) });
+    if (data) {
+        let { id, username } = data;
 
-            // 創建accessToken
-            const accessToken = jwt.sign({ email, id }, ACCESS_TOKEN_SECRET,
-                { expiresIn: 60 * 10 } // 10分鐘過期
-            );
+        // 創建accessToken
+        const accessToken = jwt.sign({ email, id }, ACCESS_TOKEN_SECRET,
+            { expiresIn: 60 * 10 } // 10分鐘過期
+        );
 
-            // 創建refreshToken
-            const refreshToken = jwt.sign({ email, id }, REFRESH_TOKEN_SECRET,
-                { expiresIn: 60 * 60 * 12 } // 12小時過期
-            );
+        // 創建refreshToken
+        const refreshToken = jwt.sign({ email, id }, REFRESH_TOKEN_SECRET,
+            { expiresIn: 60 * 60 * 12 } // 12小時過期
+        );
 
-            // Assigning refresh token in http-only cookie
-            // samesite 限制跨域請求、secure 限制只能https或不限http/https傳送
-            res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 12, sameSite: "None", secure: true });
+        // Assigning refresh token in http-only cookie
+        // samesite 限制跨域請求、secure 限制只能https或不限http/https傳送
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 12, sameSite: "None", secure: true });
 
-            // 以json格式 提供 token, 給用戶 
-            res.json({
-                code: 2000,
-                msg: "Login succeeds",
-                data: { accessToken, id, username, email }
-            });
-        } else {
-            errRes("Please fill in correct email or password");
-        }
-    } catch (err) {
-        console.log(err);
-        errRes(err.msg);
-    };
+        // 以json格式 提供 token, 給用戶 
+        res.json({
+            code: 2000,
+            msg: "Login succeeds",
+            data: { accessToken, id, username, email }
+        });
+    } else {
+        errRes("Please fill in correct email or password");
+    }
+
 });
 
 // 獲取refresh

@@ -5,6 +5,10 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const logger = require('morgan');
 
+// 導入統一錯誤處理中間件，之後所有中間件都會被包上一層錯誤處理函數
+// https://juejin.cn/post/7114645499696644103
+require('express-async-errors');
+
 // 導入api
 const feelingRouter = require('./routes/api/feeling');
 const authRouter = require('./routes/api/auth');
@@ -20,7 +24,6 @@ const MongoStore = require("connect-mongo");
 const { DBHOST, DBPORT, DBNAME, FRONTENDPORT } = require("./config/config");
 
 const app = express();
-
 
 // 設置session中間件
 app.use(session({
@@ -39,7 +42,6 @@ app.use(session({
 
 // 導入cors
 const cors = require('cors');
-const { error } = require('console');
 const corsOptions = {
   origin: [
     // 前端url
@@ -82,6 +84,7 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+  console.log("全局錯誤中間件攔截", err);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

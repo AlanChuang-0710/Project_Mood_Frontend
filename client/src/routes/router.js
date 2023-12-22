@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, createHashRouter } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
 import Layout from '../layout/Layout';
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import LoginPage from "../pages/LoginPage/LoginPage";
@@ -11,23 +12,23 @@ const CompassPage = lazy(() => import("../pages/CompassPage/CompassPage"));
 const WordAnalysisPage = lazy(() => import("../pages/WordAnalysisPage/WordAnalysisPage"));
 const AdministratorPage = lazy(() => import("../pages/Administrator/AdministratorPage"));
 
-const routes = [
+const router = [
     { path: '/', element: <Navigate to="/login" /> },
     { path: '/login', element: <LoginPage /> },
     { path: '/signup', element: <Navigate to="/signup/create" /> },
     { path: '/signup/:tabValue', element: <SignUpPage /> },
     {
-        element: <Layout />,
+        element: <ProtectedRoute><Layout /></ProtectedRoute>,
         children: [
-            { path: '/dashboard', element: <DashboardPage /> },
-            { path: '/account', element: <AccountPage /> },
-            { path: '/analysis', element: <AnalysisPage /> },
-            { path: '/word-analysis', element: <WordAnalysisPage /> },
-            { path: '/compass', element: <CompassPage /> },
-            { path: '/administrator', element: <AdministratorPage /> },
+            { path: '/dashboard', element: <DashboardPage />, handle: { permission: ["users"] } },
+            { path: '/account', element: <AccountPage />, handle: { permission: ["users"] } },
+            { path: '/analysis', element: <AnalysisPage />, handle: { permission: ["users"] } },
+            { path: '/word-analysis', element: <WordAnalysisPage />, handle: { permission: ["users"] } },
+            { path: '/compass', element: <CompassPage />, handle: { permission: ["users"] } },
+            { path: '/administrator', element: <AdministratorPage />, handle: { permission: ["admin"] } },
         ],
     },
     { path: '*', element: <NotFoundPage /> },
 ];
 
-export default routes;
+export default createHashRouter(router);

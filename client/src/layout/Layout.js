@@ -1,29 +1,20 @@
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useState } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AppShell, Navbar, useMantineTheme, Burger, Menu, Text } from '@mantine/core';
 import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '@mantine/core';
 import { IconSettings, IconLogout, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
 import { HouseDoor, Gear, Bell, Search, GraphUp, Compass, BodyText, Award } from "react-bootstrap-icons";
-import Loader from '../components/Loader/Loader';
+// import Loader from '../components/Loader/Loader';
 import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
-import { selectCurrentAccessToken, logout } from "../store/reducer/authSlice";
+import { logout } from "../store/reducer/authSlice";
 import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
 import classes from "./layout.module.scss";
 
 const Layout = (props) => {
-    /* 路由權限 */
-    // 透過selector抓取accessToken
-    const accessToken = useSelector(selectCurrentAccessToken);
+
     const location = useLocation();
     const nav = useNavigate();
-
-    /* 路由守衛 避免沒有token直接進入保護的頁面 */
-    useEffect(() => {
-        if (!accessToken) {
-            nav("/login", { replace: true, state: { from: location } });
-        };
-    });
 
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(true);

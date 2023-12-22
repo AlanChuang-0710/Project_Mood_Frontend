@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { useRoutes } from 'react-router-dom';
+import {  RouterProvider } from 'react-router-dom';
 import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
-import routes from './routes/router';
+import router from './routes/router';
 
 function App() {
   const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
-
-  // 引入路由
-  const routeList = useRoutes(routes);
 
   return (
     <div className="App">
@@ -31,7 +28,7 @@ function App() {
             // primaryColor: 'brand', //只接受colors中的鍵
           }}>
           <Notifications />
-          {routeList}
+          <RouterProvider router={router}></RouterProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </div>

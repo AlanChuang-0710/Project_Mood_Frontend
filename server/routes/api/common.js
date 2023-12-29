@@ -33,65 +33,49 @@ router.get("/:id/:property", checkTokenMiddleware, function (req, res) {
 router.post("/:id", checkTokenMiddleware, async function (req, res) {
     let { propertyName, propertyData } = req.body;
 
-    try {
-        let memberCommonData = await CommonModel.findOne();
+    let memberCommonData = await CommonModel.findOne();
 
-        // findOne找不到返回null find找不到返回[]
-        if (!memberCommonData) {
-            const common = new CommonModel({ [propertyName]: propertyData });
-            await common.save();
-        } else {
-            propertyData.forEach((item) => memberCommonData[propertyName].push(item));
-            await memberCommonData.save();
-        }
-        res.json({
-            code: "2000",
-            msg: "Common info Updated",
-            data: null
-        });
-    } catch (err) {
-        res.json({
-            code: "5000",
-            msg: err,
-            data: null
-        });
+    // findOne找不到返回null find找不到返回[]
+    if (!memberCommonData) {
+        const common = new CommonModel({ [propertyName]: propertyData });
+        await common.save();
+    } else {
+        propertyData.forEach((item) => memberCommonData[propertyName].push(item));
+        await memberCommonData.save();
     }
+    res.json({
+        code: "2000",
+        msg: "Common info Updated",
+        data: null
+    });
 });
 
 // 僅限admin權限: 刪除各類型用戶的通用資料
 // property 目前有lesson, essay
 // lesson, essay元素的id
 router.delete("/:id", checkTokenMiddleware, async function (req, res) {
-    try {
-        let { property, id } = req.body;
-        let memberCommonData = await CommonModel.findOne();
-        if (!memberCommonData) {
-            return res.json({
-                code: 2001,
-                msg: `Sth's wrong!`,
-                data: null
-            });
-        }
-        memberCommonData[property].every((item, index, array) => {
-            if (item.id === id) {
-                array.splice(index, 1);
-                return false;
-            }
-            return true;
-        });
-        res.json({
-            code: 2000,
-            msg: "Common data deleted",
-            data: null
-        });
-        memberCommonData.save();
-    } catch (err) {
-        res.json({
-            code: 5000,
-            msg: err,
+    let { property, id } = req.body;
+    let memberCommonData = await CommonModel.findOne();
+    if (!memberCommonData) {
+        return res.json({
+            code: 4000,
+            msg: `Common data not exists`,
             data: null
         });
     }
+    memberCommonData[property].every((item, index, array) => {
+        if (item.id === id) {
+            array.splice(index, 1);
+            return false;
+        }
+        return true;
+    });
+    res.json({
+        code: 2000,
+        msg: "Common data deleted",
+        data: null
+    });
+    memberCommonData.save();
 });
 
 

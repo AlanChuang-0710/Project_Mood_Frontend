@@ -3,14 +3,15 @@ const express = require('express');
 const router = express.Router();
 
 // 導入用戶上傳圖片相關
-const fs = require("fs");
+const fs = require('fs');
+const fsPromise = require('fs').promises;
 const moment = require("moment");
 const { nanoid } = require("nanoid");
 const multer = require('multer');
 const path = require("path");
 const storage = multer.diskStorage({
     // 如果destination使用函數，則必須自己創建目標資料夾; 如果destination使用string，則multer會協助創建
-    destination: function (req, file, cb) {
+    destination: async function (req, file, cb) {
         // 因為form.append的關係，前端回傳的時間格式為 string "2023-11-01T16:00:00.000Z"
         req.body.timestamp = new Date(req.body.timestamp); // 限制只能存儲Date對象
 
@@ -19,11 +20,10 @@ const storage = multer.diskStorage({
         const targetIdDir = path.resolve(__dirname, `../../public/images/${userId}`);
         const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${timestamp}`);
 
-        if (!fs.existsSync(targetIdDir)) {
-            fs.mkdirSync(targetIdDir);
-        }
 
-        if (fs.existsSync(targetDayDir)) {
+        await fsPromise.mkdir(targetIdDir, { recursive: true }, { recursive: true });
+
+        if (await fsPromise.stat(targetDayDir).catch(err => err.code !== 'ENOENT')) {
             // 如果該文件夾存在，則刪除所有內部文件，第一張照片進來時，先清理掉所有照片，並將clearPhoto設為true，表示舊照片清理完畢。第二張照片進來時，就不再清理照片。
             // if (!req.body.clearPhoto) {
             //     fs.readdirSync(targetDayDir).forEach((file) => {
@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
             //     });
             // }
         } else {
-            fs.mkdirSync(targetDayDir);
+            fsPromise.mkdir(targetDayDir, { recursive: true });
         }
         cb(null, targetDayDir);
     },
@@ -239,6 +239,7 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
         } else {
             const newUser = new FeelingModel({
                 userId,
+                options: {},
                 dailyFeeling: [{ ...req.body }]
             });
             const data = await newUser.save();

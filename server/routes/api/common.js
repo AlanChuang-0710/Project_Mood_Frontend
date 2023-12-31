@@ -9,23 +9,29 @@ const UserModel = require("../../models/UserModel");
 const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware");
 
 // 獲取所有用戶通用的資料
-router.get("/:id/:property", checkTokenMiddleware, function (req, res) {
+router.get("/:id/:property", checkTokenMiddleware, async function (req, res) {
     const id = req.user.id;
     const property = req.params.property;
 
     // 從資料庫中確認用戶存在 並獲取common data
     // findById 或 findOne兩種寫法都ok，當使用findOne搜索id時，必須使用_id，否則找不到
     // UserModel.findOne({ _id: id }).then((data) => {
-    UserModel.findById(id).then(() => {
-        CommonModel.findOne().then((data) => {
-            res.json({
-                code: "2000",
-                msg: "Common info got",
-                data: { [property]: data[property] }
-            });
-        });
-    });
 
+    const user = await UserModel.findById(id);
+    if (user) {
+        const data = await CommonModel.findOne();
+        res.json({
+            code: "2000",
+            msg: "Common info got",
+            data: { [property]: data[property] }
+        });
+    } else {
+        res.json({
+            code: "4040",
+            msg: "User not found",
+            data: null
+        });
+    }
 });
 
 // 僅限admin權限: 新建各類型用戶的通用資料 

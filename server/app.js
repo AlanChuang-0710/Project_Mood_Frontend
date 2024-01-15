@@ -5,6 +5,9 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const logger = require('morgan');
 
+// 導入server監測器
+const expressStatusMonitor = require('express-status-monitor');
+
 // 導入統一錯誤處理中間件，之後所有中間件都會被包上一層錯誤處理函數
 // https://juejin.cn/post/7114645499696644103
 require('express-async-errors');
@@ -23,6 +26,21 @@ const MongoStore = require("connect-mongo");
 const { DBHOST, DBPORT, DBNAME, FRONTENDPORT } = require("./config/config");
 
 const app = express();
+
+// 設置server監控器，默認運行於127.0.0.1:3000/status
+app.use(expressStatusMonitor({
+  title: 'Mood API Server Performance',
+  chartVisibility: {
+    cpu: true,
+    mem: true,
+    load: true,
+    eventLoop: false,
+    heap: true,
+    responseTime: true,
+    rps: true,
+    statusCodes: true
+  },
+}));
 
 // 設置session中間件
 app.use(session({

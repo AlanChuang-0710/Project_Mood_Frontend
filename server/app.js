@@ -12,7 +12,6 @@ require('express-async-errors');
 // 導入api
 const feelingRouter = require('./routes/api/feeling');
 const authRouter = require('./routes/api/auth');
-const settingRouter = require("./routes/api/setting");
 const reportRouter = require("./routes/api/report");
 const commonRouter = require("./routes/api/common");
 
@@ -73,7 +72,6 @@ app.get("/", (req, res, next) => {
 });
 app.use('/users', authRouter);
 app.use('/feeling', feelingRouter);
-app.use('/setting', settingRouter);
 app.use("/report", reportRouter);
 app.use("/common", commonRouter);
 

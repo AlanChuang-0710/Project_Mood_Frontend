@@ -106,7 +106,7 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
                     {
                         name: 'SH Histogram',
                         type: 'bar',
-                        barWidth: '30%',
+                        barWidth: '10px',
                         data: dataTransform(sleepArr),
                         itemStyle: {
                             borderRadius: [15, 15, 0, 0]

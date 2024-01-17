@@ -4,6 +4,7 @@ const fs = require("fs");
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const logger = require('morgan');
+const rfs = require('rotating-file-stream');
 
 // 導入server監測器
 const expressStatusMonitor = require('express-status-monitor');
@@ -21,6 +22,9 @@ const commonRouter = require("./routes/api/common");
 // 導入session
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+
+// 導入cors
+const cors = require('cors');
 
 // 導入配置項
 const { DBHOST, DBPORT, DBNAME, FRONTENDPORT } = require("./config/config");
@@ -57,8 +61,7 @@ app.use(session({
   }
 }));
 
-// 導入cors
-const cors = require('cors');
+
 const corsOptions = {
   origin: [
     // 前端url
@@ -67,7 +70,6 @@ const corsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   credentials: true
 };
-
 // 設置cors中間件
 app.use(cors(corsOptions));
 
@@ -75,7 +77,30 @@ app.use(cors(corsOptions));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
+
+// create a rotating write stream
+const accessLogStream = rfs.createStream('access.log', {
+  interval: '1d', // rotate daily
+  size: "2M",
+  path: path.join(__dirname, 'log')
+});
+
+const logFormat = (tokens, req, res) => {
+  return [
+    "HTTP status",
+    tokens.status(req, res),
+    "ResTime",
+    tokens['response-time'](req, res),
+    'ms',
+    tokens.method(req, res),
+    tokens.url(req, res)
+  ].join(' ');
+};
+
+app.use(logger(logFormat, {
+  stream: accessLogStream,
+  // skip: function (req, res) { return res.statusCode < 400; }
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

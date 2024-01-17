@@ -1,0 +1,13 @@
+HTTP status 200 ResTime 28.568 ms POST /users/login
+HTTP status 304 ResTime 33.585 ms GET /feeling/65362f5401f9597b1b060752?startTime=1705420799995&endTime=1705420800005
+HTTP status 304 ResTime 42.016 ms GET /feeling/65362f5401f9597b1b060752/options?type=
+HTTP status 304 ResTime 51.499 ms GET /feeling/65362f5401f9597b1b060752?startTime=1704038400000&endTime=1706630400000
+HTTP status 200 ResTime 59.987 ms GET /common/65362f5401f9597b1b060752/essay
+HTTP status 304 ResTime 41.233 ms GET /report/65362f5401f9597b1b060752/score_pie_chart?startTime=1702742400000&endTime=1705420800000
+HTTP status 304 ResTime 60.514 ms GET /report/65362f5401f9597b1b060752/score_line_chart?startTime=1702742400000&endTime=1705420800000
+HTTP status 304 ResTime 87.694 ms GET /report/65362f5401f9597b1b060752/score_day_bar?startTime=1702742400000&endTime=1705420800000
+HTTP status 304 ResTime 90.113 ms GET /report/65362f5401f9597b1b060752/kol_score_chart?startTime=1702742400000&endTime=1705420800000
+HTTP status 304 ResTime 99.290 ms GET /report/65362f5401f9597b1b060752/tags_score_chart?startTime=1702742400000&endTime=1705420800000
+HTTP status 304 ResTime 125.784 ms GET /report/65362f5401f9597b1b060752/sleep_line_chart?startTime=1702742400000&endTime=1705420800000
+HTTP status 304 ResTime 114.308 ms GET /report/65362f5401f9597b1b060752/dream_keyword_chart?startTime=1702742400000&endTime=1705420800000
+HTTP status 304 ResTime 117.387 ms GET /report/65362f5401f9597b1b060752/memo_keyword_chart?startTime=1702742400000&endTime=1705420800000

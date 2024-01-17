@@ -65,7 +65,7 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
                         color: "#aaa",
                     },
                     min: function (value) {
-                        return value.min;
+                        return 0;
                     },
                     max: function (value) {
                         return value.max + (value.max % 2 ? 1 : 2);
@@ -73,6 +73,7 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
                     axisTick: {
                         show: false
                     },
+                    interval: 1,
                     splitLine: {
                         lineStyle: {
                             opacity: 0.2
@@ -105,7 +106,7 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
                     {
                         name: 'SH Histogram',
                         type: 'bar',
-                        barWidth: '50%',
+                        barWidth: '30%',
                         data: dataTransform(sleepArr),
                         itemStyle: {
                             borderRadius: [15, 15, 0, 0]

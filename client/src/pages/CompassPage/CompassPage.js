@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Tabs } from "@mantine/core";
+import { Grid, Tabs, useMantineTheme, SegmentedControl } from "@mantine/core";
 import Activity from '@/pages/CompassPage/Activity/Activity';
 import Counseling from '@/pages/CompassPage/Counseling/Counseling';
 import classes from "@/pages/CompassPage/CompassPage.module.scss";
@@ -8,16 +8,25 @@ import { useGetComponentStyle } from "@/styles/dayNightStyle";
 const CompassPage = () => {
     // const theme = useMantineTheme();
     const [activeTab, setActiveTab] = useState('counseling');
-
+    const theme = useMantineTheme();
     return (
         <div>
-            <Tabs value={activeTab} onTabChange={setActiveTab}>
-                <Tabs.List>
-                    <Tabs.Tab value="activity">Activity</Tabs.Tab>
-                    <Tabs.Tab value="counseling">Counseling</Tabs.Tab>
-                    <Tabs.Tab value="otherPlantform">Other platform</Tabs.Tab>
-                </Tabs.List>
-
+            <Grid>
+                <Grid.Col xs={12} md={5}>
+                    <SegmentedControl
+                        fullWidth
+                        color={theme.colorScheme === 'light' ? "" : "button.1"}
+                        value={activeTab}
+                        onChange={setActiveTab}
+                        data={[
+                            { label: 'Activity', value: 'activity' },
+                            { label: 'Counseling', value: 'counseling' },
+                            { label: 'Other platform', value: 'otherPlantform' },
+                        ]}
+                    />
+                </Grid.Col>
+            </Grid>
+            <Tabs value={activeTab} >
                 <Tabs.Panel value="activity">
                     {/* Annual Month Tab*/}
                     <div className={classes["panel-wrapper"]}>

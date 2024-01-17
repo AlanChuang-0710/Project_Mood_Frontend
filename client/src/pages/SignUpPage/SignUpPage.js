@@ -6,8 +6,8 @@ import { useForm } from '@mantine/form';
 import Verification from "./Verification/Verification";
 import OTPcheck from './OTPcheck/OTPcheck';
 import SignupResult from "./SignupResult/SignupResult";
-import { useRegisterMutation } from "../../store/api/authApi";
-import { dayBg, nightBg } from "../../assets/index.js";
+import { useRegisterMutation } from "@/store/api/authApi";
+import { dayBg, nightBg } from "@/assets/index.js";
 import classes from "./SignUpPage.module.scss";
 
 const SignUpPage = () => {

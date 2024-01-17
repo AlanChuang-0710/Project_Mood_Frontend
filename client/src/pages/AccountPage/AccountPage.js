@@ -4,10 +4,10 @@ import { Image, Button, TextInput, Group, Grid, Space, Checkbox, Spoiler } from 
 import { useViewportSize } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { IconPencil } from '@tabler/icons-react';
-import test from "../../assets/test.jpg";
-import { selectCurrentUserInfo } from "../../store/reducer/authSlice";
+import test from "@/assets/test.jpg";
+import { selectCurrentUserInfo } from "@/store/reducer/authSlice";
 import classes from "./AccountPage.module.scss";
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
+import { useGetComponentStyle } from "@/styles/dayNightStyle";
 
 const AccountPage = () => {
   const auth = useSelector(selectCurrentUserInfo);

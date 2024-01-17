@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMantineTheme, } from "@mantine/core";
 import { DataTable } from 'mantine-datatable';
-import ChartTableHeader from "../../../components/ChartTableHeader/ChartTableHeader";
+import ChartTableHeader from "@/components/ChartTableHeader/ChartTableHeader";
 import classes from "./RepeatedWordTable.module.scss";
 
 // datatable document

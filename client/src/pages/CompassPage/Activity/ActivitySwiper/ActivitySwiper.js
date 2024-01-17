@@ -5,8 +5,8 @@ import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import classes from "./Activity.module.scss";
-import test from "../../../../assets/test.jpg";
-import test2 from "../../../../assets/test2.png";
+import test from "@/assets/test.jpg";
+import test2 from "@/assets/test2.png";
 
 
 SwiperCore.use([Scrollbar, Mousewheel]);

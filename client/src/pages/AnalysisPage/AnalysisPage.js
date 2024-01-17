@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, useMantineTheme, SegmentedControl } from "@mantine/core";
-import ScoreRatioPieChart from "./ScoreRatioPieChart/ScoreRatioPieChart";
-import ScoreFlowChart from './ScoreFlowChart/ScoreFlowChart';
-import ScoreDayBarChart from './ScoreDayBarChart/ScoreDayBarChart';
-import SleepFlowChart from './SleepFlowChart/SleepFlowChart';
-import ScoreAssociatedChart from "./ScoreAssociatedChart/ScoreAssociatedChart";
-import SleepScoreScatterChart from './SleepScoreScatterChart/SleepScoreScatterChart';
-import SleepHistogram from "./SleepHistogram/SleepHistogram";
-import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetTagsScoreDataQuery, useGetKOLScoreDataQuery } from '../../store/api/analysisApi';
-import { selectCurrentUserId } from "../../store/reducer/authSlice";
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
-import { getStartEndTime } from "../../utils/public";
-import classes from "./AnalysisPage.module.scss";
+import ScoreRatioPieChart from "@/pages/AnalysisPage/ScoreRatioPieChart/ScoreRatioPieChart";
+import ScoreFlowChart from '@/pages/AnalysisPage/ScoreFlowChart/ScoreFlowChart';
+import ScoreDayBarChart from '@/pages/AnalysisPage/ScoreDayBarChart/ScoreDayBarChart';
+import SleepFlowChart from '@/pages/AnalysisPage/SleepFlowChart/SleepFlowChart';
+import ScoreAssociatedChart from "@/pages/AnalysisPage/ScoreAssociatedChart/ScoreAssociatedChart";
+import SleepScoreScatterChart from '@/pages/AnalysisPage/SleepScoreScatterChart/SleepScoreScatterChart';
+import SleepHistogram from "@/pages/AnalysisPage/SleepHistogram/SleepHistogram";
+import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetTagsScoreDataQuery, useGetKOLScoreDataQuery } from '@/store/api/analysisApi';
+import { selectCurrentUserId } from "@/store/reducer/authSlice";
+import { useGetComponentStyle } from "@/styles/dayNightStyle";
+import { getStartEndTime } from "@/utils/public";
+import classes from "@/pages/AnalysisPage/AnalysisPage.module.scss";
 
 const AnalysisPage = () => {
   const theme = useMantineTheme();

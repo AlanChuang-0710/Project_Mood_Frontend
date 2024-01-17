@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, useMantineTheme, SegmentedControl } from "@mantine/core";
-import { selectCurrentUserId } from "../../store/reducer/authSlice";
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
+import { selectCurrentUserId } from "@/store/reducer/authSlice";
+import { useGetComponentStyle } from "@/styles/dayNightStyle";
 
 const Administrator = () => {
   const theme = useMantineTheme();

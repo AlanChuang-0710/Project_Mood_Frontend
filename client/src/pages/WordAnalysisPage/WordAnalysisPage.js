@@ -4,10 +4,10 @@ import { Grid, useMantineTheme, SegmentedControl, } from "@mantine/core";
 // import ScoreKOLTable from './ScoreKOLTable/ScoreKOLTable';
 import RepeatedWordTable from './RepeatedWordTable/RepeatedWordTable';
 import WorldCloudChart from './WordCloudChart/WorldCloudChart';
-import { useGetDreamKeywordDataQuery, useGetMemoKeywordDataQuery } from "../../store/api/analysisApi";
-import { selectCurrentUserId } from "../../store/reducer/authSlice";
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
-import { getStartEndTime } from "../../utils/public";
+import { useGetDreamKeywordDataQuery, useGetMemoKeywordDataQuery } from "@/store/api/analysisApi";
+import { selectCurrentUserId } from "@/store/reducer/authSlice";
+import { useGetComponentStyle } from "@/styles/dayNightStyle";
+import { getStartEndTime } from "@/utils/public";
 // import classes from "./WordAnalysisPage.module.scss";
 
 const WordAnalysisPage = () => {

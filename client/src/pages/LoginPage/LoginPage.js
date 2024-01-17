@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { PasswordInput, TextInput, Button, LoadingOverlay } from "@mantine/core";
-import { useLoginMutation } from "../../store/api/authApi";
-import { setCredentials } from "../../store/reducer/authSlice";
-import { googleIcon, facebookIcon, nightBg, dayBg } from "../../assets/index";
+import { useLoginMutation } from "@/store/api/authApi";
+import { setCredentials } from "@/store/reducer/authSlice";
+import { googleIcon, facebookIcon, nightBg, dayBg } from "@/assets/index";
 import classes from "./LoginPage.module.scss";
 const LoginPage = () => {
 

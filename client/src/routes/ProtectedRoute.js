@@ -1,6 +1,6 @@
 import { useNavigate, useLocation, useMatches } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectCurrentAccessToken } from "../store/reducer/authSlice";
+import { selectCurrentAccessToken } from "@/store/reducer/authSlice";
 
 const ProtectedRoute = ({ children }) => {
     /* 路由權限 */

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Grid, } from "@mantine/core";
-import Map from './Map/Map';
-import AddressTable from './AddressTable/AddressTable';
-import { useGetComponentStyle } from "../../../styles/dayNightStyle";
-import classes from "./Counseling.module.scss";
+import Map from '@/pages/CompassPage/Counseling/Map/Map';
+import AddressTable from '@/pages/CompassPage/Counseling/AddressTable/AddressTable';
+import { useGetComponentStyle } from "@/styles/dayNightStyle";
+import classes from "@/pages/CompassPage/Counseling/Counseling.module.scss";
 
 const Counseling = () => {
     // const theme = useMantineTheme();

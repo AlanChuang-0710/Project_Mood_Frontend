@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PinInput, Button } from "@mantine/core";
 import { useForm } from '@mantine/form';
-import { loginByPhone } from "../../../assets/index.js";
+import { loginByPhone } from "@/assets/index.js";
 import classes from "./OTP.module.scss";
 
 const OTPcheck = () => {

@@ -6,11 +6,11 @@ import { DatePicker } from '@mantine/dates';
 import RecordSwiper from "./RecordSwiper/RecordSwiper";
 import EssaySwiper from './EssaySwiper/EssaySwiper';
 import DailyRecordModal from './DailyRecordModal/DailyRecordModal';
-import { useGetUserFeelingQuery } from "../../store/api/feelingApi";
-import { useGetCommonEssayDataQuery } from "../../store/api/commonApi";
-import { selectCurrentUserId } from "../../store/reducer/authSlice";
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
-import { userImage } from "../../assets/index";
+import { useGetUserFeelingQuery } from "@/store/api/feelingApi";
+import { useGetCommonEssayDataQuery } from "@/store/api/commonApi";
+import { selectCurrentUserId } from "@/store/reducer/authSlice";
+import { useGetComponentStyle } from "@/styles/dayNightStyle";
+import { userImage } from "@/assets/index";
 import classes from "./DashboardPage.module.scss";
 
 const DashboardPage = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@mantine/core";
-import { signupSuccess } from "../../../assets/index.js";
+import { signupSuccess } from "@/assets/index.js";
 import classes from "./SignupResult.module.scss";
 
 

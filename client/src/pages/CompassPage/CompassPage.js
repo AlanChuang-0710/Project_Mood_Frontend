@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Grid, Tabs } from "@mantine/core";
-import Activity from './Activity/Activity';
-import Counseling from './Counseling/Counseling';
-import classes from "./CompassPage.module.scss";
-import { useGetComponentStyle } from "../../styles/dayNightStyle";
+import Activity from '@/pages/CompassPage/Activity/Activity';
+import Counseling from '@/pages/CompassPage/Counseling/Counseling';
+import classes from "@/pages/CompassPage/CompassPage.module.scss";
+import { useGetComponentStyle } from "@/styles/dayNightStyle";
 
 const CompassPage = () => {
     // const theme = useMantineTheme();

@@ -10,7 +10,6 @@ const ProtectedRoute = ({ children }) => {
     const nav = useNavigate();
     const matches = useMatches();
     let test = matches.find((item) => item.pathname === location.pathname);
-    console.log(test);
 
     /* 路由守衛 避免沒有token直接進入保護的頁面 */
     if (!accessToken) return nav("/login", { replace: true, state: { from: location } });

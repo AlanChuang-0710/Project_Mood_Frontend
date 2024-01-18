@@ -18,13 +18,14 @@ const baseQuery = (url) => fetchBaseQuery({
 });
 
 export const baseQueryWithReauth = (baseURL, targetURLSuffix, refreshURLSuffix) => async (args, api, extraOptions) => {
-    let result = await baseQuery(`${baseURL}${targetURLSuffix}`)(args, api, extraOptions);
+    const preRequest = async () => await baseQuery(`${baseURL}${targetURLSuffix}`)(args, api, extraOptions);
+    let result = await preRequest();
     if (result?.data?.data?.message === "jwt expired") {
-        const refreshResult = await fetchBaseQuery({ baseURL, credentials: "include", mode: 'cors' })(`${refreshURLSuffix}`, api, extraOptions);
+        const refreshResult = await fetchBaseQuery({ baseURL, credentials: "include", mode: 'cors' })(`${baseURL}${refreshURLSuffix}`, api, extraOptions);
         if (refreshResult?.data?.data?.accessToken) {
             const authData = api.getState().auth;
             api.dispatch(setCredentials({ ...authData, accessToken: refreshResult.data.data.accessToken })); // store new token
-            result = await baseQuery(args, api, extraOptions); // retry original query with new access token
+            result = await preRequest(); // retry original query with new access token
         } else {
             api.dispatch(logout());
         }

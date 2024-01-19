@@ -6,9 +6,9 @@ import { Button, SimpleGrid, Group, Header, MediaQuery, Avatar, NavLink } from '
 import { IconSettings, IconLogout, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
 import { HouseDoor, Gear, Bell, Search, GraphUp, Compass, BodyText, Award } from "react-bootstrap-icons";
 // import Loader from '../components/Loader/Loader';
-import LightDarkButton from "../components/LightDarkButton/LightDarkButton";
-import { logout } from "../store/reducer/authSlice";
-import { useGetComponentStyle, useGetLayoutComponentStyle } from "../styles/dayNightStyle";
+import LightDarkButton from "@/components/LightDarkButton/LightDarkButton";
+import { logout } from "@/store/reducer/authSlice";
+import { useGetComponentStyle, useGetLayoutComponentStyle } from "@/styles/dayNightStyle";
 import classes from "./layout.module.scss";
 
 const Layout = (props) => {

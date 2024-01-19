@@ -12,6 +12,8 @@ import { selectCurrentUserId } from "@/store/reducer/authSlice";
 import { useGetComponentStyle } from "@/styles/dayNightStyle";
 import { userImage } from "@/assets/index";
 import classes from "./DashboardPage.module.scss";
+import TrackerClick from '@/components/BuryPoint/BuryPoint';
+
 
 const DashboardPage = () => {
   let startTime = new Date();
@@ -105,26 +107,32 @@ const DashboardPage = () => {
           <Grid>
             <Grid.Col xs={12} sm={4}>
               <div style={useGetComponentStyle()}>
-                <div className={classes["shortcut-wrapper"]}>
-                  <div className={classes["shortcut-title"]}>My Happy Action</div>
-                  <div className={classes["happy-shortcut"]} ></div>
-                </div>
+                <TrackerClick name="click" bpId="dashboard:happyAction">
+                  <div className={classes["shortcut-wrapper"]}>
+                    <div className={classes["shortcut-title"]}>My Happy Action</div>
+                    <div className={classes["happy-shortcut"]} ></div>
+                  </div>
+                </TrackerClick>
               </div>
             </Grid.Col>
             <Grid.Col xs={12} sm={4}>
               <div style={useGetComponentStyle()}>
-                <div className={classes["shortcut-wrapper"]}>
-                  <div className={classes["shortcut-title"]}>My Unhappy Action</div>
-                  <div className={classes["sad-shortcut"]}></div>
-                </div>
+                <TrackerClick name="click" bpId="dashboard:UnhappyAction">
+                  <div className={classes["shortcut-wrapper"]}>
+                    <div className={classes["shortcut-title"]}>My Unhappy Action</div>
+                    <div className={classes["sad-shortcut"]}></div>
+                  </div>
+                </TrackerClick>
               </div>
             </Grid.Col>
             <Grid.Col xs={12} sm={4} >
               <div style={useGetComponentStyle()}>
-                <div className={classes["shortcut-wrapper"]}>
-                  <div className={classes["shortcut-title"]}>My Support group</div>
-                  <div className={classes["support-shortcut"]}></div>
-                </div>
+                <TrackerClick name="click" bpId="dashboard:MySupportGroup">
+                  <div className={classes["shortcut-wrapper"]}>
+                    <div className={classes["shortcut-title"]}>My Support group</div>
+                    <div className={classes["support-shortcut"]}></div>
+                  </div>
+                </TrackerClick>
               </div>
             </Grid.Col>
           </Grid >

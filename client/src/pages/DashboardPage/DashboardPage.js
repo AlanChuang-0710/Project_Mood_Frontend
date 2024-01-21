@@ -107,7 +107,7 @@ const DashboardPage = () => {
           <Grid>
             <Grid.Col xs={12} sm={4}>
               <div style={useGetComponentStyle()}>
-                <TrackerClick name="click" bpId="dashboard:happyAction">
+                <TrackerClick name="click" bpId="dashboard:HappyAction">
                   <div className={classes["shortcut-wrapper"]}>
                     <div className={classes["shortcut-title"]}>My Happy Action</div>
                     <div className={classes["happy-shortcut"]} ></div>

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { removeCookie } from "../../utils/public";
+import { removeCookie } from "@/utils/public";
 
 const getUserInformation = () => {
     const userInfo = sessionStorage.getItem('userInfo');

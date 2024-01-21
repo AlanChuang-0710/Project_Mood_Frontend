@@ -37,7 +37,7 @@ const CompassPage = () => {
 
                 <Tabs.Panel value="counseling">
                     <div className={classes["panel-wrapper"]}>
-                        <Counseling />
+                            <Counseling />
                     </div>
                 </Tabs.Panel>
 

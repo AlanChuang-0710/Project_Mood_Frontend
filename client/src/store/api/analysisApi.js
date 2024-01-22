@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
-import { baseQueryWithReauth } from "../../utils/request";
+import { baseQueryWithReauth } from "@/utils/request";
 
 const analysisApi = createApi({
 

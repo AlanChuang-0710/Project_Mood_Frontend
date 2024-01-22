@@ -1,6 +1,5 @@
 import React from "react";
 import { isDesktop, isMobile, isAndroid, isIOS } from 'react-device-detect';
-
 // 判斷用戶使用裝置
 function checkAgent() {
     if (isDesktop) return "desktop";
@@ -11,7 +10,49 @@ function checkAgent() {
     }
 }
 
-const userAgent = checkAgent();
+// 用戶通用數據
+const source = checkAgent();
+const { accessToken, id: userId } = JSON.parse(sessionStorage.getItem("userInfo"));
+
+// 上報對列
+let reportQuene = { userId, accessToken, source, bp: [] };
+
+// 上報函數
+const reportFn = () => {
+    // 判斷用戶環境是否支持navigator.sendBeacon
+    if (navigator.sendBeacon) {
+        navigator.sendBeacon("url", JSON.stringify(reportQuene));
+    } else {
+        let image = new Image();
+        image.width = 1;
+        image.height = 1;
+        image.src = "url" + JSON.stringify(reportQuene);
+    }
+    reportQuene.bp = [];
+};
+
+// 用戶導航到新頁面、切換標籤頁、關閉標籤頁、最小化、關閉瀏覽器時觸發上報函數
+window.addEventListener("visibilitychange", (e) => {
+    console.log(e);
+    if (document.visibilityState === "hidden") reportFn();
+});
+
+// 點擊事件
+const handleClick = (bpId, type, timestamp,) => {
+    // 回傳到後端邏輯
+    let bpEvent = {
+        bpId, //事件ID
+        type, //click, view
+        timestamp, //事件觸發時間
+    };
+    reportQuene.bp.push(bpEvent);
+
+    // 上報對列超過10個，合併發送API
+    if (reportQuene.bp.length > 10) {
+        reportFn();
+    }
+};
+
 
 /**
  * 點擊埋點
@@ -19,29 +60,19 @@ const userAgent = checkAgent();
  * @returns null
  */
 export default function TrackerClick({
-    name,
-    extra,
-    immediate,
+    // name,
+    // extra,
+    // immediate,
     bpId,
     children,
 }) {
-    const handleClick = (ele) => {
-        // 回傳到後端邏輯
-        let bpEvent = {
-            bpId: bpId, //事件ID
-            userId: "", //用戶ID
-            type: "click", //click, view
-            timestamp: Date.now(), //事件觸發時間
-            source: userAgent, //用戶desktop, IOS, android
-        };
-    };
 
     function AddClickEvent(ele) {
         return React.cloneElement(ele, {
             onClick: (e) => {
                 const originClick = ele.props.onClick || function () { };
                 originClick.call(ele, e);
-                handleClick(ele);
+                handleClick(bpId, "click", Date.now(),);
             }
         });
     }

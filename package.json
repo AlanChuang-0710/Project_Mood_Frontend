@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "app": "npm-run-all --parallel Client APIserver",
-    "Client": "cd ClientServer && npm start",
+    "all": "npm-run-all --parallel Clientserver APIserver BPserver",
+    "Clientserver": "cd ClientServer && npm start",
     "APIserver": "cd APIserver && npm start",
+    "BPserver": "cd BPserver && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

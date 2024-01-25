@@ -1,47 +1,42 @@
 /**
+ * 處理連接Postgres
  * 
- * @param {*} success 數據庫連接成功的回調
- * @param {*} error 數據庫連接失敗的回調
  */
 
-module.exports = function (success, error) {
+const { Pool } = require("pg");
+const { DBHOST, DBPORT, DBNAME, PASSWORD, USER } = require("../config/config");
 
-    if (typeof error !== "function") {
-        error = () => {
-            console.log("連接失敗");
-        };
+// Do not use pool.query if you are using a transaction.
+const pool = new Pool({
+    user: USER,
+    host: DBHOST,
+    port: DBPORT,
+    database: DBNAME,
+    password: PASSWORD,
+    // Maximum number of clients the pool should contain
+    // by default this is set to 10.
+    max: 100
+});
+
+// 處理連線錯誤事件
+pool.on('error', (err) => {
+    console.error('資料庫錯誤', err);
+});
+
+// 處理連線成功事件
+pool.on("connect", () => {
+    console.log("連接成功");
+});
+
+// 測試資料庫連線
+pool.query('SELECT NOW()', (err, res) => {
+    if (err) {
+        console.error('資料庫連線錯誤', err);
+    } else {
+        console.log('成功連線至 PostgreSQL，當前時間為：', res.rows[0].now);
     }
+});
 
-    // 導入pg
-    const { Client } = require("pg");
-
-    // 導入配置
-    const { DBHOST, DBPORT, DBNAME, PASSWORD, USER } = require("../config/config");
-
-    const client = new Client({
-        user: USER,
-        host: DBHOST,
-        port: DBPORT,
-        database: DBNAME,
-        password: PASSWORD
-    });
-
-
-    // // 設置回調 
-    // // 設置成功連接的回調 once: 事件回調函數只執行一次
-    // mongoose.connection.once("open", () => {
-    //     success();
-    // });
-
-    // // 連接失敗的回調
-    // mongoose.connection.on("error", () => {
-    //     error();
-    // });
-
-    // // 關閉連接的回調
-    // mongoose.connection.on("close", () => {
-    //     console.log("關閉連接");
-    // });
-
-}
-
+module.exports = {
+    query: (text, params) => pool.query(text, params)
+};

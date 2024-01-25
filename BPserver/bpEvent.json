@@ -1,0 +1,86 @@
+{
+  "0001": {
+    "name": "Happy Action",
+    "bpId": "0001",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊dashboard中的Happy Action模塊，紀錄開心舉動"
+  },
+  "0002": {
+    "name": "Unhappy Action",
+    "bpId": "0002",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊dashboard中的Unhappy Action模塊，紀錄不開心舉動"
+  },
+  "0003": {
+    "name": "My Support Group",
+    "bpId": "0003",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊dashboard中的Unhappy Action模塊，紀錄支持團體"
+  },
+  "0004": {
+    "name": "Essay_1",
+    "bpId": "0004",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊dashboard中的推播的Essay_1"
+  },
+  "0005": {
+    "name": "Essay_2",
+    "bpId": "0005",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊dashboard中的推播的Essay_2"
+  },
+  "0006": {
+    "name": "Essay_3",
+    "bpId": "0006",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊dashboard中的推播的Essay_3"
+  },
+  "0007": {
+    "name": "Counselling",
+    "bpId": "0007",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊心理諮詢"
+  },
+  "0008": {
+    "name": "Chatting",
+    "bpId": "0008",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊找人聊聊"
+  },
+  "0009": {
+    "name": "Rainbow Card",
+    "bpId": "0009",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊彩虹牌"
+  },
+  "0010": {
+    "name": "Meditation",
+    "bpId": "0010",
+    "trackEnd": "frontend",
+    "type": "click",
+    "des": "用戶點擊冥想練習"
+  },
+  "0011": {
+    "name": "Login",
+    "bpId": "0011",
+    "trackEnd": "db",
+    "type": "db",
+    "des": "用戶登入頁面"
+  },
+  "0012": {
+    "name": "Diary number",
+    "bpId": "0012",
+    "trackEnd": "db",
+    "type": "db",
+    "des": "用戶總日記數"
+  }
+}

@@ -38,11 +38,10 @@ window.addEventListener("visibilitychange", (e) => {
 });
 
 // 點擊事件
-const handleClick = (bpId, type, timestamp,) => {
+const handleClick = (bpId, timestamp,) => {
     // 回傳到後端邏輯
     let bpEvent = {
         bpId, //事件ID
-        type, //click, view
         timestamp, //事件觸發時間
     };
     reportQuene.bp.push(bpEvent);
@@ -72,7 +71,7 @@ export default function TrackerClick({
             onClick: (e) => {
                 const originClick = ele.props.onClick || function () { };
                 originClick.call(ele, e);
-                handleClick(bpId, "click", Date.now(),);
+                handleClick(bpId, Date.now(),);
             }
         });
     }

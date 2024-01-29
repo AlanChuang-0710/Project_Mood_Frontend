@@ -5,11 +5,11 @@ const jwt = require("jsonwebtoken");
 module.exports = {
     checkTokenMiddleware: (req, res, next) => {
         // 因為前端調用sendBeacon的關係，accesssToken必須從body中獲取
-        let { accessToken, userId } = req.body;
-        if (!accessToken || !userId) {
-            return res.json({ code: 4001, msg: "token缺失", data: null });
-        }
-        console.log(req.headers);
+        // let { accessToken, userId } = req.body;
+        // if (!accessToken || !userId) {
+        //     return res.json({ code: 4001, msg: "token缺失", data: null });
+        // }
+        // console.log(req.headers);
         next();
 
         /* BP server 要換方式較驗token! 如果使用API server方式，很可能API過來時就已經過期了

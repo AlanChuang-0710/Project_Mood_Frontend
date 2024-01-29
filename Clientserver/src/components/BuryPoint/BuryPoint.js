@@ -1,5 +1,7 @@
 import React from "react";
 import { isDesktop, isMobile, isAndroid, isIOS } from 'react-device-detect';
+
+
 // 判斷用戶使用裝置
 function checkAgent() {
     if (isDesktop) return "desktop";
@@ -20,8 +22,10 @@ let reportQuene = { userId, accessToken, source, bp: [] };
 // 上報函數
 const reportFn = () => {
     // 判斷用戶環境是否支持navigator.sendBeacon
+    if (reportQuene.bp.length === 0) return;
     if (navigator.sendBeacon) {
-        navigator.sendBeacon("url", JSON.stringify(reportQuene));
+        const blob = new Blob([JSON.stringify(reportQuene)], { type: 'application/json' });
+        navigator.sendBeacon("http://127.0.0.1:3002/test", blob);
     } else {
         let image = new Image();
         image.width = 1;
@@ -33,12 +37,11 @@ const reportFn = () => {
 
 // 用戶導航到新頁面、切換標籤頁、關閉標籤頁、最小化、關閉瀏覽器時觸發上報函數
 window.addEventListener("visibilitychange", (e) => {
-    console.log(e);
     if (document.visibilityState === "hidden") reportFn();
 });
 
 // 點擊事件
-const handleClick = (bpId, timestamp,) => {
+const handleReport = (bpId, timestamp,) => {
     // 回傳到後端邏輯
     let bpEvent = {
         bpId, //事件ID
@@ -71,7 +74,7 @@ export default function TrackerClick({
             onClick: (e) => {
                 const originClick = ele.props.onClick || function () { };
                 originClick.call(ele, e);
-                handleClick(bpId, Date.now(),);
+                handleReport(bpId, Date.now(),);
             }
         });
     }

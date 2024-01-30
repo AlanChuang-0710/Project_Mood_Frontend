@@ -2,13 +2,13 @@
 const { FRONTENDPORT } = require("./config/config");
 const createError = require('http-errors');
 var express = require('express');
+require('express-async-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 // var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const cors = require("cors");
-require('express-async-errors');
 var app = express();
 
 // app.use(logger('dev'));

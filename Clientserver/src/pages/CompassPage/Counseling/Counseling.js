@@ -15,7 +15,7 @@ const Counseling = () => {
                 <Grid.Col xs={4} md={2}>
                     <div className={classes["card-wrapper"]}>
                         <div style={useGetComponentStyle()}>
-                            <TrackerClick name="click" bpId={`compass:counseling`}>
+                            <TrackerClick name="click" bpId="0005">
                                 <div className={classes.card}>
                                     <div className={classes["psychological-option"]}>
                                     </div>
@@ -28,7 +28,7 @@ const Counseling = () => {
                 <Grid.Col xs={4} md={2}>
                     <div className={classes["card-wrapper"]}>
                         <div style={useGetComponentStyle()}>
-                            <TrackerClick name="click" bpId={`compass:chat`}>
+                            <TrackerClick name="click" bpId="0006">
                                 <div className={classes.card}>
                                     <div className={classes["chat-option"]}>
                                     </div>
@@ -41,7 +41,7 @@ const Counseling = () => {
                 <Grid.Col xs={4} md={2}>
                     <div className={classes["card-wrapper"]}>
                         <div style={useGetComponentStyle()}>
-                            <TrackerClick name="click" bpId={`compass:rainbowCard`}>
+                            <TrackerClick name="click" bpId="0007">
                                 <div className={classes.card}>
                                     <div className={classes["rainbow-card-option"]}>
                                     </div>
@@ -54,7 +54,7 @@ const Counseling = () => {
                 <Grid.Col xs={4} md={2}>
                     <div className={classes["card-wrapper"]}>
                         <div style={useGetComponentStyle()}>
-                            <TrackerClick name="click" bpId={`compass:meditation`}>
+                            <TrackerClick name="click" bpId="0008">
                                 <div className={classes.card}>
                                     <div className={classes["meditation-option"]}>
                                     </div>

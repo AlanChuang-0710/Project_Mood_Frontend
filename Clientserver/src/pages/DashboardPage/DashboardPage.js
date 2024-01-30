@@ -107,7 +107,7 @@ const DashboardPage = () => {
           <Grid>
             <Grid.Col xs={12} sm={4}>
               <div style={useGetComponentStyle()}>
-                <TrackerClick name="click" bpId="dashboard:HappyAction">
+                <TrackerClick name="click" bpId="0001">
                   <div className={classes["shortcut-wrapper"]}>
                     <div className={classes["shortcut-title"]}>My Happy Action</div>
                     <div className={classes["happy-shortcut"]} ></div>
@@ -117,7 +117,7 @@ const DashboardPage = () => {
             </Grid.Col>
             <Grid.Col xs={12} sm={4}>
               <div style={useGetComponentStyle()}>
-                <TrackerClick name="click" bpId="dashboard:UnhappyAction">
+                <TrackerClick name="click" bpId="0002">
                   <div className={classes["shortcut-wrapper"]}>
                     <div className={classes["shortcut-title"]}>My Unhappy Action</div>
                     <div className={classes["sad-shortcut"]}></div>
@@ -127,7 +127,7 @@ const DashboardPage = () => {
             </Grid.Col>
             <Grid.Col xs={12} sm={4} >
               <div style={useGetComponentStyle()}>
-                <TrackerClick name="click" bpId="dashboard:MySupportGroup">
+                <TrackerClick name="click" bpId="0003">
                   <div className={classes["shortcut-wrapper"]}>
                     <div className={classes["shortcut-title"]}>My Support group</div>
                     <div className={classes["support-shortcut"]}></div>

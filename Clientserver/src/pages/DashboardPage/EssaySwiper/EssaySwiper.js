@@ -61,7 +61,7 @@ const EssaySwiper = ({ commonData }) => {
 
         {essayData && essayData.map((essay) =>
           < SwiperSlide tag="div" className={classes["essay-slide"]} key={essay._id} onClick={() => essayClickHandler(essay.url)}>
-            <TrackerClick name="click" bpId={`essay:${essay._id}`}>
+            <TrackerClick name="click" bpId={`0004_${essay._id}`}>
               <Grid>
                 <Grid.Col span={4} >
                   <div>

@@ -23,7 +23,7 @@ let reportQuene = { userId, accessToken, source, bp: [] };
 const reportFn = () => {
     // 判斷用戶環境是否支持navigator.sendBeacon
     if (reportQuene.bp.length === 0) return;
-    if (!navigator.sendBeacon) {
+    if (navigator.sendBeacon) {
         const blob = new Blob([JSON.stringify(reportQuene)], { type: 'application/json' });
         navigator.sendBeacon("http://127.0.0.1:3002/test", blob);
     } else {

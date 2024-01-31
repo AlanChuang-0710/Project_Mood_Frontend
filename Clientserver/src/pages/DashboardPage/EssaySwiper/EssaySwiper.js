@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import classes from "./Essay.module.scss";
-import TrackerClick from '@/components/BuryPoint/BuryPoint';
+import Tracker from '@/components/BuryPoint/BuryPoint';
 
 SwiperCore.use([Scrollbar, Mousewheel]);
 
@@ -61,7 +61,7 @@ const EssaySwiper = ({ commonData }) => {
 
         {essayData && essayData.map((essay) =>
           < SwiperSlide tag="div" className={classes["essay-slide"]} key={essay._id} onClick={() => essayClickHandler(essay.url)}>
-            <TrackerClick name="click" bpId={`0004_${essay._id}`}>
+            <Tracker type="click" bpId={`0004_${essay._id}`}>
               <Grid>
                 <Grid.Col span={4} >
                   <div>
@@ -84,7 +84,7 @@ const EssaySwiper = ({ commonData }) => {
                   </div>
                 </Grid.Col>
               </Grid>
-            </TrackerClick>
+            </Tracker>
           </SwiperSlide>)}
       </Swiper>
     </div >

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useMantineTheme, } from "@mantine/core";
 import * as echarts from 'echarts';
+import Tracker from '@/components/BuryPoint/BuryPoint';
 
 const ScoreRatioPieChart = ({ height, scorePieChartData }) => {
     const scoreRatioPieDOM = useRef(null);
@@ -89,7 +90,9 @@ const ScoreRatioPieChart = ({ height, scorePieChartData }) => {
     }, [scoreRatioPieChart, scorePieChartData, theme]);
 
     return (
-        <div ref={scoreRatioPieDOM} style={{ height: height + "px" }}></div>
+        <Tracker type="view" bpId="1000">
+            <div ref={scoreRatioPieDOM} style={{ height: height + "px" }}></div>
+        </Tracker>
     );
 };
 

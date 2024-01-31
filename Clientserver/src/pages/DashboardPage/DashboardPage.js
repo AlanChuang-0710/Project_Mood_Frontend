@@ -12,7 +12,7 @@ import { selectCurrentUserId } from "@/store/reducer/authSlice";
 import { useGetComponentStyle } from "@/styles/dayNightStyle";
 import { userImage } from "@/assets/index";
 import classes from "./DashboardPage.module.scss";
-import TrackerClick from '@/components/BuryPoint/BuryPoint';
+import Tracker from '@/components/BuryPoint/BuryPoint';
 
 
 const DashboardPage = () => {
@@ -107,32 +107,32 @@ const DashboardPage = () => {
           <Grid>
             <Grid.Col xs={12} sm={4}>
               <div style={useGetComponentStyle()}>
-                <TrackerClick name="click" bpId="0001">
+                <Tracker type="click" bpId="0001">
                   <div className={classes["shortcut-wrapper"]}>
                     <div className={classes["shortcut-title"]}>My Happy Action</div>
                     <div className={classes["happy-shortcut"]} ></div>
                   </div>
-                </TrackerClick>
+                </Tracker>
               </div>
             </Grid.Col>
             <Grid.Col xs={12} sm={4}>
               <div style={useGetComponentStyle()}>
-                <TrackerClick name="click" bpId="0002">
+                <Tracker type="click" bpId="0002">
                   <div className={classes["shortcut-wrapper"]}>
                     <div className={classes["shortcut-title"]}>My Unhappy Action</div>
                     <div className={classes["sad-shortcut"]}></div>
                   </div>
-                </TrackerClick>
+                </Tracker>
               </div>
             </Grid.Col>
             <Grid.Col xs={12} sm={4} >
               <div style={useGetComponentStyle()}>
-                <TrackerClick name="click" bpId="0003">
+                <Tracker type="click" bpId="0003">
                   <div className={classes["shortcut-wrapper"]}>
                     <div className={classes["shortcut-title"]}>My Support group</div>
                     <div className={classes["support-shortcut"]}></div>
                   </div>
-                </TrackerClick>
+                </Tracker>
               </div>
             </Grid.Col>
           </Grid >

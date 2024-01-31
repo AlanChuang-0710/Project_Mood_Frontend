@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { isDesktop, isMobile, isAndroid, isIOS } from 'react-device-detect';
-
+import { useInView } from 'react-intersection-observer';
 
 // 判斷用戶使用裝置
 function checkAgent() {
@@ -40,8 +40,8 @@ window.addEventListener("visibilitychange", (e) => {
     if (document.visibilityState === "hidden") reportFn();
 });
 
-// 點擊事件
-const handleReport = (bpId, timestamp,) => {
+// 傳送到上報對列
+const handleReport = (bpId, timestamp, otherInfo) => {
     // 回傳到後端邏輯
     let bpEvent = {
         bpId, //事件ID
@@ -55,30 +55,60 @@ const handleReport = (bpId, timestamp,) => {
     }
 };
 
+// 綁定點擊
+function AddClickEvent(ele, bpId) {
+    return React.cloneElement(ele, {
+        onClick: (e) => {
+            const originClick = ele.props.onClick || function () { };
+            originClick.call(ele, e);
+            handleReport(bpId, Date.now(),);
+        }
+    });
+}
+
+// 綁定觀察 (單次觀察超過六秒才會上報)
+function AddViewEvent(ele, bpId) {
+    let [viewstart, setViewstart] = useState(null);
+    let [timer, setTimer] = useState(null);
+    const { ref } = useInView({
+        /* Optional options */
+        // 配置詳見 https://www.npmjs.com/package/react-intersection-observer#options
+        threshold: 1,
+        onChange(inView, entry) {
+            if (inView) {
+                let now = Date.now();
+                setTimer(setTimeout(() => { handleReport(bpId, now, now - viewstart); }, 6000));
+                setViewstart((preVal) => Date.now());
+            } else {
+                clearTimeout(timer);
+                setViewstart((preVal) => null);
+            }
+        }
+    });
+
+    return (
+        <div ref={ref}>
+            {ele}
+        </div>
+    );
+}
 
 /**
- * 點擊埋點
+ * 埋點HOC參數
  * @param {props} :Single React Node
+ * @param {bpId} :埋點事件唯一代號
+ * @param {children} :Tracker組件包裹的唯一子組件
+ * @param {type} :Tracker組件追蹤的事件
  * @returns null
  */
-export default function TrackerClick({
-    // name,
+export default function Tracker({
+    type,
     // extra,
     // immediate,
     bpId,
     children,
 }) {
-
-    function AddClickEvent(ele) {
-        return React.cloneElement(ele, {
-            onClick: (e) => {
-                const originClick = ele.props.onClick || function () { };
-                originClick.call(ele, e);
-                handleReport(bpId, Date.now(),);
-            }
-        });
-    }
-
+    if (!type || !bpId || !children) return console.error("Props should specify type, bpId and contain an only children");
     // function findHtmlElement(ele) {
     //     // 如果包裹的是組件
     //     if (typeof ele.type === 'function') {
@@ -99,5 +129,6 @@ export default function TrackerClick({
     // }
 
     // 限定傳入的數據最外層只能有一個container
-    return AddClickEvent(React.Children.only(children));
+    if (type === "click") { return AddClickEvent(React.Children.only(children), bpId); }
+    else if (type === "view") { return AddViewEvent(React.Children.only(children), bpId); };
 }

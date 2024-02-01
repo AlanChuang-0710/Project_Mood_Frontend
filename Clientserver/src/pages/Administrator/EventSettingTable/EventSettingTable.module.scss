@@ -1,0 +1,6 @@
+.search {
+    &:focus,
+    &:focus-visible {
+        outline: none;
+    }
+}

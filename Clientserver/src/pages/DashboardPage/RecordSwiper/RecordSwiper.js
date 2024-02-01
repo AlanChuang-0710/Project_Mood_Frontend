@@ -8,9 +8,9 @@ import SwiperCore, { Scrollbar, Mousewheel } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/scrollbar';
 import 'swiper/css';
-import { selectCurrentUserId } from "../../../store/reducer/authSlice";
-import { useDeleteFeelingMutation } from '../../../store/api/feelingApi';
-import { happy, smile, normal, sad, depressed, deleteIcon, editIcon, uploadIcon } from "../../../assets/index";
+import { selectCurrentUserId } from "@/store/reducer/authSlice";
+import { useDeleteFeelingMutation } from '@/store/api/feelingApi';
+import { happy, smile, normal, sad, depressed, deleteIcon, editIcon, uploadIcon } from "@/assets/index";
 import classes from "./RecordSwiper.module.scss";
 
 SwiperCore.use([Scrollbar, Mousewheel]);

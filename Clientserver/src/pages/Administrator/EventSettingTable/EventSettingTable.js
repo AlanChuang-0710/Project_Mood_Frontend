@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useMantineTheme, Grid } from "@mantine/core";
+import React, { useEffect, useState, useCallback } from 'react';
+import { useMantineTheme, Grid, Modal, TextInput, Button } from "@mantine/core";
+import { useDisclosure } from '@mantine/hooks';
+import { useForm } from '@mantine/form';
 import { Table, HeaderRow, Row, HeaderCell, Cell } from "@table-library/react-table-library/table";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { Virtualized } from "@table-library/react-table-library/virtualized";
+import SVG from "react-inlinesvg";
+import { deleteIcon, editIcon, uploadIcon } from "@/assets/index";
 import classes from "@/pages/Administrator/EventSettingTable/EventSettingTable.module.scss";
-
 let data = {
     nodes: [],
-    pageInfo: {
-        totalPages: 10,
-        total: 100,
-        limit: 10
-    }
 };
 
 for (let index = 0; index < 20; index++) {
@@ -38,7 +36,7 @@ const EventSettingTable = () => {
         borderColor: mantainTheme.colorScheme === "dark" ? "white" : "black",
         borderRadius: "2px",
         backgroundColor: "transparent",
-        "&:focus, &:focus-visible": {
+        "&:focus, &:focusVisible": {
             outline: " none"
         }
     };
@@ -50,35 +48,28 @@ const EventSettingTable = () => {
         background-color: ${mantainTheme.colorScheme === "dark" ? mantainTheme.colors.brand[0] : "#fff"};
         border-bottom: 1px solid black;
         `,
-        HeaderCell: `
-        &:nth-child(1) {
-            text-align: center;
-        }
-        `,
-        BaseCell: `
-        &:nth-child(1) {
-            text-align: center
-        }
-        `,
+        HeaderCell: ``,
+        BaseCell: ``,
         Row: `
         background-color: transparent;
         color:${mantainTheme.colorScheme === "dark" ? "white" : "black"};
+        svg{
+            cursor: pointer
+        };
         &:hover {
             background-color: #c8dbfa;
-            color: black !important
+            color: black !important;
+            svg {fill: black}
         }`,
         Cell: `
-        padding: 2px 10px`
+        padding: 2px 10px;
+        `
     }]);
 
     /* Search */
     const [search, setSearch] = useState("");
     const [showData, setShowData] = useState({
-        nodes: [], pageInfo: {
-            totalPages: 10,
-            total: 100,
-            limit: 10
-        }
+        nodes: []
     });
     const handleSearch = (event) => {
         setSearch(event.target.value);
@@ -90,6 +81,38 @@ const EventSettingTable = () => {
         );
         setShowData((preVal) => ({ ...preVal, nodes: filterData }));
     }, [search]);
+
+    /* Model */
+    const [opened, { open, close }] = useDisclosure(false);
+    const closeModalHandler = useCallback(() => {
+        close();
+    });
+    const [bpTitle, setbpTitle] = useState("Edit Bury Point");
+    const editBuryPoint = useCallback(() => {
+        open();
+    });
+    // 統一控管提交資料
+    const form = useForm({
+        initialValues: {
+            bpId: "",
+            name: "",
+            trackend: "",
+            type: "",
+            description: ""
+        },
+
+        validate: {
+            bpId: (value) => value ? null : 'Invalid bpId',
+            name: (value) => value ? null : "Invalid name",
+            trackend: (value) => value ? null : "Invalid trackend",
+            type: (value) => value ? null : "Invalid type",
+            description: (value) => value ? null : "Invalid description",
+        },
+    });
+
+    const saveHandler = useCallback(() => {
+
+    });
 
     /* Pagination */
     // const pagination = usePagination(data, {
@@ -121,33 +144,64 @@ const EventSettingTable = () => {
                             rowHeight={36}
                             header={() => (
                                 <HeaderRow>
-                                    <HeaderCell stiff>Index</HeaderCell>
+                                    <HeaderCell style={{ textAlign: "center" }} stiff>Index</HeaderCell>
                                     <HeaderCell>BP Id</HeaderCell>
                                     <HeaderCell>Name</HeaderCell>
-                                    <HeaderCell>Trackend</HeaderCell>
-                                    <HeaderCell>Type</HeaderCell>
+                                    <HeaderCell style={{ textAlign: "center" }}>Trackend</HeaderCell>
+                                    <HeaderCell style={{ textAlign: "center" }}>Type</HeaderCell>
                                     <HeaderCell>Description</HeaderCell>
-                                    <HeaderCell>Edit</HeaderCell>
-                                    <HeaderCell>Delete</HeaderCell>
+                                    <HeaderCell style={{ textAlign: "center" }}>Edit</HeaderCell>
+                                    <HeaderCell style={{ textAlign: "center" }}>Delete</HeaderCell>
                                 </HeaderRow>
                             )}
                             body={(item, index) => (
                                 <Row item={item}>
-                                    <Cell stiff>{index + 1}</Cell>
+                                    <Cell style={{ textAlign: "center" }} stiff>{index + 1}</Cell>
                                     <Cell>{item.bpId}</Cell>
                                     <Cell>{item.name}</Cell>
-                                    <Cell>{item.trackEnd}</Cell>
-                                    <Cell>{item.type}</Cell>
+                                    <Cell style={{ textAlign: "center" }}>{item.trackEnd}</Cell>
+                                    <Cell style={{ textAlign: "center" }}>{item.type}</Cell>
                                     <Cell>{item.des}</Cell>
-                                    <Cell>Edit Icon</Cell>
-                                    <Cell>Delete Icon</Cell>
+                                    <Cell style={{ textAlign: "center" }}>
+                                        <SVG onClick={editBuryPoint} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
+                                    </Cell>
+                                    <Cell style={{ textAlign: "center" }}>
+                                        <SVG loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
+                                    </Cell>
                                 </Row>
                             )}
                         />
                     )}
                 </Table>
             </div >
-            <br />
+            <Modal className={classes.burypoint} opened={opened} onClose={closeModalHandler} withCloseButton={false} yOffset={100}>
+                <div className={classes.title}>{bpTitle}</div>
+                <div className={classes.input}>
+                    <TextInput placeholder="Bury Point Id" label="Bury Point Id" withAsterisk
+                        {...form.getInputProps('bpId')} />
+                </div>
+                <div className={classes.input}>
+                    <TextInput placeholder="Bury Point Name" label="Name" withAsterisk
+                        {...form.getInputProps('name')} />
+                </div>
+                <div className={classes.input}>
+                    <TextInput placeholder="Frontend/Backend..." label="Trackend" withAsterisk
+                        {...form.getInputProps('trackend')} />
+                </div>
+                <div className={classes.input}>
+                    <TextInput placeholder="Click/View..." label="Type" withAsterisk
+                        {...form.getInputProps('type')} />
+                </div>
+                <div className={classes.input}>
+                    <TextInput placeholder="Bury point description" label="Description" withAsterisk
+                        {...form.getInputProps('description')} />
+                </div>
+                <div className={classes.btn}>
+                    <Button variant="filled" styles={{ root: { width: "100%" } }} onClick={saveHandler}>
+                        Save
+                    </Button>
+                </div>
+            </Modal>
 
         </>
     );

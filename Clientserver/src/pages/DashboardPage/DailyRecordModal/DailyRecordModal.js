@@ -5,7 +5,7 @@ import { useDisclosure } from '@mantine/hooks';
 import moment from "moment";
 import { IconUserPlus, IconTags } from '@tabler/icons-react';
 import AddTagsKolModal from './AddTagsKolModal/AddTagsKolModal';
-import { useUpdateUserFeelingMutation, useGetUserFeelingQuery, useGetUserKOLTagsOptionsQuery } from "../../../store/api/feelingApi";
+import { useUpdateUserFeelingMutation, useGetUserFeelingQuery, useGetUserKOLTagsOptionsQuery } from "@/store/api/feelingApi";
 import { selectCurrentUserId } from "@/store/reducer/authSlice";
 import { happy, smile, normal, sad, depressed } from "@/assets/index";
 import classes from "./DailyRecordModal.module.scss";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useMantineTheme, Grid, Modal, TextInput, Button, Dialog, Group, Text } from "@mantine/core";
+import { useMantineTheme, Grid, Modal, TextInput, Button, Dialog, Group, Text, } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import SVG from "react-inlinesvg";
@@ -85,12 +85,6 @@ const EventSettingTable = () => {
     /* Model */
     const [opened, { open, close }] = useDisclosure(false);
     const [bpTitle, setbpTitle] = useState("Edit Bury Point");
-    const closeModalHandler = useCallback(() => {
-        close();
-    }, [close]);
-    const openEditModal = useCallback(() => {
-        open();
-    }, [open]);
     // 統一控管提交資料
     const form = useForm({
         initialValues: {
@@ -109,47 +103,46 @@ const EventSettingTable = () => {
             description: (value) => value ? null : "Invalid description",
         },
     });
+    const openAdd = useCallback(() => {
+        setbpTitle("Add Bury Point");
+        open();
+    }, [open]);
+    const closeEdit = useCallback(() => {
+        close();
+    }, [close]);
+    const openEdit = useCallback(() => {
+        open();
+    }, [open]);
     const saveHandler = useCallback(() => {
-
-    }, []);
+        close();
+    }, [close]);
 
 
     /* Dialog */
     const [delOpened, { close: delClose, open: delOpen }] = useDisclosure(false);
     const delBPHandler = useCallback(() => {
-        console.log("delete");
         delClose();
     }, [delClose]);
     const openDelDialog = useCallback(() => {
         delOpen();
     }, [delOpen]);
-
     const closeDelDialog = useCallback(() => {
         delClose();
     }, [delClose]);
 
-    /* Pagination */
-    // const pagination = usePagination(data, {
-    //     state: {
-    //         page: 0,
-    //         size: 2,
-    //     },
-    //     onChange: onPaginationChange,
-    // });
-
-    // function onPaginationChange(action, state) {
-    //     console.log(action, state);
-    // }
-
     return (
         <>
-            <Grid>
-                <Grid.Col xs={12} md={4}></Grid.Col>
+            <Grid justify="space-between">
+                <Grid.Col xs={12} sm={7} style={{ padding: "4px", margin: "4px 0 4px 0" }}>
+                    <label htmlFor="search" style={{ fontSize: "18px" }}>
+                        <span>&nbsp;&nbsp;Search:&nbsp;</span>
+                        <input className={classes.search} style={searchStyle} id="search" type="text" value={search} onChange={handleSearch} />
+                    </label>
+                </Grid.Col>
+                <Grid.Col xs={12} sm={1} style={{ display: "center", alignItems: "center", padding: "4px", marginTop: "5px" }}>
+                    <Button onClick={openAdd} compact variant='subtle'>Add +</Button>
+                </Grid.Col>
             </Grid>
-            <label htmlFor="search" style={{ fontSize: "18px" }}>
-                <span>&nbsp;&nbsp;Search:&nbsp;</span>
-                <input className={classes.search} style={searchStyle} id="search" type="text" value={search} onChange={handleSearch} />
-            </label>
             <div style={{ height: "300px", borderRadius: "4px 4px 0 0", overflow: 'hidden' }}>
                 <Table data={showData} theme={theme} layout={{ isDiv: true, fixedHeader: true, horizontalScroll: true }}>
                     {(tableList) => (
@@ -177,7 +170,7 @@ const EventSettingTable = () => {
                                     <Cell style={{ textAlign: "center" }}>{item.type}</Cell>
                                     <Cell>{item.des}</Cell>
                                     <Cell style={{ textAlign: "center" }}>
-                                        <SVG onClick={openEditModal} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
+                                        <SVG onClick={openEdit} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
                                     </Cell>
                                     <Cell style={{ textAlign: "center" }}>
                                         <SVG onClick={openDelDialog} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
@@ -188,7 +181,7 @@ const EventSettingTable = () => {
                     )}
                 </Table>
             </div >
-            <Modal className={classes.burypoint} opened={opened} onClose={closeModalHandler} withCloseButton={false} yOffset={100}>
+            <Modal className={classes.burypoint} opened={opened} onClose={closeEdit} withCloseButton={false} yOffset={100}>
                 <div className={classes.title}>{bpTitle}</div>
                 <div className={classes.input}>
                     <TextInput placeholder="Bury Point Id" label="Bury Point Id" withAsterisk

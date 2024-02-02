@@ -56,7 +56,7 @@ router.post("/bp", checkTokenMiddleware, async function (req, res, next) {
 /* 刪除bury point */
 router.delete("/bp/:bpId", checkTokenMiddleware, async function (req, res, next) {
   const { bpId } = req.params;
-  const formatQuery = format("DELETE FROM burypoint WHERE bp_id = %L", [bpId]);
+  const formatQuery = format("DELETE FROM burypoint WHERE bp_id = %L", bpId);
   const result = await query(formatQuery).catch((err) => {
     throw Error(err);
   });

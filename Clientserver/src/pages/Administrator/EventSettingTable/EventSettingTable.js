@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useMantineTheme, Grid, Modal, TextInput, Button } from "@mantine/core";
+import { useMantineTheme, Grid, Modal, TextInput, Button, Dialog, Group, Text } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import SVG from "react-inlinesvg";
 import { Table, HeaderRow, Row, HeaderCell, Cell } from "@table-library/react-table-library/table";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { Virtualized } from "@table-library/react-table-library/virtualized";
-import SVG from "react-inlinesvg";
-import { deleteIcon, editIcon, uploadIcon } from "@/assets/index";
+import { deleteIcon, editIcon } from "@/assets/index";
 import classes from "@/pages/Administrator/EventSettingTable/EventSettingTable.module.scss";
 let data = {
     nodes: [],
@@ -84,13 +84,13 @@ const EventSettingTable = () => {
 
     /* Model */
     const [opened, { open, close }] = useDisclosure(false);
+    const [bpTitle, setbpTitle] = useState("Edit Bury Point");
     const closeModalHandler = useCallback(() => {
         close();
-    });
-    const [bpTitle, setbpTitle] = useState("Edit Bury Point");
-    const editBuryPoint = useCallback(() => {
+    }, [close]);
+    const openEditModal = useCallback(() => {
         open();
-    });
+    }, [open]);
     // 統一控管提交資料
     const form = useForm({
         initialValues: {
@@ -109,10 +109,24 @@ const EventSettingTable = () => {
             description: (value) => value ? null : "Invalid description",
         },
     });
-
     const saveHandler = useCallback(() => {
 
-    });
+    }, []);
+
+
+    /* Dialog */
+    const [delOpened, { close: delClose, open: delOpen }] = useDisclosure(false);
+    const delBPHandler = useCallback(() => {
+        console.log("delete");
+        delClose();
+    }, [delClose]);
+    const openDelDialog = useCallback(() => {
+        delOpen();
+    }, [delOpen]);
+
+    const closeDelDialog = useCallback(() => {
+        delClose();
+    }, [delClose]);
 
     /* Pagination */
     // const pagination = usePagination(data, {
@@ -163,10 +177,10 @@ const EventSettingTable = () => {
                                     <Cell style={{ textAlign: "center" }}>{item.type}</Cell>
                                     <Cell>{item.des}</Cell>
                                     <Cell style={{ textAlign: "center" }}>
-                                        <SVG onClick={editBuryPoint} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
+                                        <SVG onClick={openEditModal} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
                                     </Cell>
                                     <Cell style={{ textAlign: "center" }}>
-                                        <SVG loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
+                                        <SVG onClick={openDelDialog} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
                                     </Cell>
                                 </Row>
                             )}
@@ -202,7 +216,16 @@ const EventSettingTable = () => {
                     </Button>
                 </div>
             </Modal>
+            <Dialog position={{ top: 20, right: 20 }} opened={delOpened} withCloseButton onClose={closeDelDialog} size="lg" radius="md">
+                <Text size="sm" mb="xs" fw={500}>
+                    Are You Sure You want to delete the Bury Point?
+                </Text>
 
+                <Group position="left" >
+                    <Button color="red" onClick={delBPHandler}>Delete</Button>
+                    <Button onClick={delClose}>Cancel</Button>
+                </Group>
+            </Dialog>
         </>
     );
 };

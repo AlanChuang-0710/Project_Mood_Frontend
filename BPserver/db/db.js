@@ -59,9 +59,9 @@ async function setupDatabase() {
         console.log("created type eventType");
     };
 
-    processPool.query('CREATE TABLE IF NOT EXISTS userid (id serial, user_id varchar)');
-    processPool.query('CREATE TABLE IF NOT EXISTS burypoint (id serial, bp_id varchar, name text, trackend text, type text, des text)');
-    processPool.query('CREATE TABLE IF NOT EXISTS event (id serial, user_id varchar, bp_id varchar, timestamp varchar, source text)');
+    processPool.query('CREATE TABLE IF NOT EXISTS userid (id serial, user_id varchar PRIMARY KEY NOT NULL)');
+    processPool.query('CREATE TABLE IF NOT EXISTS burypoint (id serial, bp_id varchar PRIMARY KEY, name text NOT NULL, trackend text NOT NULL, type text NOT NULL, des text NOT NULL)');
+    processPool.query('CREATE TABLE IF NOT EXISTS event (id serial, user_id varchar PRIMARY KEY, bp_id varchar NOT NULL, timestamp varchar NOT NULL, source text NOT NULL)');
 };
 setupDatabase();
 module.exports = {

@@ -111,6 +111,7 @@ const EventSettingTable = () => {
         close();
     }, [close]);
     const openEdit = useCallback(() => {
+        setbpTitle("Edit Bury Point");
         open();
     }, [open]);
     const saveHandler = useCallback(() => {
@@ -140,7 +141,7 @@ const EventSettingTable = () => {
                     </label>
                 </Grid.Col>
                 <Grid.Col xs={12} sm={1} style={{ display: "center", alignItems: "center", padding: "4px", marginTop: "5px" }}>
-                    <Button onClick={openAdd} compact variant='subtle'>Add +</Button>
+                    <Button style={{ color: mantainTheme.colorScheme === 'light' ? "black" : "white", }} onClick={openAdd} compact variant='subtle'>Add +</Button>
                 </Grid.Col>
             </Grid>
             <div style={{ height: "300px", borderRadius: "4px 4px 0 0", overflow: 'hidden' }}>
@@ -169,11 +170,15 @@ const EventSettingTable = () => {
                                     <Cell style={{ textAlign: "center" }}>{item.trackEnd}</Cell>
                                     <Cell style={{ textAlign: "center" }}>{item.type}</Cell>
                                     <Cell>{item.des}</Cell>
-                                    <Cell style={{ textAlign: "center" }}>
-                                        <SVG onClick={openEdit} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
+                                    <Cell style={{ textAlign: "center", }}>
+                                        <div style={{ transform: "translateY(3px) " }}>
+                                            <SVG onClick={openEdit} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
+                                        </div>
                                     </Cell>
-                                    <Cell style={{ textAlign: "center" }}>
-                                        <SVG onClick={openDelDialog} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
+                                    <Cell style={{ textAlign: "center", }}>
+                                        <div style={{ transform: "translateY(3px) " }}>
+                                            <SVG onClick={openDelDialog} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
+                                        </div>
                                     </Cell>
                                 </Row>
                             )}
@@ -211,7 +216,7 @@ const EventSettingTable = () => {
             </Modal>
             <Dialog position={{ top: 20, right: 20 }} opened={delOpened} withCloseButton onClose={closeDelDialog} size="lg" radius="md">
                 <Text size="sm" mb="xs" fw={500}>
-                    Are You Sure You want to delete the Bury Point?
+                    Are You Sure You Want To Delete The Bury Point?
                 </Text>
 
                 <Group position="left" >

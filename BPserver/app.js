@@ -25,7 +25,7 @@ app.use(cors({
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true
 }));
-app.use('/', indexRouter);
+app.use('/admin', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

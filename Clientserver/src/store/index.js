@@ -3,8 +3,9 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import authApi from "./api/authApi";
 import feelingApi from "./api/feelingApi";
 import commonApi from "./api/commonApi";
-import authSlice from "./reducer/authSlice";
 import analysisApi from "./api/analysisApi";
+import adminApi from "./api/adminApi";
+import authSlice from "./reducer/authSlice";
 
 const store = configureStore({
     reducer: {
@@ -12,9 +13,10 @@ const store = configureStore({
         [feelingApi.reducerPath]: feelingApi.reducer,
         [commonApi.reducerPath]: commonApi.reducer,
         [analysisApi.reducerPath]: analysisApi.reducer,
+        [adminApi.reducerPath]: adminApi.reducer,
         auth: authSlice.reducer
     },
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(authApi.middleware, feelingApi.middleware, commonApi.middleware, analysisApi.middleware)
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(authApi.middleware, feelingApi.middleware, commonApi.middleware, analysisApi.middleware, adminApi.middleware)
 });
 
 // 為了支援refetchOnFocus 或 refetchOnReconnect 的方法

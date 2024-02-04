@@ -5,14 +5,14 @@ const { checkTokenMiddleware } = require("../middleware/checkTokenMiddleware.js"
 
 async function bpInsertDB(userId, source, bp) {
   /* 法一: 一次性寫入 */
-  let valueArr = bp.map((item) => [userId, item.bpId, item.timestamp, source]);
+  let valueArr = bp.map((item) => [userId, item.bp_id, item.timestamp, source]);
   const formatQuery = format("INSERT INTO event(user_id, bp_id, timestamp, source) VALUES %L", valueArr);
   const result = await query(formatQuery).catch((err) => {
     throw Error(err);
   });
 
   /* 法二: 分次寫入 */
-  // let valueArr = bp.map((item) => [userId, item.bpId, item.timestamp, source]);
+  // let valueArr = bp.map((item) => [userId, item.bp_id, item.timestamp, source]);
   // // 使用 Promise.all 執行所有插入操作
   // const text = 'INSERT INTO event(user_id, bp_id, timestamp, source) VALUES($1, $2, $3, $4) RETURNING *';
   // const insertPromises = valueArr.map(data => {
@@ -38,8 +38,8 @@ router.get("/bp/all", checkTokenMiddleware, async function (req, res, next) {
 
 /* 新增bury point */
 router.post("/bp", checkTokenMiddleware, async function (req, res, next) {
-  const { bpId, name, trackend, type, des } = req.body;
-  let valueArr = [bpId, name, trackend, type, des];
+  const { bp_id, name, trackend, type, des } = req.body;
+  let valueArr = [bp_id, name, trackend, type, des];
   const formatQuery = format("INSERT INTO burypoint(bp_id, name, trackend, type, des) VALUES (%L) RETURNING *", valueArr);
   const result = await query(formatQuery).catch((err) => {
     throw Error(err);
@@ -54,9 +54,9 @@ router.post("/bp", checkTokenMiddleware, async function (req, res, next) {
 });
 
 /* 刪除bury point */
-router.delete("/bp/:bpId", checkTokenMiddleware, async function (req, res, next) {
-  const { bpId } = req.params;
-  const formatQuery = format("DELETE FROM burypoint WHERE bp_id = %L", bpId);
+router.delete("/bp/:bp_id", checkTokenMiddleware, async function (req, res, next) {
+  const { bp_id } = req.params;
+  const formatQuery = format("DELETE FROM burypoint WHERE bp_id = %L", bp_id);
   const result = await query(formatQuery).catch((err) => {
     throw Error(err);
   });
@@ -70,10 +70,10 @@ router.delete("/bp/:bpId", checkTokenMiddleware, async function (req, res, next)
 });
 
 /* 編輯bury point */
-router.put("/bp/:bpId", checkTokenMiddleware, async function (req, res, next) {
-  const { bpId } = req.params;
+router.put("/bp/:bp_id", checkTokenMiddleware, async function (req, res, next) {
+  const { bp_id } = req.params;
   const { name, trackend, type, des } = req.body;
-  const formatQuery = format("UPDATE burypoint SET name = %L, trackend = %L, type = %L, des = %L WHERE bp_id = %L", name, trackend, type, des, bpId);
+  const formatQuery = format("UPDATE burypoint SET name = %L, trackend = %L, type = %L, des = %L WHERE bp_id = %L", name, trackend, type, des, bp_id);
   const result = await query(formatQuery).catch((err) => {
     throw Error(err);
   });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useMantineTheme, Grid, Modal, TextInput, Button, Dialog, Group, Text, } from "@mantine/core";
+import { useMantineTheme, Grid, Modal, TextInput, Button, Dialog, Group, Text, LoadingOverlay } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import SVG from "react-inlinesvg";
@@ -7,26 +7,12 @@ import { Table, HeaderRow, Row, HeaderCell, Cell } from "@table-library/react-ta
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { Virtualized } from "@table-library/react-table-library/virtualized";
+import { useGetAllBuryPointDataQuery, useAddBuryPointMutation, useEditBuryPointMutation, useDeleteBuryPointMutation } from "@/store/api/adminApi";
 import { deleteIcon, editIcon } from "@/assets/index";
 import classes from "@/pages/Administrator/EventSettingTable/EventSettingTable.module.scss";
-let data = {
-    nodes: [],
-};
-
-for (let index = 0; index < 20; index++) {
-    data.nodes.push({
-        id: '0',
-        bpId: "0001",
-        name: 'Dashboard:HappyAction',
-        type: 'Click',
-        trackEnd: "FrontEnd",
-        des: "用戶點擊XXXXX",
-    });
-}
-
 
 const EventSettingTable = () => {
-    /* Table 樣式 */
+    /* Table */
     const mantainTheme = useMantineTheme();
     const searchStyle = {
         color: mantainTheme.colorScheme === 'light' ? "black" : "white",
@@ -66,6 +52,26 @@ const EventSettingTable = () => {
         `
     }]);
 
+    const { data: AllBPData, isSuccess: AllBPIssuccess } = useGetAllBuryPointDataQuery();
+    const [addBuryPoint,] = useAddBuryPointMutation();
+    const [editBuryPoint,] = useEditBuryPointMutation();
+    const [deleteBuryPoint,] = useDeleteBuryPointMutation();
+    useEffect(() => {
+        if (!AllBPIssuccess) {
+            setLoadingVisible(true);
+        } else {
+            setLoadingVisible(false);
+        };
+        if (AllBPData && AllBPData.success) {
+            setShowData({
+                nodes: AllBPData.data.bp
+            });
+        }
+    }, [AllBPData, AllBPIssuccess]);
+
+    /* Loading */
+    const [loadingVisible, setLoadingVisible] = useState(false);
+
     /* Search */
     const [search, setSearch] = useState("");
     const [showData, setShowData] = useState({
@@ -76,58 +82,70 @@ const EventSettingTable = () => {
     };
 
     useEffect(() => {
-        let filterData = data.nodes.filter((item) =>
-            item.name.toLowerCase().includes(search.toLowerCase())
-        );
-        setShowData((preVal) => ({ ...preVal, nodes: filterData }));
-    }, [search]);
+        if (AllBPData && AllBPData.success) {
+            let filterData = AllBPData.data.bp.filter((item) =>
+                item.name.toLowerCase().includes(search.toLowerCase())
+            );
+            setShowData((preVal) => ({ ...preVal, nodes: filterData }));
+        }
+    }, [AllBPData, search]);
 
     /* Model */
     const [opened, { open, close }] = useDisclosure(false);
-    const [bpTitle, setbpTitle] = useState("Edit Bury Point");
-    // 統一控管提交資料
+    const [bpTitle, setbpTitle] = useState("Edit");
     const form = useForm({
         initialValues: {
-            bpId: "",
+            bp_id: "",
             name: "",
             trackend: "",
             type: "",
-            description: ""
+            des: ""
         },
 
         validate: {
-            bpId: (value) => value ? null : 'Invalid bpId',
+            bp_id: (value) => value ? null : 'Invalid BP id',
             name: (value) => value ? null : "Invalid name",
             trackend: (value) => value ? null : "Invalid trackend",
             type: (value) => value ? null : "Invalid type",
-            description: (value) => value ? null : "Invalid description",
+            des: (value) => value ? null : "Invalid description",
         },
     });
-    const openAdd = useCallback(() => {
-        setbpTitle("Add Bury Point");
+    const openAdd = useCallback(async () => {
+        setbpTitle("Add");
         open();
     }, [open]);
-    const closeEdit = useCallback(() => {
+    const closeModel = useCallback(() => {
+        form.reset();
         close();
-    }, [close]);
-    const openEdit = useCallback(() => {
-        setbpTitle("Edit Bury Point");
+    }, [close, form]);
+    const openEdit = useCallback((item) => {
+        setbpTitle("Edit");
+        form.setValues(item);
         open();
-    }, [open]);
-    const saveHandler = useCallback(() => {
+    }, [open, form]);
+    const saveHandler = useCallback(async () => {
+        form.validate();
+        if (!form.isValid()) return;
+        setLoadingVisible(true);
+        let { bp_id } = form.values;
+        console.log(form.values);
+        let fn = bpTitle === "Add" ? () => addBuryPoint(form.values) : () => editBuryPoint(bp_id, form.values);
+        const result = await fn();
+        setLoadingVisible(false);
+        if (result.error) return;
         close();
-    }, [close]);
+    }, [close, form, bpTitle, addBuryPoint, editBuryPoint]);
 
 
     /* Dialog */
     const [delOpened, { close: delClose, open: delOpen }] = useDisclosure(false);
-    const delBPHandler = useCallback(() => {
-        delClose();
-    }, [delClose]);
     const openDelDialog = useCallback(() => {
         delOpen();
     }, [delOpen]);
     const closeDelDialog = useCallback(() => {
+        delClose();
+    }, [delClose]);
+    const delBPHandler = useCallback(() => {
         delClose();
     }, [delClose]);
 
@@ -140,7 +158,7 @@ const EventSettingTable = () => {
                         <input className={classes.search} style={searchStyle} id="search" type="text" value={search} onChange={handleSearch} />
                     </label>
                 </Grid.Col>
-                <Grid.Col xs={12} sm={1} style={{ display: "center", alignItems: "center", padding: "4px", marginTop: "5px" }}>
+                <Grid.Col xs={12} sm={1} style={{ display: "flex", justifyContent: "end", alignItems: "center", padding: "4px", }}>
                     <Button style={{ color: mantainTheme.colorScheme === 'light' ? "black" : "white", }} onClick={openAdd} compact variant='subtle'>Add +</Button>
                 </Grid.Col>
             </Grid>
@@ -165,19 +183,19 @@ const EventSettingTable = () => {
                             body={(item, index) => (
                                 <Row item={item}>
                                     <Cell style={{ textAlign: "center" }} stiff>{index + 1}</Cell>
-                                    <Cell>{item.bpId}</Cell>
+                                    <Cell>{item.bp_id}</Cell>
                                     <Cell>{item.name}</Cell>
-                                    <Cell style={{ textAlign: "center" }}>{item.trackEnd}</Cell>
+                                    <Cell style={{ textAlign: "center" }}>{item.trackend}</Cell>
                                     <Cell style={{ textAlign: "center" }}>{item.type}</Cell>
                                     <Cell>{item.des}</Cell>
                                     <Cell style={{ textAlign: "center", }}>
                                         <div style={{ transform: "translateY(3px) " }}>
-                                            <SVG onClick={openEdit} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
+                                            <SVG onClick={() => openEdit(item)} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
                                         </div>
                                     </Cell>
                                     <Cell style={{ textAlign: "center", }}>
                                         <div style={{ transform: "translateY(3px) " }}>
-                                            <SVG onClick={openDelDialog} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
+                                            <SVG onClick={() => openDelDialog(item)} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
                                         </div>
                                     </Cell>
                                 </Row>
@@ -186,11 +204,12 @@ const EventSettingTable = () => {
                     )}
                 </Table>
             </div >
-            <Modal className={classes.burypoint} opened={opened} onClose={closeEdit} withCloseButton={false} yOffset={100}>
-                <div className={classes.title}>{bpTitle}</div>
+            <LoadingOverlay visible={loadingVisible} zIndex={1000} styles={{ overlay: { radius: "sm", blur: 2 } }} />
+            <Modal className={classes.burypoint} opened={opened} onClose={closeModel} withCloseButton={false} yOffset={100}>
+                <div className={classes.title}>{bpTitle} Bury Point</div>
                 <div className={classes.input}>
                     <TextInput placeholder="Bury Point Id" label="Bury Point Id" withAsterisk
-                        {...form.getInputProps('bpId')} />
+                        {...form.getInputProps('bp_id')} />
                 </div>
                 <div className={classes.input}>
                     <TextInput placeholder="Bury Point Name" label="Name" withAsterisk
@@ -206,7 +225,7 @@ const EventSettingTable = () => {
                 </div>
                 <div className={classes.input}>
                     <TextInput placeholder="Bury point description" label="Description" withAsterisk
-                        {...form.getInputProps('description')} />
+                        {...form.getInputProps('des')} />
                 </div>
                 <div className={classes.btn}>
                     <Button variant="filled" styles={{ root: { width: "100%" } }} onClick={saveHandler}>

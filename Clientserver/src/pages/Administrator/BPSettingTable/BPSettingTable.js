@@ -71,6 +71,7 @@ const BPSettingTable = () => {
 
     /* Loading */
     const [loadingVisible, setLoadingVisible] = useState(false);
+    const [modalLoadingVisible, setModalLoadingVisible] = useState(false);
 
     /* Search */
     const [search, setSearch] = useState("");
@@ -126,10 +127,10 @@ const BPSettingTable = () => {
     const saveHandler = useCallback(async () => {
         form.validate();
         if (!form.isValid()) return;
-        setLoadingVisible(true);
+        setModalLoadingVisible(true);
         let fn = bpTitle === "Add" ? () => addBuryPoint(form.values) : () => editBuryPoint(form.values);
         const result = await fn();
-        setLoadingVisible(false);
+        setModalLoadingVisible(false);
         if (result.error) return;
         close();
     }, [close, form, bpTitle, addBuryPoint, editBuryPoint]);
@@ -171,75 +172,80 @@ const BPSettingTable = () => {
                     <Button style={{ color: mantainTheme.colorScheme === 'light' ? "black" : "white", }} onClick={openAdd} compact variant='subtle'>Add +</Button>
                 </Grid.Col>
             </Grid>
-            <div style={{ height: "300px", borderRadius: "4px 4px 0 0", overflow: 'hidden' }}>
-                <Table data={showData} theme={theme} layout={{ isDiv: true, fixedHeader: true, horizontalScroll: true }}>
-                    {(tableList) => (
-                        <Virtualized
-                            tableList={tableList}
-                            rowHeight={36}
-                            header={() => (
-                                <HeaderRow>
-                                    <HeaderCell style={{ textAlign: "center" }} stiff>Index</HeaderCell>
-                                    <HeaderCell>BP ID</HeaderCell>
-                                    <HeaderCell>Name</HeaderCell>
-                                    <HeaderCell style={{ textAlign: "center" }}>Trackend</HeaderCell>
-                                    <HeaderCell style={{ textAlign: "center" }}>Type</HeaderCell>
-                                    <HeaderCell>Description</HeaderCell>
-                                    <HeaderCell style={{ textAlign: "center" }}>Edit</HeaderCell>
-                                    <HeaderCell style={{ textAlign: "center" }}>Delete</HeaderCell>
-                                </HeaderRow>
-                            )}
-                            body={(item, index) => (
-                                <Row item={item}>
-                                    <Cell style={{ textAlign: "center" }} stiff>{index + 1}</Cell>
-                                    <Cell>{item.bp_id}</Cell>
-                                    <Cell>{item.name}</Cell>
-                                    <Cell style={{ textAlign: "center" }}>{item.trackend}</Cell>
-                                    <Cell style={{ textAlign: "center" }}>{item.type}</Cell>
-                                    <Cell>{item.des}</Cell>
-                                    <Cell style={{ textAlign: "center", }}>
-                                        <div style={{ transform: "translateY(3px) " }}>
-                                            <SVG onClick={() => openEdit(item)} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
-                                        </div>
-                                    </Cell>
-                                    <Cell style={{ textAlign: "center", }}>
-                                        <div style={{ transform: "translateY(3px) " }}>
-                                            <SVG onClick={() => openDelDialog(item)} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
-                                        </div>
-                                    </Cell>
-                                </Row>
-                            )}
-                        />
-                    )}
-                </Table>
-            </div >
-            <LoadingOverlay visible={loadingVisible} zIndex={1000} styles={{ overlay: { radius: "sm", blur: 2 } }} />
+            <div style={{ position: "relative" }}>
+                <div style={{ height: "300px", borderRadius: "4px 4px 0 0", overflow: 'hidden' }}>
+                    <Table data={showData} theme={theme} layout={{ isDiv: true, fixedHeader: true, horizontalScroll: true }}>
+                        {(tableList) => (
+                            <Virtualized
+                                tableList={tableList}
+                                rowHeight={36}
+                                header={() => (
+                                    <HeaderRow>
+                                        <HeaderCell style={{ textAlign: "center" }} stiff>Index</HeaderCell>
+                                        <HeaderCell>BP ID</HeaderCell>
+                                        <HeaderCell>Name</HeaderCell>
+                                        <HeaderCell style={{ textAlign: "center" }}>Trackend</HeaderCell>
+                                        <HeaderCell style={{ textAlign: "center" }}>Type</HeaderCell>
+                                        <HeaderCell>Description</HeaderCell>
+                                        <HeaderCell style={{ textAlign: "center" }}>Edit</HeaderCell>
+                                        <HeaderCell style={{ textAlign: "center" }}>Delete</HeaderCell>
+                                    </HeaderRow>
+                                )}
+                                body={(item, index) => (
+                                    <Row item={item}>
+                                        <Cell style={{ textAlign: "center" }} stiff>{index + 1}</Cell>
+                                        <Cell>{item.bp_id}</Cell>
+                                        <Cell>{item.name}</Cell>
+                                        <Cell style={{ textAlign: "center" }}>{item.trackend}</Cell>
+                                        <Cell style={{ textAlign: "center" }}>{item.type}</Cell>
+                                        <Cell>{item.des}</Cell>
+                                        <Cell style={{ textAlign: "center", }}>
+                                            <div style={{ transform: "translateY(3px) " }}>
+                                                <SVG onClick={() => openEdit(item)} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={editIcon} width={"20px"} height={"20px"}></SVG>
+                                            </div>
+                                        </Cell>
+                                        <Cell style={{ textAlign: "center", }}>
+                                            <div style={{ transform: "translateY(3px) " }}>
+                                                <SVG onClick={() => openDelDialog(item)} loader={<span>Loading...</span>} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={deleteIcon} width={"20px"} height={"20px"}></SVG>
+                                            </div>
+                                        </Cell>
+                                    </Row>
+                                )}
+                            />
+                        )}
+                    </Table>
+                </div >
+                <LoadingOverlay visible={loadingVisible} zIndex={1000} styles={{ overlay: { radius: "sm", blur: 2 } }} />
+            </div>
             <Modal className={classes.burypoint} opened={opened} onClose={closeModel} withCloseButton={false} yOffset={100}>
-                <div className={classes.title}>{bpTitle} Bury Point</div>
-                <div className={classes.input}>
-                    <TextInput disabled={modalBPidDisabled} placeholder="Bury Point Id" label="Bury Point Id" withAsterisk
-                        {...form.getInputProps('bp_id')} />
-                </div>
-                <div className={classes.input}>
-                    <TextInput placeholder="Bury Point Name" label="Name" withAsterisk
-                        {...form.getInputProps('name')} />
-                </div>
-                <div className={classes.input}>
-                    <TextInput placeholder="Frontend/Backend..." label="Trackend" withAsterisk
-                        {...form.getInputProps('trackend')} />
-                </div>
-                <div className={classes.input}>
-                    <TextInput placeholder="Click/View..." label="Type" withAsterisk
-                        {...form.getInputProps('type')} />
-                </div>
-                <div className={classes.input}>
-                    <TextInput placeholder="Bury point description" label="Description" withAsterisk
-                        {...form.getInputProps('des')} />
-                </div>
-                <div className={classes.btn}>
-                    <Button variant="filled" styles={{ root: { width: "100%" } }} onClick={saveHandler}>
-                        Save
-                    </Button>
+                <div style={{ position: "relative" }}>
+                    <LoadingOverlay visible={modalLoadingVisible} zIndex={1000} styles={{ overlay: { radius: "sm", blur: 2 } }} />
+                    <div className={classes.title}>{bpTitle} Bury Point</div>
+                    <div className={classes.input}>
+                        <TextInput disabled={modalBPidDisabled} placeholder="Bury Point Id" label="Bury Point Id" withAsterisk
+                            {...form.getInputProps('bp_id')} />
+                    </div>
+                    <div className={classes.input}>
+                        <TextInput placeholder="Bury Point Name" label="Name" withAsterisk
+                            {...form.getInputProps('name')} />
+                    </div>
+                    <div className={classes.input}>
+                        <TextInput placeholder="Frontend/Backend..." label="Trackend" withAsterisk
+                            {...form.getInputProps('trackend')} />
+                    </div>
+                    <div className={classes.input}>
+                        <TextInput placeholder="Click/View..." label="Type" withAsterisk
+                            {...form.getInputProps('type')} />
+                    </div>
+                    <div className={classes.input}>
+                        <TextInput placeholder="Bury point description" label="Description" withAsterisk
+                            {...form.getInputProps('des')} />
+                    </div>
+                    <div className={classes.btn}>
+                        <Button variant="filled" styles={{ root: { width: "100%" } }} onClick={saveHandler}>
+                            Save
+                        </Button>
+                    </div>
                 </div>
             </Modal>
             <Dialog position={{ top: 20, right: 20 }} opened={delOpened} withCloseButton onClose={closeDelDialog} size="lg" radius="md">

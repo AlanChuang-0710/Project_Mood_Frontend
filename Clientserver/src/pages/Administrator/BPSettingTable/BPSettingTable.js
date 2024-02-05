@@ -9,9 +9,9 @@ import { getTheme } from "@table-library/react-table-library/baseline";
 import { Virtualized } from "@table-library/react-table-library/virtualized";
 import { useGetAllBuryPointDataQuery, useAddBuryPointMutation, useEditBuryPointMutation, useDeleteBuryPointMutation } from "@/store/api/adminApi";
 import { deleteIcon, editIcon } from "@/assets/index";
-import classes from "@/pages/Administrator/EventSettingTable/EventSettingTable.module.scss";
+import classes from "@/pages/Administrator/BPSettingTable/BPSettingTable.module.scss";
 
-const EventSettingTable = () => {
+const BPSettingTable = () => {
     /* Table */
     const mantainTheme = useMantineTheme();
     const searchStyle = {
@@ -256,4 +256,4 @@ const EventSettingTable = () => {
     );
 };
 
-export default EventSettingTable;;
+export default BPSettingTable;;

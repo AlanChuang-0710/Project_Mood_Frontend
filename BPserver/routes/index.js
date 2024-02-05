@@ -86,6 +86,25 @@ router.put("/bp/:bp_id", checkTokenMiddleware, async function (req, res, next) {
   });
 });
 
+/* 獲得特定用戶一段時間內的所有event */
+router.get(`/event/:user_id`, checkTokenMiddleware, async function (req, res, next) {
+  const { user_id } = req.params;
+  const { startTime, endTime } = req.query;
+  console.log(startTime, endTime);
+  const formatQuery = format(`SELECT * FROM event WHERE user_id = %L AND timestamp >= %L AND timestamp <= %L`, user_id, startTime, endTime);
+  const result = await query(formatQuery).catch((err) => {
+    throw Error(err);
+  });
+  res.json({
+    success: true,
+    errorMessage: "",
+    code: 2000,
+    stackTrace: "",
+    data: result.rows
+  });
+});
+
+
 /* 新增用戶event */
 router.post('/event', checkTokenMiddleware, async function (req, res, next) {
   let { userId, source, bp } = req.body;

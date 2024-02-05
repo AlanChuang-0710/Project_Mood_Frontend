@@ -24,7 +24,7 @@ async function bpInsertDB(userId, source, bp) {
 
 /* 獲得所有bury point */
 router.get("/bp/all", checkTokenMiddleware, async function (req, res, next) {
-  const result = await query("SELECT * FROM burypoint").catch((err) => {
+  const result = await query("SELECT * FROM burypoint ORDER BY bp_id ASC").catch((err) => {
     throw Error(err);
   });
   res.json({

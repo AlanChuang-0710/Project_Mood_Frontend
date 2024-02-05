@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useMantineTheme, Grid, Modal, TextInput, Button, Dialog, Group, Text, LoadingOverlay } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
@@ -127,27 +127,36 @@ const EventSettingTable = () => {
         form.validate();
         if (!form.isValid()) return;
         setLoadingVisible(true);
-        let { bp_id } = form.values;
-        console.log(form.values);
-        let fn = bpTitle === "Add" ? () => addBuryPoint(form.values) : () => editBuryPoint(bp_id, form.values);
+        let fn = bpTitle === "Add" ? () => addBuryPoint(form.values) : () => editBuryPoint(form.values);
         const result = await fn();
         setLoadingVisible(false);
         if (result.error) return;
         close();
     }, [close, form, bpTitle, addBuryPoint, editBuryPoint]);
 
+    // 控制能否修改bp_id
+    const modalBPidDisabled = useMemo(() => {
+        return bpTitle === "Add" ? false : true;
+    }, [bpTitle]);
 
     /* Dialog */
     const [delOpened, { close: delClose, open: delOpen }] = useDisclosure(false);
-    const openDelDialog = useCallback(() => {
+    const [delDelegate, setDelDelegate] = useState(null);
+    const openDelDialog = useCallback((item) => {
+        setDelDelegate(item);
         delOpen();
     }, [delOpen]);
     const closeDelDialog = useCallback(() => {
+        setDelDelegate(null);
         delClose();
     }, [delClose]);
-    const delBPHandler = useCallback(() => {
+    const delBPHandler = useCallback(async () => {
+        setLoadingVisible(true);
+        const result = await deleteBuryPoint(delDelegate.bp_id);
+        setLoadingVisible(false);
+        if (result.error) return;
         delClose();
-    }, [delClose]);
+    }, [delClose, delDelegate, deleteBuryPoint]);
 
     return (
         <>
@@ -171,7 +180,7 @@ const EventSettingTable = () => {
                             header={() => (
                                 <HeaderRow>
                                     <HeaderCell style={{ textAlign: "center" }} stiff>Index</HeaderCell>
-                                    <HeaderCell>BP Id</HeaderCell>
+                                    <HeaderCell>BP ID</HeaderCell>
                                     <HeaderCell>Name</HeaderCell>
                                     <HeaderCell style={{ textAlign: "center" }}>Trackend</HeaderCell>
                                     <HeaderCell style={{ textAlign: "center" }}>Type</HeaderCell>
@@ -208,7 +217,7 @@ const EventSettingTable = () => {
             <Modal className={classes.burypoint} opened={opened} onClose={closeModel} withCloseButton={false} yOffset={100}>
                 <div className={classes.title}>{bpTitle} Bury Point</div>
                 <div className={classes.input}>
-                    <TextInput placeholder="Bury Point Id" label="Bury Point Id" withAsterisk
+                    <TextInput disabled={modalBPidDisabled} placeholder="Bury Point Id" label="Bury Point Id" withAsterisk
                         {...form.getInputProps('bp_id')} />
                 </div>
                 <div className={classes.input}>
@@ -235,12 +244,12 @@ const EventSettingTable = () => {
             </Modal>
             <Dialog position={{ top: 20, right: 20 }} opened={delOpened} withCloseButton onClose={closeDelDialog} size="lg" radius="md">
                 <Text size="sm" mb="xs" fw={500}>
-                    Are You Sure You Want To Delete The Bury Point?
+                    Are You Sure You Want To Delete The Bury Point <br /> {delDelegate ? `(BP ID: ${delDelegate.bp_id})` : ""}?
                 </Text>
 
                 <Group position="left" >
                     <Button color="red" onClick={delBPHandler}>Delete</Button>
-                    <Button onClick={delClose}>Cancel</Button>
+                    <Button onClick={closeDelDialog}>Cancel</Button>
                 </Group>
             </Dialog>
         </>

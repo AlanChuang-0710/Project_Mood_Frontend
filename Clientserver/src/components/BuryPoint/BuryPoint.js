@@ -25,12 +25,12 @@ const reportFn = () => {
     if (reportQuene.bp.length === 0) return;
     if (navigator.sendBeacon) {
         const blob = new Blob([JSON.stringify(reportQuene)], { type: 'application/json' });
-        navigator.sendBeacon("http://127.0.0.1:3002/test", blob);
+        navigator.sendBeacon("http://127.0.0.1:3002/admin/test", blob);
     } else {
         let image = new Image();
         image.width = 1;
         image.height = 1;
-        image.src = "http://127.0.0.1:3002/test?" + JSON.stringify(reportQuene);
+        image.src = "http://127.0.0.1:3002/admin/test?" + JSON.stringify(reportQuene);
     }
     reportQuene.bp = [];
 };

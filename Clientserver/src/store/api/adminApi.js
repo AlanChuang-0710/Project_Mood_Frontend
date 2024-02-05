@@ -41,11 +41,11 @@ const adminApi = createApi({
                 invalidatesTags: ["getAllBuryPointData"]
             }),
             editBuryPoint: build.mutation({
-                query(bp_id, data) {
+                query({ bp_id, ...data }) {
                     return {
                         url: `bp/${bp_id}`,
                         method: `put`,
-                        body: data
+                        body: data,
                     };
                 },
                 invalidatesTags: ["getAllBuryPointData"]

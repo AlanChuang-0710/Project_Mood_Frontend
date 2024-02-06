@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { query, format } = require('../db/db.js');
+const { query, format, clientQuery } = require('../db/db.js');
 const { checkTokenMiddleware } = require("../middleware/checkTokenMiddleware.js");
 
 async function bpInsertDB(userId, source, bp) {
@@ -20,6 +20,27 @@ async function bpInsertDB(userId, source, bp) {
   // });
   // const result = await Promise.all(insertPromises);
   return result;
+}
+
+// 
+/**
+ * 功能: 用於將event table的event數據依照用戶id進行分類
+ * @param {Array} eventArray 數據庫回傳的數組 
+ * @returns {Map} 依照用戶id分類事件的Map對象
+ * @example {"uuid1": ()=> [{},{}...],"uuid2": ()=> [{},{}...], }
+ */
+function eventUserIdMap(eventArray) {
+  if (!eventArray) throw Error("Please fill in parameter");
+  let mapObj = new Map();
+  eventArray.forEach((item) => {
+    let data = mapObj.get(item.user_id);
+    if (data) {
+      data.push(item);
+    } else {
+      mapObj.set(item.user_id, [item]);
+    }
+  });
+  return mapObj;
 }
 
 /* 獲得所有bury point */
@@ -86,6 +107,31 @@ router.put("/bp/:bp_id", checkTokenMiddleware, async function (req, res, next) {
   });
 });
 
+/* 獲得所有用戶的event count */
+router.get(`/event/all`, checkTokenMiddleware, async function (req, res, next) {
+  const formatQuery = "SELECT * FROM event";
+  const result = await query(formatQuery).catch((err) => {
+    throw Error(err);
+  });
+  const userIdEvMap = eventUserIdMap(result.rows);
+  const clientData = await clientQuery("users");
+  const transformData = clientData.reduce((accu, curr) => {
+    accu[curr._id] = curr;
+    return accu;
+  }, {});
+  let data = [];
+  userIdEvMap.forEach((value, key) => {
+    data.push({ user_id: key, count: value.length, lastLoginTime: transformData?.[key]?.lastLoginTime, username: transformData?.[key]?.username });
+  });
+  res.json({
+    success: true,
+    errorMessage: "",
+    code: 2000,
+    stackTrace: "",
+    data
+  });
+});
+
 /* 獲得特定用戶一段時間內的所有event */
 router.get(`/event/:user_id`, checkTokenMiddleware, async function (req, res, next) {
   const { user_id } = req.params;
@@ -103,7 +149,6 @@ router.get(`/event/:user_id`, checkTokenMiddleware, async function (req, res, ne
     data: result.rows
   });
 });
-
 
 /* 新增用戶event */
 router.post('/event', checkTokenMiddleware, async function (req, res, next) {

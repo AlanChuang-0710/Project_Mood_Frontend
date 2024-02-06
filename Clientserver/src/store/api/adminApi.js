@@ -13,7 +13,7 @@ const adminApi = createApi({
         mode: 'cors',
     }),
 
-    tagTypes: ["getAllBuryPointData"], //用來指定Api中的標籤類型
+    tagTypes: ["getAllBuryPointData", "getAllEventCountData"], //用來指定Api中的標籤類型
 
     endpoints(build) {
         //build是請求的構建器，通過build來設置請求的相關信息
@@ -58,6 +58,18 @@ const adminApi = createApi({
                     };
                 },
                 invalidatesTags: ["getAllBuryPointData"]
+            }),
+            getAllEventCountData: build.query({
+                query() {
+                    return {
+                        url: `/event/all`,
+                        method: "get",
+                    };
+                },
+                keepUnusedDataFor: 0,
+                providesTags: [{
+                    type: "getAllEventCountData",
+                }]
             })
         };
     }
@@ -65,5 +77,5 @@ const adminApi = createApi({
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetAllBuryPointDataQuery, useAddBuryPointMutation, useEditBuryPointMutation, useDeleteBuryPointMutation } = adminApi;
+export const { useGetAllBuryPointDataQuery, useAddBuryPointMutation, useEditBuryPointMutation, useDeleteBuryPointMutation, useGetAllEventCountDataQuery } = adminApi;
 export default adminApi;

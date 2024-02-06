@@ -162,13 +162,13 @@ const BPSettingTable = () => {
     return (
         <>
             <Grid justify="space-between">
-                <Grid.Col xs={12} sm={7} style={{ padding: "4px", margin: "4px 0 4px 0" }}>
+                <Grid.Col span={8} style={{ padding: "4px", margin: "4px 0 4px 0" }}>
                     <label htmlFor="search" style={{ fontSize: "18px" }}>
                         <span>&nbsp;&nbsp;Search:&nbsp;</span>
                         <input className={classes.search} style={searchStyle} id="search" type="text" value={search} onChange={handleSearch} />
                     </label>
                 </Grid.Col>
-                <Grid.Col xs={12} sm={1} style={{ display: "flex", justifyContent: "end", alignItems: "center", padding: "4px", }}>
+                <Grid.Col span={4} style={{ display: "flex", justifyContent: "end", alignItems: "center", padding: "4px", }}>
                     <Button style={{ color: mantainTheme.colorScheme === 'light' ? "black" : "white", }} onClick={openAdd} compact variant='subtle'>Add +</Button>
                 </Grid.Col>
             </Grid>

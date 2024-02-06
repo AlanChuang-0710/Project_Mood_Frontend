@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, useMantineTheme, SegmentedControl } from "@mantine/core";
 import BPSettingTable from './BPSettingTable/BPSettingTable';
+import UserEventTable from "./UserEventTable/UserEventTable";
 import { selectCurrentUserId } from "@/store/reducer/authSlice";
 import { useGetComponentStyle } from "@/styles/dayNightStyle";
 
@@ -36,7 +37,7 @@ const Administrator = () => {
         </Grid.Col>
         <Grid.Col xs={12} >
           <div style={dayNightStyle}>
-            用戶數據
+            <UserEventTable></UserEventTable>
           </div>
         </Grid.Col>
         <Grid.Col xs={12} md={4}>

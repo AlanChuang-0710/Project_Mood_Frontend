@@ -4,9 +4,14 @@
  */
 
 const { Pool } = require("pg");
+const mongoose = require("mongoose");
 const format = require('pg-format');
 const { DBHOST, DBPORT, DBNAME, PASSWORD, USER } = require("../config/config");
 
+/* MongoDB 配置 & 連線 */
+mongoose.connect(`mongodb://127.0.0.1:27017/Mood`);
+
+/* Postgres DB配置 & 連線*/
 let processPool;
 async function setupDatabase() {
     const checkAndSetupDB = async () => {
@@ -64,7 +69,14 @@ async function setupDatabase() {
     processPool.query('CREATE TABLE IF NOT EXISTS event (id serial PRIMARY KEY, user_id varchar, bp_id varchar NOT NULL, timestamp varchar NOT NULL, source text NOT NULL)');
 };
 setupDatabase();
+
+
 module.exports = {
     query: (text, params) => processPool.query(text, params),
-    format
+    format,
+    clientQuery: async (collection, query = {}) => {
+        const collectObj = mongoose.connection.collection(collection);
+        const documents = await collectObj.find(query).toArray();
+        return documents;
+    }
 };

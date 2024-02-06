@@ -24,6 +24,7 @@ import supportAction from "./dashboard/support_action.svg";
 import deleteIcon from "./tool/delete.svg";
 import editIcon from "./tool/edit.svg";
 import uploadIcon from "./tool/upload.svg";
+import detailsIcon from "./tool/details.svg";
 
 // compass
 import optionDoctor from "./compass/option_doctor.svg";
@@ -43,7 +44,7 @@ export {
     dayBg, nightBg, facebookIcon, googleIcon, loginByPhone, signupSuccess,
     happy, smile, normal, sad, depressed,
     userImage, happyAction, negativeAction, supportAction,
-    deleteIcon, editIcon, uploadIcon,
+    deleteIcon, editIcon, uploadIcon, detailsIcon,
     optionDoctor, optionMeditation, optionRainbowCard, optionTalk,
     climb, dream, think,
     error404

@@ -68,7 +68,9 @@ router.post("/login", async (req, res) => {
     const data = await UserModel.findOne({ email, password: md5(password) });
     if (data) {
         let { id, username } = data;
-
+        data.lastLoginTime = Date.now();
+        data.save();
+        
         // 創建accessToken
         const accessToken = jwt.sign({ email, id }, ACCESS_TOKEN_SECRET,
             { expiresIn: 20 } // 20秒過期

@@ -26,6 +26,11 @@ let UserSchema = new mongoose.Schema({
     gender: {
         type: Number,
         enum: [1, 2, 3]
+    },
+    lastLoginTime: {
+        type: Date,
+        default: Date.now(),
+        required: true,
     }
 }, {
     timestamps: true

@@ -3380,3 +3380,15 @@ HTTP status 200 ResTime 11.439 ms GET /report/65362f5401f9597b1b060752/memo_keyw
 HTTP status 200 ResTime 17.383 ms GET /report/65362f5401f9597b1b060752/dream_keyword_chart?startTime=1675699200000&endTime=1707235200000
 HTTP status 304 ResTime 10.328 ms GET /report/65362f5401f9597b1b060752/memo_keyword_chart?startTime=1704556800000&endTime=1707235200000
 HTTP status 304 ResTime 15.330 ms GET /report/65362f5401f9597b1b060752/dream_keyword_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 5.748 ms GET /report/65362f5401f9597b1b060752/dream_keyword_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 5.704 ms GET /report/65362f5401f9597b1b060752/memo_keyword_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 3.724 ms GET /users/refresh
+HTTP status 304 ResTime 1.243 ms GET /users/refresh
+HTTP status 200 ResTime 14.944 ms GET /report/65362f5401f9597b1b060752/memo_keyword_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 34.758 ms GET /report/65362f5401f9597b1b060752/dream_keyword_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 20.006 ms GET /report/65362f5401f9597b1b060752/score_line_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 29.415 ms GET /report/65362f5401f9597b1b060752/score_pie_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 56.329 ms GET /report/65362f5401f9597b1b060752/score_day_bar?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 50.532 ms GET /report/65362f5401f9597b1b060752/kol_score_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 49.422 ms GET /report/65362f5401f9597b1b060752/tags_score_chart?startTime=1704556800000&endTime=1707235200000
+HTTP status 200 ResTime 52.661 ms GET /report/65362f5401f9597b1b060752/sleep_line_chart?startTime=1704556800000&endTime=1707235200000

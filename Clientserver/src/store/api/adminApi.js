@@ -25,7 +25,7 @@ const adminApi = createApi({
                         method: "get",
                     };
                 },
-                keepUnusedDataFor: 0, // 設置數據緩存的時間，單位為秒，默認60s
+                keepUnusedDataFor: 60, // 設置數據緩存的時間，單位為秒，默認60s
                 providesTags: [{
                     type: "getAllBuryPointData",
                 }]
@@ -70,6 +70,15 @@ const adminApi = createApi({
                 providesTags: [{
                     type: "getAllEventCountData",
                 }]
+            }),
+            getCertainUserEventData: build.mutation({
+                query(user_id) {
+                    return {
+                        url: `/event/${user_id}`,
+                        method: "get",
+                    };
+                },
+                keepUnusedDataFor: 1000,
             })
         };
     }
@@ -77,5 +86,5 @@ const adminApi = createApi({
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useGetAllBuryPointDataQuery, useAddBuryPointMutation, useEditBuryPointMutation, useDeleteBuryPointMutation, useGetAllEventCountDataQuery } = adminApi;
+export const { useGetAllBuryPointDataQuery, useAddBuryPointMutation, useEditBuryPointMutation, useDeleteBuryPointMutation, useGetAllEventCountDataQuery, useGetCertainUserEventDataMutation } = adminApi;
 export default adminApi;

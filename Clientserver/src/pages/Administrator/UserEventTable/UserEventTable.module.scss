@@ -5,3 +5,31 @@
         outline: none;
     }
 }
+
+.modal {
+    .title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .name,
+    .id {
+        font-size: 18px;
+        display: flex;
+    }
+
+    .name {
+        border-bottom: 1px solid gray;
+    }
+
+    .key {
+        width: 55px;
+        border-right: 1px solid gray;
+        margin-right: 5px;
+    }
+
+    .trend {
+        margin-top: 5px;
+    }
+}

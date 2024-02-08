@@ -7,7 +7,13 @@
 }
 
 .modal {
+
     .title {
+        margin-bottom: 5px;
+    }
+
+    .title,
+    .trend-title {
         text-align: center;
         font-size: 18px;
         font-weight: bold;
@@ -17,9 +23,7 @@
     .id {
         font-size: 18px;
         display: flex;
-    }
-
-    .name {
+        border-top: 1px solid gray;
         border-bottom: 1px solid gray;
     }
 
@@ -29,7 +33,7 @@
         margin-right: 5px;
     }
 
-    .trend {
-        margin-top: 5px;
+    .trend-title {
+        margin-bottom: 0;
     }
 }

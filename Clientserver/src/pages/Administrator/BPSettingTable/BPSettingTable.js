@@ -169,7 +169,7 @@ const BPSettingTable = () => {
                     </label>
                 </Grid.Col>
                 <Grid.Col span={4} style={{ display: "flex", justifyContent: "end", alignItems: "center", padding: "4px", }}>
-                    <Button style={{ color: mantainTheme.colorScheme === 'light' ? "black" : "white", }} onClick={openAdd} compact variant='subtle'>Add +</Button>
+                    <Button style={{ color: mantainTheme.colorScheme === 'light' ? "black" : "white", marginRight: "4px" }} onClick={openAdd} compact variant='subtle'>Add +</Button>
                 </Grid.Col>
             </Grid>
             <div style={{ position: "relative" }}>

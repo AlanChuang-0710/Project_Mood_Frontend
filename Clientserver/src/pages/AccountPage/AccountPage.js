@@ -33,8 +33,6 @@ const AccountPage = () => {
 
   return (
     <>
-      <div style={{ fontWeight: "bold", fontSize: "30px", paddingLeft: "5px" }}>Account Setting</div>
-
       <div style={useGetComponentStyle()}>
         <Grid >
           <Grid.Col xs={12} md="content" >

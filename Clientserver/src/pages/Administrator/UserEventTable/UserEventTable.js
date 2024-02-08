@@ -6,6 +6,7 @@ import { Virtualized } from "@table-library/react-table-library/virtualized";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import SVG from "react-inlinesvg";
+import moment from 'moment';
 import { useGetAllEventCountDataQuery, useGetCertainUserEventDataMutation } from "@/store/api/adminApi";
 import EventFlowChart from "./EventFlowChart/EventFlowChart";
 import { detailsIcon } from "@/assets/index";
@@ -68,13 +69,38 @@ const UserEventTable = () => {
   };
 
   /* 獲得特定用戶Event */
+  const [certainUser, setCertainUser] = useState({});
   const [getCertainUserEv] = useGetCertainUserEventDataMutation();
-
+  const [certainUserEvData, setCertainUserEvData] = useState([]);
   /* Modal */
   const [opened, { open, close }] = useDisclosure(false);
-  const checkUserDetail = useCallback(async (user_id) => {
-    const result = await getCertainUserEv(user_id);
-    console.log(result.data.data);
+  const checkUserDetail = useCallback(async (user) => {
+    setCertainUser(user);
+    const result = await getCertainUserEv(user.user_id);
+    let data = result.data.data.map((item) => ({
+      timestamp: moment(item.timestamp / 1).format("YYYYMMDD"),
+      bp_id: item.bp_id
+    }));
+    let transData = new Map();
+    data.forEach((item) => {
+      let { bp_id, timestamp } = item;
+      if (transData.has(timestamp)) {
+        let [timestamp, count, label] = transData.get(item.timestamp);
+        count += 1;
+        label[bp_id] = label[bp_id] ? label[bp_id] + 1 : 1;
+        let newData = [timestamp, count, label];
+        transData.set(timestamp, newData);
+      } else {
+        let newData = [timestamp, 1, { [bp_id]: 1 }];
+        transData.set(timestamp, newData);
+      }
+    });
+    transData = Array.from(transData.values());
+    transData = {
+      xAxis: transData.map((item) => item[0]),
+      yAxis: transData.map((item) => ({ value: item[1], evInfo: item[2] }))
+    };
+    setCertainUserEvData(transData);
     open();
   }, [open, getCertainUserEv]);
 
@@ -124,7 +150,7 @@ const UserEventTable = () => {
                     <Cell style={{ textAlign: "center" }}>{item.count}</Cell>
                     <Cell style={{ textAlign: "center" }}>
                       <div style={{ transform: "translateY(3px) " }}>
-                        <SVG loader={<span>Loading...</span>} onClick={() => checkUserDetail(item.user_id)} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={detailsIcon} width={"20px"} height={"20px"}></SVG>
+                        <SVG loader={<span>Loading...</span>} onClick={() => checkUserDetail(item)} fill={mantainTheme.colorScheme === "dark" ? "white" : "black"} src={detailsIcon} width={"20px"} height={"20px"}></SVG>
                       </div>
                     </Cell>
                   </Row>
@@ -141,16 +167,24 @@ const UserEventTable = () => {
           <div className={classes.title}>Event Record</div>
           <div className={classes.name}>
             <div className={classes.key}>Name</div>
-            <div>Alan</div>
+            <div>{certainUser.username}</div>
           </div>
           <div className={classes.id}>
             <div className={classes.key}>ID</div>
-            <div>65362f5401f9597b</div>
+            <div>{certainUser.user_id}</div>
           </div>
-          <div className={`${classes.trend} ${classes.trend}`}>
-            <p>User Activity Trend</p>
+          <div className={classes.id}>
+            <div className={classes.key}>LLT</div>
+            <div>{certainUser.lastLoginTime}</div>
+          </div>
+          <div className={classes.id}>
+            <div className={classes.key}>TEC</div>
+            <div>{certainUser.count}</div>
+          </div>
+          <div className={`${classes.trend} `}>
+            <p className={`${classes["trend-title"]}`}>Activity Trend</p>
             <div style={{ width: "100%" }}>
-              <EventFlowChart height={400} eventFlowChartData={{ data: [{ score: 2, timestamp: Date.now() - 2 }, { score: 2, timestamp: Date.now() }] }} />
+              <EventFlowChart height={350} eventFlowChartData={certainUserEvData} />
             </div>
           </div>
         </div>

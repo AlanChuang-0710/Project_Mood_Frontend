@@ -9,13 +9,13 @@ import { useGetComponentStyle } from "@/styles/dayNightStyle";
 const Administrator = () => {
   const theme = useMantineTheme();
   const id = useSelector(selectCurrentUserId);
-  const [value, setValue] = useState('AppAnalysis');
+  const [value, setValue] = useState('UserAnalysis');
   const dayNightStyle = useGetComponentStyle();
   return (
     <div>
       {/* Annual analysis Tab*/}
       <Grid>
-        <Grid.Col xs={12} md={4}>
+        <Grid.Col xs={12} md={6}>
           <SegmentedControl
             fullWidth
             color={theme.colorScheme === 'light' ? "" : "button.1"}
@@ -23,6 +23,7 @@ const Administrator = () => {
             onChange={setValue}
             data={[
               { label: 'App Analysis', value: 'AppAnalysis' },
+              { label: 'User Analysis', value: 'UserAnalysis' },
               { label: 'Setting', value: 'setting' },
             ]}
           />
@@ -30,16 +31,6 @@ const Administrator = () => {
       </Grid>
 
       {value === 'AppAnalysis' && < Grid >
-        <Grid.Col xs={12} >
-          <div style={dayNightStyle}>
-            <BPSettingTable></BPSettingTable>
-          </div>
-        </Grid.Col>
-        <Grid.Col xs={12} >
-          <div style={dayNightStyle}>
-            <UserEventTable></UserEventTable>
-          </div>
-        </Grid.Col>
         <Grid.Col xs={12} md={4}>
           <div style={dayNightStyle}>
             前端網頁服務器: 端口、流量
@@ -53,6 +44,19 @@ const Administrator = () => {
         <Grid.Col xs={12} md={4}>
           <div style={dayNightStyle}>
             分析服務器: 端口、流量
+          </div>
+        </Grid.Col>
+      </ Grid >}
+
+      {value === 'UserAnalysis' && < Grid >
+        <Grid.Col xs={12} >
+          <div style={dayNightStyle}>
+            <BPSettingTable></BPSettingTable>
+          </div>
+        </Grid.Col>
+        <Grid.Col xs={12} >
+          <div style={dayNightStyle}>
+            <UserEventTable></UserEventTable>
           </div>
         </Grid.Col>
       </ Grid >}

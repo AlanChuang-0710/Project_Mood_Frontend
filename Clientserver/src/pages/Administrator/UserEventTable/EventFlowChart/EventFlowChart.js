@@ -10,25 +10,11 @@ const EventFlowChart = ({ height, eventFlowChartData }) => {
 
 
     useEffect(() => {
-        let dataArray;
-        let timestampArray;
-        let option;
         if (!eventFlowChart) {
             setEventFlowChart(echarts.init(eventFlowDOM.current));
         }
         if (eventFlowChart && eventFlowChartData) {
-            const nameMap = ["Depressed", "Sad", "Peace", "Smile", "Happy"];
-            const colorMap = theme.colors.emotion;
-            dataArray = eventFlowChartData.data.map((item) => {
-                let newProp = {
-                    label: item.score !== null ? nameMap[item.score + 2] : "No record",
-                    color: item.score !== null ? colorMap[item.score + 2] : "#A9A9A9",
-                    value: item.score
-                };
-                return { ...newProp, ...item };
-            });
-            timestampArray = eventFlowChartData.data.map((item) => moment(item.timestamp).format('YYYY-MM-DD'));
-            option = {
+            let option = {
                 title: {
                     text: "Mood Flow",
                     show: false,
@@ -38,7 +24,7 @@ const EventFlowChart = ({ height, eventFlowChartData }) => {
                 },
                 xAxis: {
                     type: 'category',
-                    data: timestampArray,
+                    data: eventFlowChartData.xAxis,
                     axisLine: {
                         show: false,
                         onZero: false,
@@ -63,10 +49,6 @@ const EventFlowChart = ({ height, eventFlowChartData }) => {
                             opacity: 1
                         }
                     },
-                    axisLabel: {
-                        rotate: 0,
-                        formatter: (value) => nameMap[value + 2],
-                    }
                 },
                 axisPointer: [
                     {
@@ -90,20 +72,21 @@ const EventFlowChart = ({ height, eventFlowChartData }) => {
                     backgroundColor: "rgba(0, 0, 0, 0)",
                     borderWidth: 0,
                     formatter: (params) => {
+                        console.log(params);
                         return `<div style="width: 150px; padding: 5px 6px; border-radius: 5px; border:3px solid ${params[0].data.color}; background: #FFF">
                             <div style="display: flex; justify-content: space-between">
                                 <div>Date</div>
                                 <div>${params[0].axisValue}</div>
                             </div>
                             <div style="display: flex; justify-content: space-between">
-                                <div>Score</div>
-                                <div>${params[0].data.label}</div>
+                                <div>Count</div>
+                                <div>${params[0].value}</div>
                             </div>
                         </div>`;
                     },
                 },
                 grid: {
-                    top: "20px",
+                    top: "10px",
                     left: "8px",
                     right: "2px",
                     bottom: "15px",
@@ -111,7 +94,7 @@ const EventFlowChart = ({ height, eventFlowChartData }) => {
                 },
                 series: [
                     {
-                        data: dataArray,
+                        data: eventFlowChartData.yAxis,
                         type: 'line',
                         smooth: true,
                         // 控制value為null時，是否斷開連線
@@ -125,7 +108,6 @@ const EventFlowChart = ({ height, eventFlowChartData }) => {
                         symbolSize: 5,
                         // 折線數據點
                         itemStyle: {
-                            color: (data) => data.data.color,
                             borderWidth: 0,
                         },
                         emphasis: {

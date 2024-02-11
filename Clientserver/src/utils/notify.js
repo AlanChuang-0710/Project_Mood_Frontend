@@ -22,7 +22,7 @@ export const warnNotify = ({ title = "Thoughtful Notification", message = "Defau
     });
 };
 
-export const kindNotify = ({ title = "Default title", message = "Default message", withCloseButton = true, onClose = () => { }, onOpen = () => { }, autoClose = 3000 }) => {
+export const successNotify = ({ title = "Thoughtful Notification", message = "Default message", withCloseButton = true, onClose = () => { }, onOpen = () => { }, autoClose = 3000 }) => {
     notifications.show({
         title,
         message,

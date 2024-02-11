@@ -12,7 +12,7 @@ import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScor
 import { selectCurrentUserId } from "@/store/reducer/authSlice";
 import { useGetComponentStyle } from "@/styles/dayNightStyle";
 import { getStartEndTime } from "@/utils/public";
-import { warnNotify, kindNotify } from '@/utils/notify';
+import { warnNotify, successNotify } from '@/utils/notify';
 import classes from "@/pages/AnalysisPage/AnalysisPage.module.scss";
 
 const AnalysisPage = () => {

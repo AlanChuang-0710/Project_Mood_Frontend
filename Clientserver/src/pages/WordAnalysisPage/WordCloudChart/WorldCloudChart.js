@@ -3,7 +3,7 @@ import { useMantineTheme } from "@mantine/core";
 import * as echarts from 'echarts';
 import 'echarts-wordcloud';
 import ChartTableHeader from "@/components/ChartTableHeader/ChartTableHeader";
-// import classes from "./WorldCloudChart.module.scss";
+import classes from "./WorldCloudChart.module.scss";
 
 const WorldCloudChart = ({ height, keywordData, title, subtitle }) => {
     const theme = useMantineTheme();
@@ -79,8 +79,17 @@ const WorldCloudChart = ({ height, keywordData, title, subtitle }) => {
     return (
         <div>
             <ChartTableHeader title={title} subtitle={subtitle} />
-            <div style={{ borderRadius: "10px", overflow: "hidden" }}>
-                <div ref={wordCloudDOM} style={{ height: height + "px" }}></div>
+            <div style={{ borderRadius: "10px", overflow: "hidden", height: height + "px", position: "relative" }}>
+                <div >
+                    <div ref={wordCloudDOM} style={{ height: height + "px" }}></div>
+                </div>
+                <div style={{ position: "absolute", top: "0", left: "0", width: "100%", height: height + "px", display: keywordData?.length ? "none" : "flex", justifyContent: "center", alignItems: "center" }} >
+                    <div style={{ transform: "translateY(-20%)", fontSize: "20px" }}>
+                        <p className="animate__animated animate__fadeInDown " >
+                            No Word Recorded~
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -12,6 +12,7 @@ import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScor
 import { selectCurrentUserId } from "@/store/reducer/authSlice";
 import { useGetComponentStyle } from "@/styles/dayNightStyle";
 import { getStartEndTime } from "@/utils/public";
+import { warnNotify, kindNotify } from '@/utils/notify';
 import classes from "@/pages/AnalysisPage/AnalysisPage.module.scss";
 
 const AnalysisPage = () => {
@@ -37,13 +38,20 @@ const AnalysisPage = () => {
   const { data: scoreKOLChartData } = useGetKOLScoreDataQuery({ id, startTime, endTime });
 
 
+  const [anaMsg, setAnaMsg] = useState({});
   // 數據分析
   useEffect(() => {
 
     // 心情佔比
     if (scorePieChartData) {
-      let happyRatio = (scorePieChartData.data.data[4].count / scorePieChartData.data.total).toFixed(2) * 100;
-      let depressionRatio = (scorePieChartData.data.data[0].count / scorePieChartData.data.total).toFixed(2) * 100;
+      let depressionCount = scorePieChartData.data.data[0].count;
+      let totalCount = scorePieChartData.data.total;
+      let nullCount = scorePieChartData.data.data[5].count;
+      if ((nullCount / totalCount).toFixed(2) * 100 > 80) warnNotify({
+        message: "The amount of recorded data is insufficient, rendering the analysis potentially inconclusive",
+        autoClose: 5000
+      });
+      setAnaMsg((preVal) => ({ ...preVal, depressRatio: depressionCount / (totalCount - nullCount) }));
     };
 
     // 波動率 (介於0 ~ 2之間)，大於1.5認定為波動較大。
@@ -72,7 +80,7 @@ const AnalysisPage = () => {
         return standardDeviation;
       };
       let scoreVolatility = calculateStandardDeviation(scoreArray);
-      console.log(`過去一段時間您的心情波動率約為${scoreVolatility}`);
+      setAnaMsg((preVal) => ({ ...preVal, volatility: scoreVolatility }));
     }
 
     // 星期幾低潮佔比較高，建議可以特別注意 (特定星期幾depressed比例高於特定星期幾的1/2，則認定特定星期幾具有較高比例不開心)
@@ -84,16 +92,13 @@ const AnalysisPage = () => {
           overDepressedArr.push(dayArrMapping[index]);
         };
       });
-      console.log(overDepressedArr.join(", ") + "有較高的低潮比例，需特別注意!");
+      setAnaMsg((preVal) => ({ ...preVal, depressDay: overDepressedArr.join(", ") }));
     }
 
     // 睡眠時段主要分布範圍 (幾個小時到幾個小時之間)
     if (sleepFlowChartData) {
-
+      console.log("sleepFlowChartData", sleepFlowChartData);
     }
-
-    // 結合睡眠與心情時間圖，進行綜合分析，可以發現___
-
 
   }, [scorePieChartData, scoreFlowChartData, scoreDayBarChartData]);
 

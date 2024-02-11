@@ -17,6 +17,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "animate.css": "^4.1.1",
     "dayjs": "^1.11.10",
     "echarts": "^5.4.3",
     "echarts-stat": "^1.2.0",

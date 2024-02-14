@@ -47,10 +47,6 @@ const AnalysisPage = () => {
       let depressionCount = scorePieChartData.data.data[0].count;
       let totalCount = scorePieChartData.data.total;
       let nullCount = scorePieChartData.data.data[5].count;
-      if ((nullCount / totalCount).toFixed(2) * 100 > 80) warnNotify({
-        message: "The amount of recorded data is insufficient, rendering the analysis potentially inconclusive",
-        autoClose: 5000
-      });
       setAnaMsg((preVal) => ({ ...preVal, depressRatio: depressionCount / (totalCount - nullCount) }));
     };
 
@@ -101,6 +97,19 @@ const AnalysisPage = () => {
     }
 
   }, [scorePieChartData, scoreFlowChartData, scoreDayBarChartData]);
+
+  // 數據不足的提示
+  useEffect(() => {
+    if (scorePieChartData) {
+      let totalCount = scorePieChartData.data.total;
+      let nullCount = scorePieChartData.data.data[5].count;
+      if ((nullCount / totalCount).toFixed(2) * 100 > 80) warnNotify({
+        message: "The amount of recorded data is insufficient, rendering the analysis potentially inconclusive",
+        autoClose: 5000
+      });
+    };
+  }, [scorePieChartData]);
+
 
   return (
     <div>

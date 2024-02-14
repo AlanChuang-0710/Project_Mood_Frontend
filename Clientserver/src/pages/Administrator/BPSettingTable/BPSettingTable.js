@@ -164,7 +164,7 @@ const BPSettingTable = () => {
             <Grid justify="space-between">
                 <Grid.Col span={8} style={{ padding: "4px", margin: "4px 0 4px 0" }}>
                     <label htmlFor="search" style={{ fontSize: "18px" }}>
-                        <span>&nbsp;&nbsp;Search:&nbsp;</span>
+                        <span>&nbsp;&nbsp;Search By Name:&nbsp;</span>
                         <input className={classes.search} style={searchStyle} id="search" type="text" value={search} onChange={handleSearch} />
                     </label>
                 </Grid.Col>

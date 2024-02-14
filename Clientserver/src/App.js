@@ -20,7 +20,7 @@ function App() {
             colors: globalColor
             // primaryColor: 'brand', //只接受colors中的鍵
           }}>
-          <Notifications />
+          <Notifications position="top-right" />
           <RouterProvider router={router}></RouterProvider>
         </MantineProvider>
       </ColorSchemeProvider>

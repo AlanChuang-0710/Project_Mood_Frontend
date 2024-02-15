@@ -8,16 +8,18 @@ import SleepFlowChart from '@/pages/AnalysisPage/SleepFlowChart/SleepFlowChart';
 import ScoreAssociatedChart from "@/pages/AnalysisPage/ScoreAssociatedChart/ScoreAssociatedChart";
 import SleepScoreScatterChart from '@/pages/AnalysisPage/SleepScoreScatterChart/SleepScoreScatterChart';
 import SleepHistogram from "@/pages/AnalysisPage/SleepHistogram/SleepHistogram";
+import AnalysisMsg from "@/pages/AnalysisPage/AnalysisMsg/AnalysisMsg";
 import { useGetScorePieChartDataQuery, useGetScoreLineChartDataQuery, useGetScoreDayBarDataQuery, useGetSleepLineChartDataQuery, useGetTagsScoreDataQuery, useGetKOLScoreDataQuery } from '@/store/api/analysisApi';
-import { selectCurrentUserId } from "@/store/reducer/authSlice";
+import { selectCurrentUserId, selectCurrentUsername } from "@/store/reducer/authSlice";
 import { useGetComponentStyle } from "@/styles/dayNightStyle";
 import { getStartEndTime } from "@/utils/public";
-import { warnNotify, successNotify } from '@/utils/notify';
+import { warnNotify } from '@/utils/notify';
 import classes from "@/pages/AnalysisPage/AnalysisPage.module.scss";
 
 const AnalysisPage = () => {
   const theme = useMantineTheme();
   const id = useSelector(selectCurrentUserId);
+  const username = useSelector(selectCurrentUsername);
 
   const [value, setValue] = useState('month');
   const { startTime, endTime } = getStartEndTime(value);
@@ -38,19 +40,36 @@ const AnalysisPage = () => {
   const { data: scoreKOLChartData } = useGetKOLScoreDataQuery({ id, startTime, endTime });
 
 
-  const [anaMsg, setAnaMsg] = useState({});
-  // 數據分析
-  useEffect(() => {
+  const [anaMsg, setAnaMsg] = useState({
+    depressRatio: "",
+    recordedCount: "",
+    depressDay: "",
+    volatility: ""
+  });
 
-    // 心情佔比
+
+  // 心情佔比
+  useEffect(() => {
     if (scorePieChartData) {
       let depressionCount = scorePieChartData.data.data[0].count;
       let totalCount = scorePieChartData.data.total;
       let nullCount = scorePieChartData.data.data[5].count;
-      setAnaMsg((preVal) => ({ ...preVal, depressRatio: depressionCount / (totalCount - nullCount) }));
+      let recordedCount = totalCount - nullCount;
+      let depressRatio = (depressionCount / recordedCount).toFixed(2, 10);
+      setAnaMsg((preVal) => ({ ...preVal, recordedCount, depressRatio }));
     };
 
-    // 波動率 (介於0 ~ 2之間)，大於1.5認定為波動較大。
+  }, [scorePieChartData]);
+
+  // 睡眠時段主要分布範圍 (幾個小時到幾個小時之間)
+  useEffect(() => {
+    if (sleepFlowChartData) {
+      console.log("sleepFlowChartData", sleepFlowChartData);
+    }
+  }, [sleepFlowChartData]);
+
+  // 波動率 (介於0 ~ 2之間)，大於1.5認定為波動較大。
+  useEffect(() => {
     if (scoreFlowChartData) {
       let scoreArray = [];
 
@@ -78,8 +97,10 @@ const AnalysisPage = () => {
       let scoreVolatility = calculateStandardDeviation(scoreArray);
       setAnaMsg((preVal) => ({ ...preVal, volatility: scoreVolatility }));
     }
+  }, [scoreFlowChartData]);
 
-    // 星期幾低潮佔比較高，建議可以特別注意 (特定星期幾depressed比例高於特定星期幾的1/2，則認定特定星期幾具有較高比例不開心)
+  // 星期幾低潮佔比較高，建議可以特別注意 (特定星期幾depressed比例高於特定星期幾的1/2，則認定特定星期幾具有較高比例不開心)
+  useEffect(() => {
     if (scoreDayBarChartData) {
       const dayArrMapping = ["Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"];
       let overDepressedArr = [];
@@ -90,13 +111,7 @@ const AnalysisPage = () => {
       });
       setAnaMsg((preVal) => ({ ...preVal, depressDay: overDepressedArr.join(", ") }));
     }
-
-    // 睡眠時段主要分布範圍 (幾個小時到幾個小時之間)
-    if (sleepFlowChartData) {
-      console.log("sleepFlowChartData", sleepFlowChartData);
-    }
-
-  }, [scorePieChartData, scoreFlowChartData, scoreDayBarChartData]);
+  }, [scoreDayBarChartData]);
 
   // 數據不足的提示
   useEffect(() => {
@@ -163,9 +178,10 @@ const AnalysisPage = () => {
         </Grid.Col>
         <Grid.Col xs={12} md={4}>
           <div style={useGetComponentStyle()}>
-            <div className={classes["score-report1"]}>
+            {/* <div className={classes["score-report1"]}>
               過去一{value === "month" ? "個月" : "年"}當中，XXX總共記錄了___天心情筆記。從筆記中，我們發現開心佔比約___%；低潮佔比約___%。
-            </div>
+            </div> */}
+            <AnalysisMsg msg={anaMsg} time={value} username={username} />
           </div>
         </Grid.Col>
         <Grid.Col xs={12} md={6}>
@@ -178,7 +194,7 @@ const AnalysisPage = () => {
             <ScoreAssociatedChart title={"Top 5 highly-associated Tags"} subtitle={"Tags hightly associated with daily emotion"} data={scoreTagsChartData} />
           </div>
         </Grid.Col>
-        <Grid.Col xs={12} md={6}>
+        {/* <Grid.Col xs={12} md={6}>
           <div style={useGetComponentStyle()}>
             <div className={classes["score-report1"]}>
               數據分析
@@ -191,7 +207,7 @@ const AnalysisPage = () => {
               數據分析
             </div>
           </div>
-        </Grid.Col>
+        </Grid.Col> */}
       </Grid >
     </div>
   );

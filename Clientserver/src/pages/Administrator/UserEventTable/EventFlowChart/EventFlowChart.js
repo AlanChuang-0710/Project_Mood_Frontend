@@ -72,7 +72,6 @@ const EventFlowChart = ({ height, eventFlowChartData }) => {
                     backgroundColor: "rgba(0, 0, 0, 0)",
                     borderWidth: 0,
                     formatter: (params) => {
-                        console.log(params);
                         return `<div style="width: 150px; padding: 5px 6px; border-radius: 5px; border:3px solid ${params[0].data.color}; background: #FFF">
                             <div style="display: flex; justify-content: space-between">
                                 <div>Date</div>

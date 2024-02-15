@@ -36,7 +36,9 @@ import optionTalk from "./compass/option_talk.svg";
 import climb from "./analysis/climb.svg";
 import dream from "./analysis/dream.svg";
 import think from "./analysis/think.svg";
-
+import analysis from "./analysis/analysis.svg";
+import checkbox from "./analysis/checkbox.svg";
+import info from "./analysis/info.svg";
 // 404
 import error404 from "./404_error/404error.svg";
 
@@ -46,7 +48,7 @@ export {
     userImage, happyAction, negativeAction, supportAction,
     deleteIcon, editIcon, uploadIcon, detailsIcon,
     optionDoctor, optionMeditation, optionRainbowCard, optionTalk,
-    climb, dream, think,
-    error404
+    climb, dream, think, analysis, checkbox, info,
+    error404,
 };
 

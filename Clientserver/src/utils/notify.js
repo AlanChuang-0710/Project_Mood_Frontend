@@ -10,7 +10,7 @@ import { notifications } from '@mantine/notifications';
  * @param {*} autoClose Number default 3000
  * @param {*} color String 
  */
-export const warnNotify = ({ title = "Thoughtful Notification", message = "Default message", withCloseButton = true, onClose = () => { }, onOpen = () => { }, autoClose = 3000, withBorder = true, } = {}) => {
+export const warnNotify = ({ title = "Thoughtful Notification", message = "Default message", withCloseButton = true, onClose = () => { }, autoClose = 3000, withBorder = true, } = {}) => {
     notifications.show({
         withBorder,
         title,
@@ -18,12 +18,11 @@ export const warnNotify = ({ title = "Thoughtful Notification", message = "Defau
         color: "orange",
         withCloseButton,
         onClose,
-        onOpen,
         autoClose
     });
 };
 
-export const successNotify = ({ title = "Thoughtful Notification", message = "Default message", withCloseButton = true, onClose = () => { }, onOpen = () => { }, autoClose = 3000, withBorder = true, }) => {
+export const successNotify = ({ title = "Thoughtful Notification", message = "Default message", withCloseButton = true, onClose = () => { }, autoClose = 3000, withBorder = true, }) => {
     notifications.show({
         withBorder,
         title,
@@ -31,7 +30,6 @@ export const successNotify = ({ title = "Thoughtful Notification", message = "De
         color: "green",
         withCloseButton,
         onClose,
-        onOpen,
         autoClose
     });
 };

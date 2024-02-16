@@ -6,7 +6,7 @@ import { analysis } from "@/assets/index";
 import classes from "./AnalysisMsg.module.scss";
 import { checkbox, info } from '@/assets/index';
 
-const AnalysisMsg = ({ time, username, msg: { recordedCount, depressRatio, depressDay, volatility } }) => {
+const AnalysisMsg = ({ time, username, msg: { recordedCount, depressRatio, depressDay, volatility, happyKOL, depressKOL } }) => {
     const [opened, { open, close }] = useDisclosure(false);
     const checkAnalysisMsg = useCallback(() => {
         open();
@@ -14,11 +14,14 @@ const AnalysisMsg = ({ time, username, msg: { recordedCount, depressRatio, depre
     const msgList = [
         `低潮日佔了所有記錄日的${depressRatio}%`,
         depressDay ? `${depressDay}比較容易低潮，可能${depressDay}存在讓您長期低潮的因素` : "今天星期幾跟您的心情並無顯著的關係",
-        `心情波動約為${volatility}`
+        `心情波動約為${volatility}`,
+        depressKOL ? `${depressKOL}與您的低潮情緒有一定的相關性` : "並無觀察到與低潮情緒高度相關的來源",
+        happyKOL ? `${happyKOL}與您的開心情緒有一定的相關性` : "並無觀察到與開心情緒高度相關的來源"
     ];
     const explainList = [
         "低潮日佔比超過10%，代表可能有抑鬱的傾向，請即時尋求幫助",
-        "心情比例波動代表一段時間內心情起伏的狀態，當超過1.5，代表心情波動過大"
+        "心情比例波動代表一段時間內心情起伏的狀態，當超過1.5，代表心情波動過大",
+        "請考慮調整與您低潮情緒高度相關來源的相處模式"
     ];
     return (
         <>

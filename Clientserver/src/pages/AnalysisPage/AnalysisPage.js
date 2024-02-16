@@ -44,7 +44,9 @@ const AnalysisPage = () => {
     depressRatio: "",
     recordedCount: "",
     depressDay: "",
-    volatility: ""
+    volatility: "",
+    happyKOL: "",
+    depressKOL: ""
   });
 
 
@@ -112,6 +114,16 @@ const AnalysisPage = () => {
       setAnaMsg((preVal) => ({ ...preVal, depressDay: overDepressedArr.join(", ") }));
     }
   }, [scoreDayBarChartData]);
+
+  // 心情相關人物
+  useEffect(() => {
+    if (scoreKOLChartData?.data) {
+      let data = scoreKOLChartData.data;
+      let happyKOL = data["score2"].map((item) => item[0]).join(", ");
+      let depressKOL = data["score-2"].map((item) => item[0]).join(", ");
+      setAnaMsg((preVal) => ({ ...preVal, happyKOL, depressKOL }));
+    }
+  }, [scoreKOLChartData]);
 
   // 數據不足的提示
   useEffect(() => {

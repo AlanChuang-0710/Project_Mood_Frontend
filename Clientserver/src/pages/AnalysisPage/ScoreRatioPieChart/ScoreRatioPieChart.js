@@ -11,14 +11,9 @@ const ScoreRatioPieChart = ({ height, scorePieChartData }) => {
         let data;
         let option;
         if (!scoreRatioPieChart) {
-            // 此處極為重要，目的是避免DOM尚未被渲染就執行init，會出現頁面不顯示圖表，且控制台報錯的問題:
-            // Can't get DOM width or height. Please check dom.clientWidth and dom.clientHeight.
-            // setTimeout(() => {
             setScoreRaioPieChart(echarts.init(scoreRatioPieDOM.current));
-            // }, 100);
         };
-
-        if (scoreRatioPieChart && scorePieChartData) {
+        if (scoreRatioPieChart && scorePieChartData?.data) {
             const colorMap = theme.colors.emotion;
             const nameMap = ["Depressed", "Sad", "Peace", "Smile", "Happy"];
             // 處理顯示的name和color

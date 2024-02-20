@@ -19,7 +19,7 @@ const ScoreDayBarChart = ({ height, scoreDayBarChartData }) => {
             // }, 100);
         }
 
-        if (scoreDayBarChart && scoreDayBarChartData) {
+        if (scoreDayBarChart && scoreDayBarChartData?.data) {
             dataArray = JSON.parse(JSON.stringify(scoreDayBarChartData.data.barData));
 
 

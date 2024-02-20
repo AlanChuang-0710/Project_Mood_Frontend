@@ -27,11 +27,11 @@ const MongoStore = require("connect-mongo");
 const cors = require('cors');
 
 // 導入配置項
-const { DBHOST, DBPORT, DBNAME, FRONTENDPORT } = require("./config/config");
+const { DBHOST, DBPORT, DBNAME, FRONTENDHOST, FRONTENDPORT } = require("./config/config");
 
 const app = express();
 
-// 設置server監控器，默認運行於127.0.0.1:3000/status
+// 設置server監控器，默認運行於 ${DBHOST}:${DBPORT}/status
 app.use(expressStatusMonitor({
   title: 'Mood API Server Performance',
   chartVisibility: {
@@ -53,7 +53,7 @@ app.use(session({
   saveUninitialized: false, //是否為每次請求都設置一個cookie來存儲session的id
   resave: true, //是否在每次請求時重新保存session (每次請求都重新設置過期時間)
   store: MongoStore.create({
-    mongoUrl: `mongodb://${DBHOST}:${DBPORT}/${DBNAME}` //設置數據庫的連接位置
+    mongoUrl: `${DBHOST}:${DBPORT}/${DBNAME}` //設置數據庫的連接位置
   }),
   cookie: {
     httpOnly: true,
@@ -64,8 +64,8 @@ app.use(session({
 
 const corsOptions = {
   origin: [
-    // 前端url
-    `http://localhost:${FRONTENDPORT}`,
+    // 前端url 套件規定不能是127.0.0.1，故此處改用localhost
+    `${FRONTENDHOST}:${FRONTENDPORT}`,
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   credentials: true

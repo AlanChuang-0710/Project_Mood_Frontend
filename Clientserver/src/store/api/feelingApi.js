@@ -1,5 +1,7 @@
 import { createApi, } from "@reduxjs/toolkit/dist/query/react";
 import { baseQueryWithReauth } from "../../utils/request";
+const HOST = process.env.REACT_APP_SERVER_HOST;
+const APIPort = process.env.REACT_APP_API_PORT;
 
 const feelingApi = createApi({
 
@@ -7,7 +9,7 @@ const feelingApi = createApi({
     reducerPath: "feelingApi",
 
     //指定查詢的基礎信息，發信請求的工具
-    baseQuery: baseQueryWithReauth("http://127.0.0.1:3000", "/feeling", "/users/refresh"),
+    baseQuery: baseQueryWithReauth(`${HOST}:${APIPort}`, "/feeling", "/users/refresh"),
 
     tagTypes: ["getFeeling", "addFeeling", "deleteFeeling"], //用來指定Api中的標籤類型
 

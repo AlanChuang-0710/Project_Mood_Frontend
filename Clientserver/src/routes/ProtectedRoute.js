@@ -1,6 +1,7 @@
 import { useNavigate, useLocation, useMatches } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentAccessToken } from "@/store/reducer/authSlice";
+import { useEffect } from 'react';
 
 const ProtectedRoute = ({ children }) => {
     /* 路由權限 */
@@ -11,9 +12,10 @@ const ProtectedRoute = ({ children }) => {
     const matches = useMatches();
     let test = matches.find((item) => item.pathname === location.pathname);
 
-    /* 路由守衛 避免沒有token直接進入保護的頁面 */
-    if (!accessToken) return nav("/login", { replace: true, state: { from: location } });
-
+    useEffect(() => {
+        /* 路由守衛 避免沒有token直接進入保護的頁面 */
+        if (!accessToken) return nav("/login", { replace: true, state: { from: location } });
+    }, [accessToken, location, nav]);
     return children;
 };
 

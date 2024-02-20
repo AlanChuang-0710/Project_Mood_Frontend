@@ -52,7 +52,7 @@ const AnalysisPage = () => {
 
   // 心情佔比
   useEffect(() => {
-    if (scorePieChartData) {
+    if (scorePieChartData?.data) {
       let depressionCount = scorePieChartData.data.data[0].count;
       let totalCount = scorePieChartData.data.total;
       let nullCount = scorePieChartData.data.data[5].count;
@@ -72,7 +72,7 @@ const AnalysisPage = () => {
 
   // 波動率 (介於0 ~ 2之間)，大於1.5認定為波動較大。
   useEffect(() => {
-    if (scoreFlowChartData) {
+    if (scoreFlowChartData?.data) {
       let scoreArray = [];
 
       scoreFlowChartData.data.forEach((item) => {
@@ -103,7 +103,7 @@ const AnalysisPage = () => {
 
   // 星期幾低潮佔比較高，建議可以特別注意 (特定星期幾depressed比例高於特定星期幾的1/2，則認定特定星期幾具有較高比例不開心)
   useEffect(() => {
-    if (scoreDayBarChartData) {
+    if (scoreDayBarChartData?.data) {
       const dayArrMapping = ["Sunday", "Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday"];
       let overDepressedArr = [];
       scoreDayBarChartData.data.barData[0].forEach((item, index) => {
@@ -127,7 +127,7 @@ const AnalysisPage = () => {
 
   // 數據不足的提示
   useEffect(() => {
-    if (scorePieChartData) {
+    if (scorePieChartData?.data) {
       let totalCount = scorePieChartData.data.total;
       let nullCount = scorePieChartData.data.data[5].count;
       if ((nullCount / totalCount).toFixed(2) * 100 > 80) warnNotify({

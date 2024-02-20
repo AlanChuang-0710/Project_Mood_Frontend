@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import { baseQueryWithReauth } from "../../utils/request";
-
+const HOST = process.env.REACT_APP_SERVER_HOST;
+const APIPort = process.env.REACT_APP_API_PORT;
 
 const commonApi = createApi({
 
@@ -8,7 +9,7 @@ const commonApi = createApi({
     reducerPath: "common",
 
     //指定查詢的基礎信息，發信請求的工具
-    baseQuery: baseQueryWithReauth("http://127.0.0.1:3000", "/common", "/users/refresh"),
+    baseQuery: baseQueryWithReauth(`${HOST}:${APIPort}`, "/common", "/users/refresh"),
 
     tagTypes: ["getCommonData"], //用來指定Api中的標籤類型
 

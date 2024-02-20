@@ -20,7 +20,7 @@ const ScoreFlowChart = ({ height, scoreFlowChartData }) => {
             setScoreFlowChart(echarts.init(scoreFlowDOM.current));
             // }, 100);
         }
-        if (scoreFlowChart && scoreFlowChartData) {
+        if (scoreFlowChart && scoreFlowChartData?.data) {
             const nameMap = ["Depressed", "Sad", "Peace", "Smile", "Happy"];
             const colorMap = theme.colors.emotion;
             dataArray = scoreFlowChartData.data.map((item) => {

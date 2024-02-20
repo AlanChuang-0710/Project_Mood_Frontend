@@ -15,7 +15,7 @@ const SleepScoreScatterChart = ({ sleepFlowChartData, scoreFlowChartData, height
         if (!scatterChart) {
             setScatterChart(echarts.init(scatterChartDOM.current));
         }
-        if (sleepFlowChartData && scoreFlowChartData) {
+        if (sleepFlowChartData && scoreFlowChartData?.data) {
             if (!(sleepFlowChartData.data.length === scoreFlowChartData.data.length)) return;
             let sleepData = sleepFlowChartData.data.slice(1); // 當日情緒造成的睡眠品質是隔日才會被記錄，故要做此處理
             let scoreData = scoreFlowChartData.data.slice(0, -1);

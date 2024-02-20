@@ -5,7 +5,7 @@ import { happy, smile, normal, sad, depressed, } from "@/assets/index.js";
 
 const ScoreAssociatedChart = ({ title, subtitle, data }) => {
     let rows = [];
-    if (data && data.data) {
+    if (data?.data) {
         const elements = [
             { icon: happy, KOL: data.data.score2 },
             { icon: smile, KOL: data.data.score1 },

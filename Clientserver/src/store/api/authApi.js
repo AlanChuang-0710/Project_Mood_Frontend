@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
+const HOST = process.env.REACT_APP_SERVER_HOST;
+const APIPort = process.env.REACT_APP_API_PORT;
 
 const authApi = createApi({
 
@@ -6,7 +8,7 @@ const authApi = createApi({
     reducerPath: "authApi",
 
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://127.0.0.1:3000/users",
+        baseUrl: `${HOST}:${APIPort}/users`,
         credentials: "include", // 即便跨域也會攜帶上cookie
         mode: 'cors',
     }),

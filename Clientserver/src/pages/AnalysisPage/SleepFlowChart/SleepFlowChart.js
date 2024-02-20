@@ -15,7 +15,7 @@ const SleepFlowChart = ({ height, sleepFlowChartData }) => {
         if (!sleepFlowChart) {
             setScoreFlowChart(echarts.init(sleepFlowDOM.current));
         }
-        if (sleepFlowChart && sleepFlowChartData) {
+        if (sleepFlowChart && sleepFlowChartData?.data) {
             timestampArray = sleepFlowChartData.data.map((item) => moment(item.timestamp).format('YYYY-MM-DD'));
             dataArray = sleepFlowChartData.data.map((item) => item.sleep);
             option = {

@@ -1,5 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
 import { baseQueryWithReauth } from "@/utils/request";
+const HOST = process.env.REACT_APP_SERVER_HOST;
+const APIPort = process.env.REACT_APP_API_PORT;
 
 const analysisApi = createApi({
 
@@ -7,7 +9,7 @@ const analysisApi = createApi({
     reducerPath: "analysis",
 
     //指定查詢的基礎信息，發信請求的工具
-    baseQuery: baseQueryWithReauth("http://127.0.0.1:3000", "/report", "/users/refresh"),
+    baseQuery: baseQueryWithReauth(`${HOST}:${APIPort}`, "/report", "/users/refresh"),
 
     tagTypes: ["getScorePieChartData"], //用來指定Api中的標籤類型
 

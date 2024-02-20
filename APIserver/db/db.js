@@ -19,7 +19,7 @@ module.exports = function (success, error) {
     const { DBHOST, DBPORT, DBNAME } = require("../config/config");
 
     // 連接mongodb服務  mood是數據庫名稱，如果不存在會自動創建
-    mongoose.connect(`mongodb://${DBHOST}:${DBPORT}/${DBNAME}`);
+    mongoose.connect(`${DBHOST}:${DBPORT}/${DBNAME}`);
 
     // 設置回調 
     // 設置成功連接的回調 once: 事件回調函數只執行一次

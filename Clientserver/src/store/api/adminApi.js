@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
-
+const HOST = process.env.REACT_APP_SERVER_HOST;
+const BPPort = process.env.REACT_APP_BP_PORT;
 
 const adminApi = createApi({
 
@@ -8,7 +9,7 @@ const adminApi = createApi({
 
     //指定查詢的基礎信息，發信請求的工具
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://127.0.0.1:3002/admin",
+        baseUrl: `${HOST}:${BPPort}/admin`,
         credentials: "include", // 即便跨域也會攜帶上cookie
         mode: 'cors',
     }),

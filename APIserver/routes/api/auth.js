@@ -1,7 +1,7 @@
 const express = require('express');
 
 // 導入配置項
-const { DBHOST, DBPORT, DBNAME, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("../../config/config");
+const {  ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("../../config/config");
 
 // 導入用戶模型
 const UserModel = require("../../models/UserModel");

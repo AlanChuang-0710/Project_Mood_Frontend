@@ -1,9 +1,11 @@
 // 配置文件
 module.exports = {
-    DBHOST: "127.0.0.1",
+    DBHOST: "mongodb://127.0.0.1",
     DBPORT: 27017,
     DBNAME: "Mood",
+    SERVERHOST: "http://127.0.0.1",
     SERVERPORT: 3000,
+    FRONTENDHOST: "http://localhost",
     FRONTENDPORT: 8550,
     //  node  require("crypto").randomBytes(64).toString("hex") 製作token
     ACCESS_TOKEN_SECRET: "6c0b7ed3b2343e2867c88e29a06116cd1d42fe961ee632598f28e21edf02c9dcd2e4303ab22480a88aa7eb5aa236ff066be22b28a0a5da884643df53a46b837f",

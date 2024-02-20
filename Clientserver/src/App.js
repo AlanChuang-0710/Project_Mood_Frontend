@@ -5,6 +5,7 @@ import { Notifications } from '@mantine/notifications';
 import router from '@/routes/router';
 import globalColor from "@/styles/globalColor";
 
+
 function App() {
   const [colorScheme, setColorScheme] = useState('dark');
   const toggleColorScheme = () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
@@ -26,6 +27,6 @@ function App() {
       </ColorSchemeProvider>
     </div>
   );
-}
+};
 
 export default App;

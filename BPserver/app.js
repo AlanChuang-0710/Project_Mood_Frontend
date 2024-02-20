@@ -1,5 +1,5 @@
 // 導入配置項
-const { FRONTENDPORT } = require("./config/config");
+const { FRONTENDHOST, FRONTENDPORT } = require("./config/config");
 const createError = require('http-errors');
 var express = require('express');
 require('express-async-errors');
@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
     origin: [
         // 前端url
-        `http://localhost:${FRONTENDPORT}`,
+        `${FRONTENDHOST}:${FRONTENDPORT}`,
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true

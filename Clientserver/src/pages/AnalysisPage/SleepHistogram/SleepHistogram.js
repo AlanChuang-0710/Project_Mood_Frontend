@@ -11,7 +11,7 @@ const SleepHistogram = ({ height, sleepFlowChartData }) => {
         if (!sleepHistogram) {
             setSleepHistogram(echarts.init(SHDOM.current));
         }
-        if (sleepFlowChartData) {
+        if (sleepFlowChartData?.data) {
             function dataTransform(arr) {
                 let result = {};
                 arr.forEach((data) => {

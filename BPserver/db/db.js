@@ -6,10 +6,10 @@
 const { Pool } = require("pg");
 const mongoose = require("mongoose");
 const format = require('pg-format');
-const { DBHOST, DBPORT, DBNAME, PASSWORD, USER } = require("../config/config");
+const { DBHOST, DBPORT, DBNAME, PASSWORD, USER, APIDBHOST, APIDBPORT, APIDBNAME } = require("../config/config");
 
 /* MongoDB 配置 & 連線 */
-mongoose.connect(`mongodb://127.0.0.1:27017/Mood`);
+mongoose.connect(`${APIDBHOST}:${APIDBPORT}/${APIDBNAME}`);
 
 /* Postgres DB配置 & 連線*/
 let processPool;

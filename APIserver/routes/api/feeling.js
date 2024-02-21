@@ -64,56 +64,63 @@ const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware"
 // 獲取特定用戶的KOL, tags選項
 // type為"tags", "KOL" 並且以,隔開。 如果為"",則代表回傳所有選項 
 router.get("/:id/options", checkTokenMiddleware, async function (req, res) {
-    const userId = req.params.id;
-    const userData = await FeelingModel.findOne({ userId });
-    if (!userData) {
-        return res.json({
+    try {
+        const userId = req.params.id;
+        const userData = await FeelingModel.findOne({ userId });
+        if (!userData) throw new Error("User not exists");
+
+        let data = {};
+        let msg = "All options got";
+        let type = req.query.type;
+
+        if (type === "") {
+            data = userData.options;
+        } else {
+            type = type?.split(",");
+            type.forEach((type) => {
+                if (userData.options[type]) {
+                    data[type] = userData.options[type];
+                }
+            });
+        };
+
+        res.json({
+            code: "2000",
+            msg,
+            data
+        });
+    } catch (err) {
+        res.json({
             code: "4000",
-            msg: "User not exists",
+            msg: err.message,
             data: null
         });
-    };
-
-    let data = {};
-    let msg = "All options got";
-    let type = req.query.type;
-
-    if (type === "") {
-        data = userData.options;
-    } else {
-        type = type?.split(",");
-        type.forEach((type) => {
-            if (userData.options[type]) {
-                data[type] = userData.options[type];
-            }
-        });
-    };
-
-    res.json({
-        code: "2000",
-        msg,
-        data
-    });
+    }
 });
 
-// 新增特定用戶的KOL, tags選項
-// type為"tags", "KOL"
+// 新增特定用戶的KOL, tags選項，type為"tags", "KOL"
 router.post("/:id/options/:type", checkTokenMiddleware, async function (req, res) {
-    const userId = req.params.id;
-    const type = req.params.type;
-    let userData = await FeelingModel.findOne({ userId });
-    if (!userData) {
-        userData = new FeelingModel({
-            userId,
+    try {
+        const userId = req.params.id;
+        const type = req.params.type;
+        let userData = await FeelingModel.findOne({ userId });
+        if (!userData) userData = new FeelingModel({ userId });
+
+        const data = req.body[type];
+        userData.options[type].push(data);
+        await userData.save();
+        res.json({
+            code: "2000",
+            msg: "Options successfully updated!",
+            data: null
         });
-    };
-    const data = req.body[type];
-    userData.options[type].push(data);
-    await userData.save();
-    res.json({
-        code: "2000",
-        msg: "Options successfully updated!",
-    });
+    } catch (err) {
+        res.json({
+            code: "4000",
+            msg: err.message,
+            data: null
+        });
+    }
 });
 
 // 獲取特定用戶的一段日期/全部心情
@@ -125,17 +132,9 @@ router.get("/:id", checkTokenMiddleware, async function (req, res) {
         const endTime = req.query.endTime; //api的query都會轉換成string
 
         if (startTime && endTime) {
-            const data = await FeelingModel.findOne(
-                { userId }
-            );
+            const data = await FeelingModel.findOne({ userId });
 
-            if (!data) {
-                return res.json({
-                    code: "4000",
-                    msg: "User not exists",
-                    data: null
-                });
-            }
+            if (!data) throw new Error("User not exists");
             const periodFeeling = data.dailyFeeling.filter((item) => item.timestamp >= startTime && item.timestamp <= endTime);
             res.json({
                 code: "2000",
@@ -145,13 +144,7 @@ router.get("/:id", checkTokenMiddleware, async function (req, res) {
         } else {
             // 獲取所有日心情
             const data = await FeelingModel.findOne({ userId });
-            if (!data) {
-                return res.json({
-                    code: "4000",
-                    msg: "User not exists",
-                    data: null
-                });
-            };
+            if (!data) throw new Error("User not exists");
             res.json({
                 code: "2000",
                 msg: "All feeling got!",
@@ -161,7 +154,7 @@ router.get("/:id", checkTokenMiddleware, async function (req, res) {
     } catch (err) {
         res.json({
             code: "4000",
-            msg: err,
+            msg: err.message,
             data: null
         });
     }
@@ -169,42 +162,45 @@ router.get("/:id", checkTokenMiddleware, async function (req, res) {
 
 // 新建/更新特定日心情
 router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async function (req, res) {
-    const userId = req.params.id;
-    req.body.timestamp = req.body.timestamp instanceof Date ? req.body.timestamp : new Date(req.body.timestamp); // 限制只能存儲Date對象
-
-    const yearMonthDateTimestamp = moment(req.body.timestamp).format("YYYY-MM-DD"); //只取年月日
-    const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${yearMonthDateTimestamp}`);
-
-    // 如果沒有imgURL，就清空圖片
-    if (!req.body.imgURL) {
-        if (fs.existsSync(targetDayDir)) {
-            fs.rmdirSync(targetDayDir, { recursive: true });
-        }
-    }
-
-    // 沒經過muler處理 (沒有傳圖片但有傳imgURL)
-    if (req.body.imgURL && !req.body.addPhoto) {
-
-        // 只傳一個imgURL(http...)
-        if (req.body.imgURL && !(req.body.imgURL instanceof Array)) {
-            req.body.imgURL = [req.body.imgURL];
-        }
-
-        // 傳多個imgURL(http...) 
-        const reserveList = req.body.imgURL.map((item) => {
-            let newArr = item.split("/");
-            return newArr[newArr.length - 1];
-        });
-        fs.readdirSync(targetDayDir).forEach((file) => {
-            if (reserveList.indexOf(file) === -1) {
-                const curPath = path.join(targetDayDir, file);
-                fs.unlinkSync(curPath);
-            }
-        });
-
-    }
-    const timestamp = req.body.timestamp;
     try {
+        const userId = req.params.id;
+        let timestamp = req.body.timestamp;
+        timestamp = timestamp instanceof Date ? timestamp : new Date(timestamp); // 限制只能存儲Date對象
+
+        const yearMonthDateTimestamp = moment(timestamp).format("YYYY-MM-DD"); //只取年月日
+        const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${yearMonthDateTimestamp}`);
+
+        // 如果沒有imgURL，就清空圖片
+        if (!req.body.imgURL) {
+            try {
+                await fsPromise.access(targetDayDir); //file 不存在的話，會throw error
+                await fsPromise.rmdir(targetDayDir, { recursive: true });
+            } catch (err) { }
+        }
+
+        // 沒經過muler處理 (沒有傳圖片但有傳imgURL)
+        if (req.body.imgURL && !req.body.addPhoto) {
+
+            // 只傳一個imgURL(http...)
+            if (req.body.imgURL && !(req.body.imgURL instanceof Array)) {
+                req.body.imgURL = [req.body.imgURL];
+            }
+
+            // 傳多個imgURL(http...) 
+            const reserveList = req.body.imgURL.map((item) => {
+                let newArr = item.split("/");
+                return newArr[newArr.length - 1];
+            });
+
+            const files = await fsPromise.readdir(targetDayDir);
+            for (const file of files) {
+                if (!reserveList.includes(file)) {
+                    const curPath = path.join(targetDayDir, file);
+                    await fsPromise.unlink(curPath);
+                }
+            };
+        }
+
         const user = await FeelingModel.findOne({ userId });
         if (user) {
             // 用户存在，查找是否有匹配的timestamp
@@ -229,30 +225,30 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
                 // user.dailyFeeling.push({ ...req.body });
                 // user.dailyFeeling.sort((a, b) => a.timestamp - b.timestamp);
             }
-            // 保存更新后的用户数据
             const data = await user.save();
-            res.json({
+            return res.json({
                 code: "2000",
                 msg: existingEntryIndex !== -1 ? "Feeling revised" : "New feeling created",
                 data: existingEntryIndex !== -1 ? data.dailyFeeling[existingEntryIndex] : data.dailyFeeling[insertIndex]
             });
-        } else {
-            const newUser = new FeelingModel({
-                userId,
-                options: {},
-                dailyFeeling: [{ ...req.body }]
-            });
-            const data = await newUser.save();
-            res.json({
-                code: "2000",
-                msg: "New feeling created",
-                data: data.dailyFeeling[0]
-            });
-        };
+        }
+        throw new Error("User not exists");
+
+        // 已於signup時自動創建feelingModel，故此處應不用特別做此動作
+        // else {
+        //     const newUser = await FeelingModel.createDefaultFeeling(userId);
+        //     newUser.dailyFeeling = [{ ...req.body }];
+        //     const data = await newUser.save();
+        //     res.json({
+        //         code: "2000",
+        //         msg: "New feeling created",
+        //         data: data.dailyFeeling[0]
+        //     });
+        // };
     } catch (err) {
         res.json({
             code: "5000",
-            msg: err,
+            msg: err.message,
             data: null
         });
     }
@@ -263,39 +259,32 @@ router.delete("/:id/:feelingId", checkTokenMiddleware, async (req, res) => {
     try {
         const userId = req.params.id;
         const feelingId = req.params.feelingId;
-
         const user = await FeelingModel.findOne({ userId });
 
         if (user) {
             const existingEntryIndex = user.dailyFeeling.findIndex(item => item.id == feelingId);
             if (existingEntryIndex !== -1) {
-
                 // 刪除images
                 let [{ timestamp }] = user.dailyFeeling.splice(existingEntryIndex, 1);
+                await user.save();
                 let yearMonthDateTimestamp = moment(timestamp).format("YYYY-MM-DD");
                 const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${yearMonthDateTimestamp}`);
-                fs.rmdirSync(targetDayDir, { recursive: true });
-
-                await user.save();
-                res.json({
-                    code: "2000",
-                    msg: "Feeling deleted!",
-                    data: null
-                });
-            } else {
-                res.json({
-                    code: "2000",
-                    msg: "Feeling not exists!",
-                    data: null
-                });
+                try {
+                    await fsPromise.access(targetDayDir); //file 不存在的話，會throw error
+                    await fsPromise.rmdir(targetDayDir, { recursive: true });
+                } catch (err) { }
             }
-        } else {
-            throw new Error();
+            return res.json({
+                code: "2000",
+                msg: "Feeling deleted!",
+                data: null
+            });
         }
+        throw new Error("User not exists");
     } catch (err) {
         res.json({
             code: "2002",
-            msg: "User not exists",
+            msg: err.message,
             data: null
         });
     }

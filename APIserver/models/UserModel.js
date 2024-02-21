@@ -36,6 +36,16 @@ let UserSchema = new mongoose.Schema({
     timestamps: true
 });
 
+UserSchema.statics.createDefaultUser = async function ({ username, email, password, membership = "free" }) {
+    const defaultData = {
+        username,
+        email,
+        password,
+        membership
+    };
+    return await this.create(defaultData);
+};
+
 // 創建模型對象，對文檔操作的封裝對象 mongoose會自動以 複數名稱 創建集合
 let UserModel = mongoose.model("users", UserSchema);
 

@@ -55,6 +55,18 @@ const FeelingSchema = new mongoose.Schema({
     dailyFeeling: [DailyFeelingSchema]
 });
 
+FeelingSchema.statics.createDefaultFeeling = async function (userId) {
+    const defaultData = {
+        userId,
+        options: {
+            KOL: [],
+            tags: []
+        },
+        dailyFeeling: []
+    };
+    return await this.create(defaultData);
+};
+
 // 創建模型對象，對文檔操作的封裝對象 mongoose會自動以 複數名稱 創建集合
 const FeelingModel = mongoose.model("feelings", FeelingSchema);
 

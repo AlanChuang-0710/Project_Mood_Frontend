@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "server": "node ./bin/www"
+    "start": "nodemon ./bin/www NODE_ENV=dev",
+    "server": "node ./bin/www NODE_ENV=prod"
   },
   "_moduleAliases": {
     "@": ".",
+    "@db": "./db",
     "@middleware": "./middleware",
     "@models": "./models",
     "@jieba": "./jieba",
@@ -19,6 +20,7 @@
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
+    "dotenv": "^16.4.5",
     "ejs": "~2.6.1",
     "express": "^4.17.3",
     "express-async-errors": "^3.1.1",

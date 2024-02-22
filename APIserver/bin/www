@@ -1,8 +1,10 @@
-#!/usr/bin/env node
+
+// 全局路徑配置
+require('module-alias/register');
 
 // 導入db函數
-const db = require("../db/db");
-const { SERVERPORT } = require("../config/config");
+const db = require("@db/db");
+const { SERVERPORT } = require("@config/config");
 
 // 得先連接上數據庫再啟動服務，
 // 故將啟動服務放置於成功回調函數中

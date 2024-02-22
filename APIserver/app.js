@@ -1,4 +1,3 @@
-require('module-alias/register');
 const createError = require('http-errors');
 const path = require('path');
 const fs = require("fs");
@@ -6,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const logger = require('morgan');
 const rfs = require('rotating-file-stream');
+
+
 
 // 導入server監測器
 const expressStatusMonitor = require('express-status-monitor');

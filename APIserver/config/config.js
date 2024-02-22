@@ -1,15 +1,19 @@
 // 配置文件
+//  node  require("crypto").randomBytes(64).toString("hex") 製作token
+// 載入 dotenv
+const path = require("path");
+require('dotenv').config({ path: path.resolve(__dirname, '../env/.env.' + process.env.NODE_ENV) });
+
 module.exports = {
-    DBHOST: "mongodb://127.0.0.1",
-    DBPORT: 27017,
-    DBNAME: "Mood",
-    SERVERHOST: "http://127.0.0.1",
-    SERVERPORT: 3000,
-    FRONTENDHOST: "http://localhost",
-    FRONTENDPORT: 8550,
-    //  node  require("crypto").randomBytes(64).toString("hex") 製作token
-    ACCESS_TOKEN_SECRET: "6c0b7ed3b2343e2867c88e29a06116cd1d42fe961ee632598f28e21edf02c9dcd2e4303ab22480a88aa7eb5aa236ff066be22b28a0a5da884643df53a46b837f",
-    REFRESH_TOKEN_SECRET: "2d41eacaa6e1133a194c0646d94a6eb9ec72adf727f6f4b71aca6bc22b36e2bcae7f80b98b595f79dbf3b96d5432958f22e4485c60bd571ef9bf395634357fef"
+    DBHOST: process.env.DBHOST,
+    DBPORT: process.env.DBPORT,
+    DBNAME: process.env.DBNAME,
+    SERVERHOST: process.env.SERVERHOST,
+    SERVERPORT: process.env.SERVERPORT,
+    FRONTENDHOST: process.env.FRONTENDHOST,
+    FRONTENDPORT: process.env.FRONTENDPORT,
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
 };
 
 

@@ -1,3 +1,4 @@
+require('module-alias/register');
 const createError = require('http-errors');
 const path = require('path');
 const fs = require("fs");
@@ -14,10 +15,10 @@ const expressStatusMonitor = require('express-status-monitor');
 require('express-async-errors');
 
 // 導入api
-const feelingRouter = require('./routes/api/feeling');
-const authRouter = require('./routes/api/auth');
-const reportRouter = require("./routes/api/report");
-const commonRouter = require("./routes/api/common");
+const feelingRouter = require('@/routes/api/feeling');
+const authRouter = require('@/routes/api/auth');
+const reportRouter = require("@/routes/api/report");
+const commonRouter = require("@/routes/api/common");
 
 // 導入session
 const session = require("express-session");
@@ -27,7 +28,7 @@ const MongoStore = require("connect-mongo");
 const cors = require('cors');
 
 // 導入配置項
-const { DBHOST, DBPORT, DBNAME, FRONTENDHOST, FRONTENDPORT } = require("./config/config");
+const { DBHOST, DBPORT, DBNAME, FRONTENDHOST, FRONTENDPORT } = require("@config/config");
 
 const app = express();
 

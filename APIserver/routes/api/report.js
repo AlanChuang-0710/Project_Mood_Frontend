@@ -1,10 +1,6 @@
-// 引入express
 const express = require("express");
 const router = express.Router();
-
 const moment = require("moment");
-
-// 導入結巴
 const jieba = require("@node-rs/jieba");
 
 // 導入自定義/停用辭典
@@ -16,8 +12,8 @@ const userDict = fs.readFileSync(path.resolve(__dirname, "../../jieba/dict.txt")
 jieba.loadDict(userDict);
 
 // 導入toekn較驗中間件
-const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware");
-const { getUserPeriodFeelingMiddleware } = require("../../middleware/getUserPeriodFeelingMiddleware");
+const { checkTokenMiddleware } = require("@middleware/checkTokenMiddleware");
+const { getUserPeriodFeelingMiddleware } = require("@middleware/getUserPeriodFeelingMiddleware");
 
 // 獲取一段時間內score pie chart
 router.get("/:id/score_pie_chart", checkTokenMiddleware, getUserPeriodFeelingMiddleware, async function (req, res) {

@@ -1,18 +1,12 @@
 const express = require('express');
-
-// 導入配置項
-const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("../../config/config");
-
-// 導入用戶模型
-const UserModel = require("../../models/UserModel");
-const FeelingModel = require("../../models/FeelingModel");
-
-// 導入jwt 相關 
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = require("@config/config");
+const UserModel = require("@models/UserModel");
+const FeelingModel = require("@models/FeelingModel");
 const jwt = require("jsonwebtoken");
 const md5 = require('md5');
 
 // 導入token較驗中間件
-const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware");
+const { checkTokenMiddleware } = require("@middleware/checkTokenMiddleware");
 const router = express.Router();
 
 // 註冊新帳號

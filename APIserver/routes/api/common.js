@@ -1,12 +1,11 @@
-// 引入 express
 const express = require('express');
 const router = express.Router();
 
-const CommonModel = require('../../models/CommonModel');
-const UserModel = require("../../models/UserModel");
+const CommonModel = require('@models/CommonModel');
+const UserModel = require("@models/UserModel");
 
 // 導入token較驗中間件
-const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware");
+const { checkTokenMiddleware } = require("@middleware/checkTokenMiddleware");
 
 // 獲取所有用戶通用的資料
 router.get("/:id/:property", checkTokenMiddleware, async function (req, res) {

@@ -1,4 +1,3 @@
-// 引入 express
 const express = require('express');
 const router = express.Router();
 
@@ -56,10 +55,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // 導入情感模型
-const FeelingModel = require('../../models/FeelingModel');
+const FeelingModel = require('@models/FeelingModel');
 
 // 導入token較驗中間件
-const { checkTokenMiddleware } = require("../../middleware/checkTokenMiddleware");
+const { checkTokenMiddleware } = require("@middleware/checkTokenMiddleware");
 
 // 獲取特定用戶的KOL, tags選項
 // type為"tags", "KOL" 並且以,隔開。 如果為"",則代表回傳所有選項 

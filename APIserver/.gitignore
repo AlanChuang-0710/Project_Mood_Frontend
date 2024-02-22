@@ -17,6 +17,9 @@
 
 # misc
 .DS_Store
+
+# 環境變量 (已跟蹤過，故還須手動去除追蹤)
+/env
 .env.local
 .env.development.local
 .env.test.local

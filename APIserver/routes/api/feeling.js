@@ -202,37 +202,39 @@ router.post("/:id", checkTokenMiddleware, upload.array('imgURL', 3), async funct
         }
 
         const user = await FeelingModel.findOne({ userId });
-        if (user) {
-            // 用户存在，查找是否有匹配的timestamp
-            const existingEntryIndex = user.dailyFeeling.findIndex(item => item.timestamp.toString() == timestamp.toString());
-            let insertIndex = 0;
-            if (existingEntryIndex !== -1) {
-                user.dailyFeeling[existingEntryIndex] = { ...req.body };
-            } else {
-                /* 方法一: 手動排序插入，較少的元素操作，適合大型數據庫 */
-                const result = user.dailyFeeling.every((item, index) => {
-                    if (item.timestamp.getTime() > timestamp.getTime()) {
-                        insertIndex = index;
-                        return false;
-                    }
-                    return true;
-                });
-                if (result) {
-                    insertIndex = user.dailyFeeling.length;
+
+        // 用戶不存在
+        if (!user) throw new Error("User not exists");
+
+        // 用户存在，查找是否有匹配的timestamp
+        const existingEntryIndex = user.dailyFeeling.findIndex(item => item.timestamp.toString() == timestamp.toString());
+        let insertIndex = 0;
+        if (existingEntryIndex !== -1) {
+            user.dailyFeeling[existingEntryIndex] = { ...req.body };
+        } else {
+            /* 方法一: 手動排序插入，較少的元素操作，適合大型數據庫 */
+            const result = user.dailyFeeling.every((item, index) => {
+                if (item.timestamp.getTime() > timestamp.getTime()) {
+                    insertIndex = index;
+                    return false;
                 }
-                user.dailyFeeling.splice(insertIndex, 0, { ...req.body });
-                /* 方法二: 插入後調用mongodb的排序方法，較直觀，但多元素的操作，適合小數據庫 */
-                // user.dailyFeeling.push({ ...req.body });
-                // user.dailyFeeling.sort((a, b) => a.timestamp - b.timestamp);
-            }
-            const data = await user.save();
-            return res.json({
-                code: "2000",
-                msg: existingEntryIndex !== -1 ? "Feeling revised" : "New feeling created",
-                data: existingEntryIndex !== -1 ? data.dailyFeeling[existingEntryIndex] : data.dailyFeeling[insertIndex]
+                return true;
             });
+            if (result) {
+                insertIndex = user.dailyFeeling.length;
+            }
+            user.dailyFeeling.splice(insertIndex, 0, { ...req.body });
+            /* 方法二: 插入後調用mongodb的排序方法，較直觀，但多元素的操作，適合小數據庫 */
+            // user.dailyFeeling.push({ ...req.body });
+            // user.dailyFeeling.sort((a, b) => a.timestamp - b.timestamp);
         }
-        throw new Error("User not exists");
+        const data = await user.save();
+        return res.json({
+            code: "2000",
+            msg: existingEntryIndex !== -1 ? "Feeling revised" : "New feeling created",
+            data: existingEntryIndex !== -1 ? data.dailyFeeling[existingEntryIndex] : data.dailyFeeling[insertIndex]
+        });
+
 
         // 已於signup時自動創建feelingModel，故此處應不用特別做此動作
         // else {
@@ -261,26 +263,27 @@ router.delete("/:id/:feelingId", checkTokenMiddleware, async (req, res) => {
         const feelingId = req.params.feelingId;
         const user = await FeelingModel.findOne({ userId });
 
-        if (user) {
-            const existingEntryIndex = user.dailyFeeling.findIndex(item => item.id == feelingId);
-            if (existingEntryIndex !== -1) {
-                // 刪除images
-                let [{ timestamp }] = user.dailyFeeling.splice(existingEntryIndex, 1);
-                await user.save();
-                let yearMonthDateTimestamp = moment(timestamp).format("YYYY-MM-DD");
-                const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${yearMonthDateTimestamp}`);
-                try {
-                    await fsPromise.access(targetDayDir); //file 不存在的話，會throw error
-                    await fsPromise.rmdir(targetDayDir, { recursive: true });
-                } catch (err) { }
-            }
-            return res.json({
-                code: "2000",
-                msg: "Feeling deleted!",
-                data: null
-            });
+        // 用戶不存在
+        if (!user) throw new Error("User not exists");
+
+        const existingEntryIndex = user.dailyFeeling.findIndex(item => item.id == feelingId);
+        if (existingEntryIndex !== -1) {
+            // 刪除images
+            let [{ timestamp }] = user.dailyFeeling.splice(existingEntryIndex, 1);
+            await user.save();
+            let yearMonthDateTimestamp = moment(timestamp).format("YYYY-MM-DD");
+            const targetDayDir = path.resolve(__dirname, `../../public/images/${userId}/${yearMonthDateTimestamp}`);
+            try {
+                await fsPromise.access(targetDayDir); //file 不存在的話，會throw error
+                await fsPromise.rmdir(targetDayDir, { recursive: true });
+            } catch (err) { }
         }
-        throw new Error("User not exists");
+        return res.json({
+            code: "2000",
+            msg: "Feeling deleted!",
+            data: null
+        });
+
     } catch (err) {
         res.json({
             code: "2002",

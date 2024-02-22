@@ -132,7 +132,13 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({
+    success: false, // 提供前端判斷
+    errorMessage: err.message,
+    code: 5000, // 通用後端server業務狀態碼
+    stackTrace: "",
+    data: null
+  });
 });
 
 module.exports = app;

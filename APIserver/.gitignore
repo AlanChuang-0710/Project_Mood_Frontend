@@ -18,8 +18,8 @@
 # misc
 .DS_Store
 
-# 環境變量 (已跟蹤過，故還須手動去除追蹤)
-/env
+# 環境變量 (備註: 已跟蹤過，須手動去除追蹤)
+# /env 方便開發，還是先讓git追蹤
 .env.local
 .env.development.local
 .env.test.local

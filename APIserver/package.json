@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www NODE_ENV=dev",
-    "server": "node ./bin/www NODE_ENV=prod"
+    "start": "cross-env NODE_ENV=development nodemon ./bin/www ",
+    "server": "cross-env NODE_ENV=production node ./bin/www "
   },
   "_moduleAliases": {
     "@": ".",
@@ -37,5 +37,8 @@
     "multer": "^1.4.5-lts.1",
     "nanoid": "3.0",
     "rotating-file-stream": "^3.2.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

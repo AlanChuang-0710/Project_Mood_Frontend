@@ -1,6 +1,6 @@
 // 導入jsonwebtoken
 const jwt = require("jsonwebtoken");
-const { ACCESS_TOKEN_SECRET } = require("../config/config");
+const { ACCESS_TOKEN_SECRET } = require("@config/config");
 
 module.exports = {
     checkTokenMiddleware: (req, res, next) => {

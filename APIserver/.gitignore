@@ -15,6 +15,9 @@
 # log
 /log
 
+#public
+/public/images
+
 # misc
 .DS_Store
 

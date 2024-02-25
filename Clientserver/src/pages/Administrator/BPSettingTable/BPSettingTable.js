@@ -132,6 +132,7 @@ const BPSettingTable = () => {
         const result = await fn();
         setModalLoadingVisible(false);
         if (result.error) return;
+        form.reset();
         close();
     }, [close, form, bpTitle, addBuryPoint, editBuryPoint]);
 

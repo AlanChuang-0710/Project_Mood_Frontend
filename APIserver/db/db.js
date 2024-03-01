@@ -3,8 +3,10 @@
  * @param {*} success 數據庫連接成功的回調
  * @param {*} error 數據庫連接失敗的回調
  */
+// 導入mongoose
+const mongoose = require("mongoose");
 
-module.exports = function (success, error) {
+function db(success, error) {
 
     if (typeof error !== "function") {
         error = () => {
@@ -12,11 +14,8 @@ module.exports = function (success, error) {
         };
     }
 
-    // 導入mongoose
-    const mongoose = require("mongoose");
-
     // 導入配置
-    const { DBHOST, DBPORT, DBNAME } = require("../config/config");
+    const { DBHOST, DBPORT, DBNAME } = require("@config/config");
 
     // 連接mongodb服務  mood是數據庫名稱，如果不存在會自動創建
     mongoose.connect(`${DBHOST}:${DBPORT}/${DBNAME}`);
@@ -39,3 +38,8 @@ module.exports = function (success, error) {
 
 }
 
+
+// 外曝連接函數和mongoose連接對象
+module.exports = {
+    db, connection: mongoose.connection
+};

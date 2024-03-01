@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const { connection } = require("@db/db");
 
 // 導入用戶上傳圖片相關
-const fs = require('fs');
+// const fs = require('fs');
 const fsPromise = require('fs').promises;
 const moment = require("moment");
 const { nanoid } = require("nanoid");
@@ -99,26 +100,30 @@ router.get("/:id/options", checkTokenMiddleware, async function (req, res) {
 
 // 新增特定用戶的KOL, tags選項，type為"tags", "KOL"
 router.post("/:id/options/:type", checkTokenMiddleware, async function (req, res) {
+    // const session = await connection.startSession();
+    // session.startTransaction();
     try {
         const userId = req.params.id;
         const type = req.params.type;
+        // let userData = await FeelingModel.findOne({ userId }).session(session);
         let userData = await FeelingModel.findOne({ userId });
         if (!userData) userData = new FeelingModel({ userId });
 
         const data = req.body[type];
         userData.options[type].push(data);
+        // await userData.save({ session });
         await userData.save();
+        // await session.commitTransaction();
         res.json({
             code: "2000",
             msg: "Options successfully updated!",
             data: null
         });
     } catch (err) {
-        res.json({
-            code: "4000",
-            msg: err.message,
-            data: null
-        });
+        // await session.abortTransaction();
+        throw new Error(err);
+    } finally {
+        // session.endSession();
     }
 });
 

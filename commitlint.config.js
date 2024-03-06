@@ -29,7 +29,6 @@ module.exports = {
                 'ci',         // 對 CI 設定檔或腳本進行了修改
                 'chore',      // 依賴更新/腳手架配置修改等
                 'revert',     // 撤銷修改
-                'wip',        // 開發中
                 'workflow',   // 工作流改進
                 'types',      // 類型修改
                 'release',

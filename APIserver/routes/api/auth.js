@@ -12,19 +12,16 @@ const router = express.Router();
 // 註冊新帳號
 router.post("/register", async (req, res) => {
     try {
-        let { username, password, email } = req.body;
-        // 表單驗證
-        if (username && password && email) {
-            const user = await UserModel.findOne({ email });
-            if (user) throw new Error("Email has already been used");
-            const newUser = await UserModel.createDefaultUser({ ...req.body, password: md5(password) });
-            let { membership, id, username } = newUser;
-            FeelingModel.createDefaultFeeling(id);
-            return res.json({
-                code: 2000, msg: "Registration succeed", data: { membership, id, username }
-            });
-        }
-        throw new Error("Please fill in correct information");
+        let { username: name, password, email } = req.body;
+        if (!name || !password || !email) throw new Error("Please fill in correct information");
+        const user = await UserModel.findOne({ email });
+        if (user) throw new Error("Email has already been used");
+        const newUser = await UserModel.createDefaultUser({ ...req.body, password: md5(password) });
+        let { membership, id, username } = newUser;
+        FeelingModel.createDefaultFeeling(id);
+        return res.json({
+            code: 2000, msg: "Registration succeed", data: { membership, id, username }
+        });
     } catch (err) {
         res.json({ code: 4001, msg: err.message, data: null });
     }

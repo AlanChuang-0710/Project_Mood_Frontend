@@ -37,25 +37,24 @@ const LoginPage = () => {
 
     const loginHandler = async () => {
         form.validate();
-        if (form.isValid()) {
-            try {
-                setLoadingVisible(true);
-                const result = await getUserInfo(form.values).unwrap(); //獲得原始的error，以利try catch攔截
-                if (result.code !== 4001) {
-                    dispatch(setCredentials(result.data));
-                    setTimeout(() => {
-                        setLoadingVisible(false);
-                        nav("/dashboard", { replace: true, state: { from: "/login" } });
-                    }, 1000);
-                } else {
-                    // 展示後端回傳的msg
-                    alert(result.msg);
+        if (!form.isValid()) return;
+        try {
+            setLoadingVisible(true);
+            const result = await getUserInfo(form.values).unwrap(); //獲得原始的error，以利try catch攔截
+            if (result.code !== 4001) {
+                dispatch(setCredentials(result.data));
+                setTimeout(() => {
                     setLoadingVisible(false);
-                }
-            } catch (err) {
-                // 沒有網路的情況
-                alert("No server response");
+                    nav("/dashboard", { replace: true, state: { from: "/login" } });
+                }, 1000);
+            } else {
+                // 展示後端回傳的msg
+                alert(result.msg);
+                setLoadingVisible(false);
             }
+        } catch (err) {
+            // 沒有網路的情況
+            alert("No server response");
         }
     };
 

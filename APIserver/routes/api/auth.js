@@ -11,23 +11,25 @@ const router = express.Router();
 
 // 註冊新帳號
 router.post("/register", async (req, res) => {
-    try {
-        let { username: name, password, email } = req.body;
-        if (!name || !password || !email) throw new Error("Please fill in correct information");
-        const user = await UserModel.findOne({ email });
-        if (user) throw new Error("Email has already been used");
-        const newUser = await UserModel.createDefaultUser({ ...req.body, password: md5(password) });
-        let { membership, id, username } = newUser;
-        FeelingModel.createDefaultFeeling(id);
-        return res.json({
-            code: 2000, msg: "Registration succeed", data: { membership, id, username }
-        });
-    } catch (err) {
-        res.json({ code: 4001, msg: err.message, data: null });
-    }
+    let { username: name, password, email } = req.body;
+    let err = new Error("Please fill in correct information");
+    err.code = 40000;
+    if (!name || !password || !email) throw err;
+    const user = await UserModel.findOne({ email });
+    if (user) {
+        err.message = "Email has already been used";
+        throw err;
+    };
+    const newUser = await UserModel.createDefaultUser({ ...req.body, password: md5(password) });
+    let { membership, id, username } = newUser;
+    FeelingModel.createDefaultFeeling(id);
+    return res.json({
+        code: 2000, msg: "Registration succeed", data: { membership, id, username }
+    });
+
 });
 
-// 刪除帳號
+// 刪除帳號 理論上應該標示status為 active或inactive 
 router.delete("/:id", checkTokenMiddleware, async (req, res) => {
     let id = req.params.id;
     try {
@@ -45,67 +47,58 @@ router.delete("/:id", checkTokenMiddleware, async (req, res) => {
 
 // 用戶登入
 router.post("/login", async (req, res) => {
-    try {
-        let { email, password } = req.body;
-        if (!email || !password) throw new Error("Please fill in correct information");
+    let err = new Error("Please fill in correct information");
+    err.code = 40001;
 
-        // 查詢數據庫
-        const data = await UserModel.findOne({ email, password: md5(password) });
-        if (data) {
-            let { id, username } = data;
-            data.lastLoginTime = Date.now();
-            data.save();
+    let { email, password } = req.body;
+    if (!email || !password) throw err;
 
-            const accessToken = jwt.sign({ email, id }, ACCESS_TOKEN_SECRET,
-                { expiresIn: 20 } // 創建accessToken 20秒過期
-            );
+    const data = await UserModel.findOne({ email, password: md5(password) });
+    if (!data) throw err;
 
-            const refreshToken = jwt.sign({ email, id }, REFRESH_TOKEN_SECRET,
-                { expiresIn: 60 * 60 * 12 } // 創建refreshToken 12小時過期
-            );
+    let { id, username } = data;
+    data.lastLoginTime = Date.now();
+    data.save();
 
-            // Assigning refresh token in http-only cookie
-            // samesite 限制跨域請求、secure 限制只能https或不限http/https傳送
-            res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 12, sameSite: "None", secure: true });
+    const accessToken = jwt.sign({ email, id }, ACCESS_TOKEN_SECRET,
+        { expiresIn: 20 } // 創建accessToken 20秒過期
+    );
 
-            return res.json({
-                code: 2000,
-                msg: "Login succeeds",
-                data: { accessToken, id, username, email }
-            });
-        }
-        throw new Error("Please fill in correct information");
+    const refreshToken = jwt.sign({ email, id }, REFRESH_TOKEN_SECRET,
+        { expiresIn: 60 * 60 * 12 } // 創建refreshToken 12小時過期
+    );
 
-    } catch (err) {
-        res.json({
-            code: 4001,
-            msg: err.message,
-            data: null
-        });
-    }
+    // Assigning refresh token in http-only cookie
+    // samesite 限制跨域請求、secure 限制只能https或不限http/https傳送
+    res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 12, sameSite: "None", secure: true });
+
+    res.json({
+        code: 2000,
+        msg: "Login succeeds",
+        data: { accessToken, id, username, email }
+    });
 });
 
 // 獲取refresh
 router.get("/refresh", (req, res) => {
-    try {
-        if (req.cookies?.refreshToken) {
-            const refreshToken = req.cookies.refreshToken;
-            jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, data) => {
-                if (err) {
-                    let msg = "";
-                    err instanceof jwt.JsonWebTokenError ? msg = "accesstoken verification fails" : err instanceof jwt.TokenExpiredError ? "refreshToken expires" : "Undefined Error";
-                    return res.json({ code: 4001, msg, data: err });
-                }
-                const accessToken = jwt.sign({ email: data.email, id: data.id }, ACCESS_TOKEN_SECRET,
-                    { expiresIn: 20 } // 20秒過期
-                );
-                return res.json({ code: 2000, msg: "Token updated", data: { accessToken } });
-            });
-        } else {
-            throw new Error("Unauthorized");
-        }
-    } catch (err) {
-        res.json({ code: 4001, msg: err.message, data: null });
+    if (req.cookies?.refreshToken) {
+        const refreshToken = req.cookies.refreshToken;
+        jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, data) => {
+            if (err) {
+                let err = new Error("");
+                err.code = 40301;
+                err.message = err instanceof jwt.JsonWebTokenError ? "accesstoken verification fails" : err instanceof jwt.TokenExpiredError ? "refreshToken expires" : "Undefined Error";
+                throw err;
+            }
+            const accessToken = jwt.sign({ email: data.email, id: data.id }, ACCESS_TOKEN_SECRET,
+                { expiresIn: 20 } // 20秒過期
+            );
+            res.json({ code: 2000, msg: "Token updated", data: { accessToken } });
+        });
+    } else {
+        let err = new Error("Unauthorized");
+        err.code = 40101;
+        throw err;
     }
 });
 

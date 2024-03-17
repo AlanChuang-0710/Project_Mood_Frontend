@@ -12,11 +12,19 @@ module.exports = {
 
         // 較驗token
         jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, data) => {
-            if (err instanceof jwt.JsonWebTokenError || data.id !== req.params.id) {
-                return res.json({ code: 4001, msg: "accessToken verification fails", data: err });
-            } else if (err instanceof jwt.TokenExpiredError) {
-                return res.json({ code: 4001, msg: "accessToken expires", data: err });
-            } else {
+            if (err) {
+                let error = err;
+                error.code = 40101;
+
+                if (err instanceof jwt.JsonWebTokenError) {
+                    throw error;
+                    // return res.json({ code: 40101, msg: "accessToken verification fails", data: err });
+                } else if (err instanceof jwt.TokenExpiredError) {
+                    throw error;
+                    // return res.json({ code: 40101, msg: "accessToken expires", data: err });
+                }
+            }
+            else {
                 req.user = data; // 將token內的用戶信息(id, email),，存到該次req中
                 next(); // 如果token較驗成功
             }

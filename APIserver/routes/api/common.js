@@ -13,21 +13,17 @@ router.get("/:id/:property", checkTokenMiddleware, async function (req, res) {
     // findById 或 findOne兩種寫法都ok，當使用findOne搜索id時，必須使用_id，否則找不到
     // UserModel.findOne({ _id: id }).then((data) => {
 
-    const user = await UserModel.findById(id);
-    if (user) {
-        const data = await CommonModel.findOne();
-        res.json({
-            code: "2000",
-            msg: "Common info got",
-            data: { [property]: data[property] }
-        });
-    } else {
-        res.json({
-            code: "4040",
-            msg: "User not found",
-            data: null
-        });
-    }
+    // const user = await UserModel.findById(id);
+    // let err = new Error("User not found");
+    // err.code = 40001;
+    // if (!user) throw err;
+    
+    const data = await CommonModel.findOne();
+    res.json({
+        code: "2000",
+        msg: "Common info got",
+        data: { [property]: data[property] }
+    });
 });
 
 // 僅限admin權限: 新建各類型用戶的通用資料 

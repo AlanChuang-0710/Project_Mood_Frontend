@@ -108,13 +108,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 未來前端打包後，發送html設定
-app.get("/", (req, res, next) => {
-  const readStream = fs.createReadStream(path.resolve(__dirname, "./public/index.html")).on("error", (error) => {
-    next(error);
-  });
-  readStream.pipe(res);
-});
+/* 未來前端打包後，發送html設定---->改用nginx */
+// app.get("/", (req, res, next) => {
+//   const readStream = fs.createReadStream(path.resolve(__dirname, "./public/index.html")).on("error", (error) => {
+//     next(error);
+//   });
+//   readStream.pipe(res);
+// });
 app.use('/users', authRouter);
 app.use('/feeling', feelingRouter);
 app.use("/report", reportRouter);
@@ -127,17 +127,16 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  console.log("全局錯誤中間件攔截", err);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status || 200);
   res.json({
     success: false, // 提供前端判斷
     errorMessage: err.message,
-    code: 5000, // 通用後端server業務狀態碼
+    code: err.code, // 通用後端server業務狀態碼
     stackTrace: "",
     data: null
   });

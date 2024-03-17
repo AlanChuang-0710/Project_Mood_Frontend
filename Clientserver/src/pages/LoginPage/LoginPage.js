@@ -41,7 +41,7 @@ const LoginPage = () => {
         try {
             setLoadingVisible(true);
             const result = await getUserInfo(form.values).unwrap(); //獲得原始的error，以利try catch攔截
-            if (result.code !== 4001) {
+            if (result.code !== 40001) {
                 dispatch(setCredentials(result.data));
                 setTimeout(() => {
                     setLoadingVisible(false);
@@ -49,7 +49,7 @@ const LoginPage = () => {
                 }, 1000);
             } else {
                 // 展示後端回傳的msg
-                alert(result.msg);
+                alert(result.errorMessage);
                 setLoadingVisible(false);
             }
         } catch (err) {

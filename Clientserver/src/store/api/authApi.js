@@ -56,5 +56,5 @@ const authApi = createApi({
 
 
 // 自動生成的鉤子函數的命名規則 getStudents ---> useGetStudentsQuery (use表示鉤子函數 Query表示查詢)
-export const { useLoginMutation, useRegisterMutation, useGetStudentByIdQuery, useUpdateStudentMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, } = authApi;
 export default authApi;

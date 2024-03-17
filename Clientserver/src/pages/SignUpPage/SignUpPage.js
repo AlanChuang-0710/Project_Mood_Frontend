@@ -42,16 +42,11 @@ const SignUpPage = () => {
         async () => {
             form.validate();
             if (form.isValid()) {
-                try {
-                    const result = await register(form.values).unwrap(); //獲得原始的error，以利try catch攔截
-                    if (result.code !== 4001) {
-                        nav("/signup/verification");
-                    } else {
-                        // 展示後端回傳的msg
-                        alert(result.msg);
-                    }
-                } catch (err) {
-                    alert("No server response");
+                const result = await register(form.values).unwrap(); //獲得原始的error，以利try catch攔截
+                if (result.code !== 40000) {
+                    nav("/signup/verification");
+                } else {
+                    alert(result.errorMessage);
                 }
             }
         };

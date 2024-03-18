@@ -29,19 +29,15 @@ router.post("/register", async (req, res) => {
 
 });
 
-// 刪除帳號 理論上應該標示status為 active或inactive 
+// 刪除帳號 待調整: 理論上應該標示status為 active或inactive 
 router.delete("/:id", checkTokenMiddleware, async (req, res) => {
     let id = req.params.id;
-    try {
-        const data = await UserModel.deleteOne({ _id: id });
-        await FeelingModel.deleteOne({ userId: id });
-        if (data.deletedCount) {
-            res.json({ code: 2000, msg: "Account deleted", data: null });
-        } else {
-            throw Error();
-        }
-    } catch (err) {
-        res.json({ code: 4001, msg: "Invalid deletion", data: null });
+    const data = await UserModel.deleteOne({ _id: id });
+    await FeelingModel.deleteOne({ userId: id });
+    if (data.deletedCount) {
+        res.json({ code: 2000, msg: "Account deleted", data: null });
+    } else {
+        throw Error("Unknown Error");
     }
 });
 

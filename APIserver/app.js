@@ -135,8 +135,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 200);
   res.json({
     success: false, // 提供前端判斷
-    errorMessage: err.message,
-    code: err.code, // 通用後端server業務狀態碼
+    errorMessage: err.message || "Unknown Error",
+    code: err.code || 50000, // 通用後端server業務狀態碼，默認值為通用業務狀態碼
     stackTrace: "",
     data: null
   });

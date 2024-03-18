@@ -20,7 +20,7 @@ router.get("/:id/:property", checkTokenMiddleware, async function (req, res) {
     
     const data = await CommonModel.findOne();
     res.json({
-        code: "2000",
+        code: 2000,
         msg: "Common info got",
         data: { [property]: data[property] }
     });
@@ -42,7 +42,7 @@ router.post("/:id", checkTokenMiddleware, async function (req, res) {
         await memberCommonData.save();
     }
     res.json({
-        code: "2000",
+        code: 2000,
         msg: "Common info Updated",
         data: null
     });

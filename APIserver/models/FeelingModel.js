@@ -43,11 +43,13 @@ const FeelingSchema = new mongoose.Schema({
         type: {
             KOL: {
                 type: Array,
-                required: true
+                required: true,
+                unique: true
             },
             tags: {
                 type: Array,
-                required: true
+                required: true,
+                unique: true
             },
         },
         required: true

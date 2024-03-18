@@ -139,7 +139,7 @@ const DailyRecordModal = ({ opened, open, close, selectedDateValue }) => {
             id,
             data: form
         });
-        if (result?.data?.code === "2000") {
+        if (result?.data?.code === 2000) {
             closeModalHandler();
         }
 

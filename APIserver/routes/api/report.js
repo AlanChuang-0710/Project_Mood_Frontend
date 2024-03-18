@@ -55,7 +55,7 @@ router.get("/:id/score_pie_chart", checkTokenMiddleware, getUserPeriodFeelingMid
         );
 
         res.json({
-            code: "2000",
+            code: 2000,
             msg: "Score pie chart data got",
             data: {
                 total: result.length,
@@ -142,7 +142,7 @@ router.get("/:id/score_day_bar", checkTokenMiddleware, getUserPeriodFeelingMiddl
         });
 
         res.json({
-            code: "2000",
+            code: 2000,
             msg: "Score day bar data got",
             data: {
                 total: result.length,
@@ -183,7 +183,7 @@ router.get("/:id/score_line_chart", checkTokenMiddleware, getUserPeriodFeelingMi
         };
 
         res.json({
-            code: "2000",
+            code: 2000,
             msg: "Score line chart data got",
             data: result
         });
@@ -220,7 +220,7 @@ router.get("/:id/sleep_line_chart", checkTokenMiddleware, getUserPeriodFeelingMi
         };
 
         res.json({
-            code: "2000",
+            code: 2000,
             msg: "Sleep line chart data got",
             data: result
         });

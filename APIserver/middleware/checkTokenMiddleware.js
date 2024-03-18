@@ -7,8 +7,10 @@ module.exports = {
         // 一般放置在請求頭中，透過req.get獲取token
         let accessToken = req.get("accessToken");
         if (!accessToken) {
-            return res.json({ code: 4001, msg: "token缺失", data: null });
-        }
+            let err = new Error("Lack of Token");
+            err.code = 40000;
+            throw err;
+        };
 
         // 較驗token
         jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, data) => {

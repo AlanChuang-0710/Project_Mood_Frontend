@@ -74,7 +74,7 @@ const DashboardPage = () => {
     }
   }, [open]);
 
-  const [getCatDataHandler, count] = useFetch("https://cat-fact.herokuapp.com");
+  const [getCatDataHandler] = useFetch("https://cat-fact.herokuapp.com");
   const getCatData = useCallback(() => {
     getCatDataHandler();
   }, [getCatDataHandler]);

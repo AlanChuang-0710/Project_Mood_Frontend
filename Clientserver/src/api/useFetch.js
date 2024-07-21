@@ -6,8 +6,8 @@ export const useFetch = (url, option) => {
     async function fetchHandler() {
         const res = await fetch(url, option);
         setLoading(true);
+        count++;
         return res;
     }
-    count++;
-    return [fetchHandler, count];
+    return [fetchHandler];
 };

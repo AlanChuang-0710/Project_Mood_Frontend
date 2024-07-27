@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Image, Grid, MediaQuery, Button, useMantineTheme, } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
@@ -78,8 +78,22 @@ const DashboardPage = () => {
   const getCatData = useCallback(() => {
     getCatDataHandler();
   }, [getCatDataHandler]);
+
+  const [data, setDate] = useState(0);
+  useEffect(() => {
+    async function test() {
+      const res1 = await fetch("https://mock.httpstatus.io/200");
+      console.log(res1);
+      setDate(1);
+      alert(data); // 測試: setData非立即更新
+      const res2 = await fetch("https://mock.httpstatus.io/200?delay=2000");
+      setDate(2);
+    }
+    test();
+  }, []);
   return (
     <Grid>
+      <h1>this is data {data}</h1>
       {/* Positive Phrase Section */}
       <Grid.Col xs={12} lg={8}>
 
